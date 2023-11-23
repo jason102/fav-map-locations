@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link as RRDLink } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar/AppBar";
 import Toolbar from "@mui/material/Toolbar/Toolbar";
@@ -18,22 +18,33 @@ const NavBar: React.FC = () => (
         Favorite Map Locations!
       </Typography>
       <nav>
-        <NavLink to={"about"}>
-          <Link variant="button" color="text.primary" sx={{ my: 1, mx: 1.5 }}>
-            About
-          </Link>
-        </NavLink>
-        <NavLink to={"profile"}>
-          <Link variant="button" color="text.primary" sx={{ my: 1, mx: 1.5 }}>
-            My Profile
-          </Link>
-        </NavLink>
+        <Link
+          variant="button"
+          color="text.primary"
+          sx={{ my: 1, mx: 1.5 }}
+          component={RRDLink}
+          to={"about"}
+        >
+          About
+        </Link>
+        <Link
+          variant="button"
+          color="text.primary"
+          sx={{ my: 1, mx: 1.5 }}
+          component={RRDLink}
+          to={"profile"}
+        >
+          My Profile
+        </Link>
       </nav>
-      <NavLink to={"login"}>
-        <Button variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-          Login
-        </Button>
-      </NavLink>
+      <Button
+        variant="contained"
+        sx={{ my: 1, mx: 1.5 }}
+        component={RRDLink}
+        to={"login"}
+      >
+        Login
+      </Button>
     </Toolbar>
   </AppBar>
 );
