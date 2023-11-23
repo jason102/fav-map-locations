@@ -1,6 +1,5 @@
 import React from "react";
 import { Link as RRDLink } from "react-router-dom";
-import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar/AppBar";
 import Toolbar from "@mui/material/Toolbar/Toolbar";
 import Link from "@mui/material/Link/Link";
@@ -14,9 +13,17 @@ const NavBar: React.FC = () => (
     sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
   >
     <Toolbar sx={{ flexWrap: "wrap" }}>
-      <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+      <Link
+        variant="h6"
+        color="inherit"
+        noWrap
+        sx={{ flexGrow: 1 }}
+        component={RRDLink}
+        to={"/"}
+        underline="none"
+      >
         Favorite Map Locations!
-      </Typography>
+      </Link>
       <nav>
         <Link
           variant="button"
