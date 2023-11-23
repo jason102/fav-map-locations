@@ -1,17 +1,17 @@
 import React from "react";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import { Outlet } from "react-router-dom";
+import NavBar from "src/app/navigation/NavBar";
+import FetchResultSnackbar from "src/components/FetchResultSnackbar";
+import LoginExpiredDialog from "src/components/LoadingDialog/LoginExpiredDialog";
 
 const App: React.FC = () => {
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Favorite Map Locations!
-        </Typography>
-      </Box>
-    </Container>
+    <>
+      <NavBar />
+      <Outlet />
+      <LoginExpiredDialog />
+      <FetchResultSnackbar />
+    </>
   );
 };
 
