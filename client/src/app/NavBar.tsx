@@ -9,7 +9,7 @@ const NavBar: React.FC = () => (
   <AppBar
     position="static"
     color="default"
-    elevation={0}
+    elevation={8}
     sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
   >
     <Toolbar sx={{ flexWrap: "wrap" }}>
