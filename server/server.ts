@@ -1,15 +1,37 @@
 import express from "express";
-import cors from "cors";
-import { setupDatabase } from "./db/db-connection";
+// import cors from "cors";
 import { fileURLToPath } from "url";
 import path from "path";
+import cookieParser from "cookie-parser";
+import authRouter from "./routes/authRoutes";
 import dotenv from "dotenv";
 
 dotenv.config();
-const db = setupDatabase();
+
 const app = express();
-app.use(cors());
 app.use(express.json());
+
+// CORS
+// app.use(cors({ credentials: true, origin: process.env.URL || "*" }));
+app.use((req, res, next) => {
+  const origin = process.env.URL || req.headers.origin;
+  const host = req.headers?.host ?? "";
+
+  res.header(
+    "Access-Control-Allow-Origin",
+    host.includes("localhost") ? "http://localhost:5173" : origin
+  );
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  next();
+});
+
+app.use(cookieParser());
 
 // For serving the static files from the React build directory.
 const __filename = fileURLToPath(import.meta.url);
@@ -28,27 +50,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(REACT_BUILD_DIR, "index.html"));
 });
 
-// app.post("/addContact", async (req, res) => {
-//   try {
-//     const newContact = {
-//       name: req.body.name,
-//       email: req.body.email,
-//       phone: req.body.phone,
-//       notes: req.body.notes,
-//     };
-
-//     const result = await db.query(
-//       "INSERT INTO contacts(name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
-//       [newContact.name, newContact.email, newContact.phone, newContact.notes]
-//     );
-
-//     res.json(result.rows[0]);
-//   } catch (e) {
-//     console.log(e);
-
-//     return res.status(400).json({ e });
-//   }
-// });
+app.use("/api/auth", authRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);

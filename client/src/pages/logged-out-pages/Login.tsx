@@ -59,7 +59,6 @@ const Login: React.FC = () => {
 
     if (requestStatus === "rejected") {
       const fetchResult = payload as FetchResult;
-      console.log({ fetchResult });
       dispatch(setFetchResult(fetchResult));
     }
 

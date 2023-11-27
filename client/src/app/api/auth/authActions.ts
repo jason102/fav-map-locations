@@ -15,7 +15,7 @@ export const login = createAsyncThunk<
 
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/auth/login`,
+      `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
       {
         method: "POST",
         credentials: "include",
