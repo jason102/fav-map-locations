@@ -71,7 +71,7 @@ const Register: React.FC = () => {
     if (requestStatus === "fulfilled") {
       dispatch(
         setFetchResult({
-          message: "Welcome!",
+          message: "Welcome to Favorite Map Locations!",
           type: FetchResultType.success,
         })
       );

@@ -16,5 +16,8 @@ CREATE TABLE users(
 -- Check if a user exists
 SELECT * FROM users WHERE email = $1 OR username = $1;
 
+-- Update the last_login timestamp
+UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE user_id = $1;
+
 -- Add a new user
 INSERT INTO users (username, email, user_password, last_login) VALUES ($1, $2, $3, CURRENT_TIMESTAMP);

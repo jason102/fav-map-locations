@@ -7,3 +7,14 @@ export type DatabaseUser = {
   last_login: Date;
   created_at: Date;
 };
+
+export type LoginFormValues = {
+  usernameOrEmail: string;
+  password: string;
+};
+
+export type RegisterFormValues = {
+  username: string;
+  email: string;
+  password: string;
+};
