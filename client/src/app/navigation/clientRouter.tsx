@@ -6,6 +6,7 @@ import AboutPage from "src/pages/About";
 import LoginPage from "src/pages/logged-out-pages/Login";
 import RegisterPage from "src/pages/logged-out-pages/Register";
 import ProfilePage from "src/pages/logged-in-pages/Profile";
+import UnAuthenticatedRoute from "src/app/navigation/UnAuthenticatedRoute";
 
 const router = createBrowserRouter([
   {
@@ -22,11 +23,19 @@ const router = createBrowserRouter([
           },
           {
             path: "login",
-            element: <LoginPage />,
+            element: (
+              <UnAuthenticatedRoute>
+                <LoginPage />
+              </UnAuthenticatedRoute>
+            ),
           },
           {
             path: "register",
-            element: <RegisterPage />,
+            element: (
+              <UnAuthenticatedRoute>
+                <RegisterPage />
+              </UnAuthenticatedRoute>
+            ),
           },
           {
             path: "profile/:username",

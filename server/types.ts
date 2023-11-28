@@ -8,6 +8,11 @@ export type DatabaseUser = {
   created_at: Date;
 };
 
+export type PublicUserInfo = {
+  username: string;
+  email: string;
+};
+
 export type LoginFormValues = {
   usernameOrEmail: string;
   password: string;

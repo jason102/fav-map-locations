@@ -3,12 +3,12 @@ import {
   FetchResult,
   FetchResultType,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import { DecodedJWT, RegisterFormValues } from "src/types";
+import { UserInfo, RegisterFormValues } from "src/types";
 import { trimObjectStringValues } from "src/utils";
 import { jwtDecode } from "src/utils/jwtDecode";
 
 const register = createAsyncThunk<
-  { decodedJWT: DecodedJWT; accessToken: string },
+  { userInfo: UserInfo; accessToken: string },
   RegisterFormValues
 >("auth/register", async (registerFormValues, { rejectWithValue }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,9 +49,9 @@ const register = createAsyncThunk<
 
     const { accessToken } = responseData;
 
-    const decodedJWT = jwtDecode(accessToken);
+    const userInfo = jwtDecode(accessToken);
 
-    return { decodedJWT, accessToken };
+    return { userInfo, accessToken };
   } catch (error) {
     console.log(`register(): ${error}`);
 

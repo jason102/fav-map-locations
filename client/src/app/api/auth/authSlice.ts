@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import login from "src/app/api/auth/loginThunk";
 import register from "src/app/api/auth/registerThunk";
-import { DecodedJWT } from "src/types";
+import { UserInfo } from "src/types";
 
 interface AuthState {
   isLoading: boolean;
   accessToken: string;
-  decodedJWT: DecodedJWT;
+  userInfo: UserInfo;
   registerSuccess: boolean;
 }
 
 const initialState: AuthState = {
   isLoading: false,
   accessToken: "",
-  decodedJWT: { username: "", id: "", email: "" },
+  userInfo: { username: "", email: "" },
   registerSuccess: false,
 };
 
@@ -28,10 +28,10 @@ const authSlice = createSlice({
     });
     builder.addCase(
       login.fulfilled,
-      (state, { payload: { accessToken, decodedJWT } }) => {
+      (state, { payload: { accessToken, userInfo } }) => {
         state.isLoading = false;
         state.accessToken = accessToken;
-        state.decodedJWT = decodedJWT;
+        state.userInfo = userInfo;
       }
     );
     builder.addCase(login.rejected, (state) => {
@@ -44,10 +44,10 @@ const authSlice = createSlice({
     });
     builder.addCase(
       register.fulfilled,
-      (state, { payload: { accessToken, decodedJWT } }) => {
+      (state, { payload: { accessToken, userInfo } }) => {
         state.isLoading = false;
         state.accessToken = accessToken;
-        state.decodedJWT = decodedJWT;
+        state.userInfo = userInfo;
       }
     );
     builder.addCase(register.rejected, (state) => {

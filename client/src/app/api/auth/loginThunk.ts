@@ -3,12 +3,12 @@ import {
   FetchResult,
   FetchResultType,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import { DecodedJWT, LoginFormValues } from "src/types";
+import { UserInfo, LoginFormValues } from "src/types";
 import { trimObjectStringValues } from "src/utils";
 import { jwtDecode } from "src/utils/jwtDecode";
 
 const login = createAsyncThunk<
-  { decodedJWT: DecodedJWT; accessToken: string },
+  { userInfo: UserInfo; accessToken: string },
   LoginFormValues
 >("auth/login", async (loginFormValues, { rejectWithValue }) => {
   const loginData = trimObjectStringValues<LoginFormValues>(loginFormValues);
@@ -43,9 +43,9 @@ const login = createAsyncThunk<
 
     const { accessToken } = responseData;
 
-    const decodedJWT = jwtDecode(accessToken);
+    const userInfo = jwtDecode(accessToken);
 
-    return { decodedJWT, accessToken };
+    return { userInfo, accessToken };
   } catch (error) {
     console.log(`login(): ${error}`);
 

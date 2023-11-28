@@ -22,10 +22,11 @@ export type RegisterFormValues = {
   repeatedPassword: string;
 };
 
-export type DecodedJWT = {
+export type UserInfo = {
   username: string;
-  id: string;
   email: string;
+  exp: number;
+  iat: number;
 };
 
 export type TransformedResponse = { status: number; message: string };

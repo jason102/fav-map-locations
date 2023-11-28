@@ -57,7 +57,12 @@ router.post(
       );
 
       // Sign and return tokens
-      const { refreshToken, accessToken } = getSignedJwtTokens(user);
+      const userInfoToSign = {
+        username: user.username,
+        email: user.email,
+      };
+
+      const { refreshToken, accessToken } = getSignedJwtTokens(userInfoToSign);
 
       res.cookie("refresh_token", refreshToken, {
         ...(process.env.COOKIE_DOMAIN && {
@@ -106,7 +111,12 @@ router.post(
       const newUser = createdUsers.rows[0];
 
       // Sign and return tokens
-      const { refreshToken, accessToken } = getSignedJwtTokens(newUser);
+      const userInfoToSign = {
+        username: newUser.username,
+        email: newUser.email,
+      };
+
+      const { refreshToken, accessToken } = getSignedJwtTokens(userInfoToSign);
 
       res.cookie("refresh_token", refreshToken, {
         ...(process.env.COOKIE_DOMAIN && { domain: process.env.COOKIE_DOMAIN }),
