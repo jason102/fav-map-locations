@@ -15,6 +15,13 @@ export type LoginFormValues = {
   password: string;
 };
 
+export type RegisterFormValues = {
+  username: string;
+  email: string;
+  password: string;
+  repeatedPassword: string;
+};
+
 export type DecodedJWT = {
   username: string;
   id: string;

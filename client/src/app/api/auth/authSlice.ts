@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login } from "src/app/api/auth/authActions";
+import login from "src/app/api/auth/loginThunk";
+import register from "src/app/api/auth/registerThunk";
 import { DecodedJWT } from "src/types";
 
 interface AuthState {
@@ -21,6 +22,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // Login
     builder.addCase(login.pending, (state) => {
       state.isLoading = true;
     });
@@ -33,6 +35,22 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(login.rejected, (state) => {
+      state.isLoading = false;
+    });
+
+    // Register
+    builder.addCase(register.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      register.fulfilled,
+      (state, { payload: { accessToken, decodedJWT } }) => {
+        state.isLoading = false;
+        state.accessToken = accessToken;
+        state.decodedJWT = decodedJWT;
+      }
+    );
+    builder.addCase(register.rejected, (state) => {
       state.isLoading = false;
     });
   },

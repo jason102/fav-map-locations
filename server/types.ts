@@ -2,7 +2,7 @@ export type DatabaseUser = {
   user_id: string;
   username: string;
   email: string;
-  user_password: string;
+  hashed_password: string;
   profile_image: string | null;
   last_login: Date;
   created_at: Date;

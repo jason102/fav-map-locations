@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link as RRDLink, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "src/app/store";
 
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -9,21 +10,18 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Link from "@mui/material/Link";
 
 import RHFTextField from "src/components/RHFTextField";
 import { LoginFormValues } from "src/types";
-import { useAppDispatch, useAppSelector } from "src/app/store";
-import { login } from "src/app/api/auth/authActions";
+import login from "src/app/api/auth/loginThunk";
 import {
   FetchResult,
   FetchResultType,
   setFetchResult,
   setIsSnackbarOpen,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
+import TogglePasswordVisibility from "src/pages/logged-out-pages/TogglePasswordVisibility";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -110,20 +108,12 @@ const Login: React.FC = () => {
                 type={showPassword ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() =>
-                          setShowPassword((previousValue) => !previousValue)
-                        }
-                      >
-                        {showPassword ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
+                    <TogglePasswordVisibility
+                      showPassword={showPassword}
+                      onClick={() =>
+                        setShowPassword((previousValue) => !previousValue)
+                      }
+                    />
                   ),
                 }}
               />
@@ -139,6 +129,12 @@ const Login: React.FC = () => {
           </Box>
         </form>
       </Paper>
+      <Typography variant="inherit" align="center">
+        {`Don't yet have an account? `}
+        <Link component={RRDLink} to="/register">
+          Register
+        </Link>
+      </Typography>
     </Container>
   );
 };

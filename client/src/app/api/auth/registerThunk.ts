@@ -3,19 +3,25 @@ import {
   FetchResult,
   FetchResultType,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import { DecodedJWT, LoginFormValues } from "src/types";
+import { DecodedJWT, RegisterFormValues } from "src/types";
 import { trimObjectStringValues } from "src/utils";
 import { jwtDecode } from "src/utils/jwtDecode";
 
-export const login = createAsyncThunk<
+const register = createAsyncThunk<
   { decodedJWT: DecodedJWT; accessToken: string },
-  LoginFormValues
->("auth/login", async (loginFormValues, { rejectWithValue }) => {
-  const loginData = trimObjectStringValues<LoginFormValues>(loginFormValues);
+  RegisterFormValues
+>("auth/register", async (registerFormValues, { rejectWithValue }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { repeatedPassword, ...formValuesWithoutRepeatedPassword } =
+    registerFormValues;
+
+  const registrationData = trimObjectStringValues<
+    Omit<RegisterFormValues, "repeatedPassword">
+  >(formValuesWithoutRepeatedPassword);
 
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
+      `${import.meta.env.VITE_BASE_URL}/api/auth/register`,
       {
         method: "POST",
         credentials: "include",
@@ -23,7 +29,7 @@ export const login = createAsyncThunk<
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify(registrationData),
       }
     );
 
@@ -47,7 +53,7 @@ export const login = createAsyncThunk<
 
     return { decodedJWT, accessToken };
   } catch (error) {
-    console.log(`login(): ${error}`);
+    console.log(`register(): ${error}`);
 
     const fetchResult: FetchResult = {
       message:
@@ -58,3 +64,5 @@ export const login = createAsyncThunk<
     return rejectWithValue(fetchResult);
   }
 });
+
+export default register;

@@ -6,6 +6,11 @@ export const validateEmail = (email: string) => {
   );
 };
 
+// https://stackoverflow.com/questions/12090077/javascript-regular-expression-password-validation-having-special-characters
+export const validatePassword = (password: string) => {
+  return /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
+};
+
 export const trimObjectStringValues = <T>(obj: any): T =>
   Object.keys(obj).reduce((accumulated, nextKey) => {
     const key = nextKey as keyof T;
