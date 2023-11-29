@@ -6,7 +6,9 @@ import AboutPage from "src/pages/About";
 import LoginPage from "src/pages/logged-out-pages/Login";
 import RegisterPage from "src/pages/logged-out-pages/Register";
 import ProfilePage from "src/pages/logged-in-pages/Profile";
+import LocationPage from "src/pages/logged-in-pages/Location";
 import UnAuthenticatedRoute from "src/app/navigation/UnAuthenticatedRoute";
+import PrivateRoute from "src/app/navigation/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -38,12 +40,28 @@ const router = createBrowserRouter([
             ),
           },
           {
+            path: "location/:locationId",
+            element: (
+              <PrivateRoute>
+                <LocationPage />
+              </PrivateRoute>
+            ),
+          },
+          {
             path: "profile/:username",
-            element: <ProfilePage />,
+            element: (
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            ),
           },
           {
             path: "profile/:username/edit",
-            element: <ProfilePage />,
+            element: (
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            ),
           },
           {
             path: "about",

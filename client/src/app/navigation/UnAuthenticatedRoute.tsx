@@ -6,10 +6,10 @@ interface Props {
   children: JSX.Element;
 }
 
-const UnAuthenticated: React.FC<Props> = ({ children }) => {
+const UnAuthenticatedRoute: React.FC<Props> = ({ children }) => {
   const accessToken = useAppSelector((state) => state.auth.accessToken);
 
   return accessToken ? <Navigate to={"/"} replace /> : children;
 };
 
-export default UnAuthenticated;
+export default UnAuthenticatedRoute;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link as RRDLink, useNavigate } from "react-router-dom";
+import { Link as RRDLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "src/app/store";
 
 import Container from "@mui/material/Container";
@@ -28,6 +28,7 @@ const Login: React.FC = () => {
   const isLoading = useAppSelector((state) => state.auth.isLoading);
 
   const navigate = useNavigate();
+  const { state: locationState } = useLocation();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -52,7 +53,9 @@ const Login: React.FC = () => {
         })
       );
 
-      navigate("/", { replace: true });
+      navigate(locationState?.fromPath ? locationState.fromPath : "/", {
+        replace: true,
+      });
     }
 
     if (requestStatus === "rejected") {
