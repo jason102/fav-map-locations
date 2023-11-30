@@ -2,11 +2,9 @@ import React from "react";
 import { Link as RRDLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "src/app/store";
 
-import AppBar from "@mui/material/AppBar/AppBar";
-import Toolbar from "@mui/material/Toolbar/Toolbar";
-import Link from "@mui/material/Link/Link";
-import Button from "@mui/material/Button/Button";
-import CircularProgress from "@mui/material/CircularProgress";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Link from "@mui/material/Link";
 
 import logout from "src/app/api/auth/logoutThunk";
 import {
@@ -15,6 +13,7 @@ import {
   setFetchResult,
   setIsSnackbarOpen,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
+import LoadingButton from "src/components/LoadingButton";
 
 const NavBar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -87,34 +86,13 @@ const NavBar: React.FC = () => {
           )}
         </nav>
         {accessToken ? (
-          <Button
-            variant="contained"
-            sx={{ my: 1, mx: 1.5 }}
-            onClick={onLogout}
-            disabled={isLoading}
-            {...(isLoading && { sx: { width: "88px", height: "36px" } })}
-          >
-            {isLoading ? (
-              <CircularProgress size={18} color="inherit" />
-            ) : (
-              "Log out"
-            )}
-          </Button>
+          <LoadingButton isLoading={isLoading} onClick={onLogout}>
+            Log out
+          </LoadingButton>
         ) : (
-          <Button
-            variant="contained"
-            sx={{ my: 1, mx: 1.5 }}
-            component={RRDLink}
-            to={"login"}
-            disabled={isLoading}
-            {...(isLoading && { sx: { width: "88px", height: "36px" } })}
-          >
-            {isLoading ? (
-              <CircularProgress size={18} color="inherit" />
-            ) : (
-              "Log in"
-            )}
-          </Button>
+          <LoadingButton isLoading={isLoading} component={RRDLink} to={"login"}>
+            Log in
+          </LoadingButton>
         )}
       </Toolbar>
     </AppBar>

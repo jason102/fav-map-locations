@@ -7,8 +7,6 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 
@@ -22,6 +20,7 @@ import {
   setIsSnackbarOpen,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import TogglePasswordVisibility from "src/pages/logged-out-pages/TogglePasswordVisibility";
+import LoadingButton from "src/components/LoadingButton";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -125,18 +124,9 @@ const Login: React.FC = () => {
             </Grid>
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={isLoading}
-              {...(isLoading && { sx: { width: "88px", height: "36px" } })}
-            >
-              {isLoading ? (
-                <CircularProgress size={18} color="inherit" />
-              ) : (
-                "Submit"
-              )}
-            </Button>
+            <LoadingButton isLoading={isLoading} type="submit">
+              Submit
+            </LoadingButton>
           </Box>
         </form>
       </Paper>
