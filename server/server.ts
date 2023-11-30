@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import registerRoute from "./routes/auth/register";
 import loginRoute from "./routes/auth/login";
 import logoutRoute from "./routes/auth/logout";
+import refreshTokenRoute from "./routes/auth/refreshToken";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -52,7 +53,12 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(REACT_BUILD_DIR, "index.html"));
 });
 
-app.use("/api/auth", [registerRoute, loginRoute, logoutRoute]);
+app.use("/api/auth", [
+  registerRoute,
+  loginRoute,
+  logoutRoute,
+  refreshTokenRoute,
+]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);

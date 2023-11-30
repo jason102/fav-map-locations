@@ -38,3 +38,5 @@ router.get("/refreshToken", async (req: Request, res: Response) => {
     return res.status(401).json({ error: error.message });
   }
 });
+
+export default router;
