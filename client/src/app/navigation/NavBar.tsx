@@ -20,6 +20,7 @@ const NavBar: React.FC = () => {
   const dispatch = useAppDispatch();
   const accessToken = useAppSelector((state) => state.auth.accessToken);
   const isLoading = useAppSelector((state) => state.auth.isLoading);
+  const userToken = useAppSelector((state) => state.auth.userToken);
 
   const onLogout = async () => {
     const {
@@ -73,15 +74,17 @@ const NavBar: React.FC = () => {
           >
             About
           </Link>
-          <Link
-            variant="button"
-            color="text.primary"
-            sx={{ my: 1, mx: 1.5 }}
-            component={RRDLink}
-            to={"profile"}
-          >
-            My Profile
-          </Link>
+          {accessToken && (
+            <Link
+              variant="button"
+              color="text.primary"
+              sx={{ my: 1, mx: 1.5 }}
+              component={RRDLink}
+              to={`profile/${userToken!.username}`}
+            >
+              My Profile
+            </Link>
+          )}
         </nav>
         {accessToken ? (
           <Button

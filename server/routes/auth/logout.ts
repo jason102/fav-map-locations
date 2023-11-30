@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express";
-import { getDatabase } from "../../db/dbSetup";
 
 const router = express.Router();
-const db = getDatabase();
 
 router.delete("/logout", async (req: Request, res: Response) => {
   try {

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import login from "src/app/api/auth/loginThunk";
 import register from "src/app/api/auth/registerThunk";
 import logout from "src/app/api/auth/logoutThunk";
+import refreshToken from "src/app/api/auth/refreshTokenThunk";
 import { UserToken } from "src/types";
 
 interface AuthState {
@@ -65,6 +66,22 @@ const authSlice = createSlice({
       state.userToken = null;
     });
     builder.addCase(logout.rejected, (state) => {
+      state.isLoading = false;
+    });
+
+    // Refresh token
+    builder.addCase(refreshToken.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      refreshToken.fulfilled,
+      (state, { payload: { accessToken, userToken } }) => {
+        state.isLoading = false;
+        state.accessToken = accessToken;
+        state.userToken = userToken;
+      }
+    );
+    builder.addCase(refreshToken.rejected, (state) => {
       state.isLoading = false;
     });
   },
