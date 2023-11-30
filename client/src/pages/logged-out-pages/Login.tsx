@@ -53,9 +53,11 @@ const Login: React.FC = () => {
         })
       );
 
-      navigate(locationState?.fromPath ? locationState.fromPath : "/", {
-        replace: true,
-      });
+      if (locationState?.fromPath) {
+        navigate(locationState.fromPath, {
+          replace: true,
+        });
+      }
     }
 
     if (requestStatus === "rejected") {

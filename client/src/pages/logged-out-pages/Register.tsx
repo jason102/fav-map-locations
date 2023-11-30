@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link as RRDLink, useNavigate } from "react-router-dom";
+import { Link as RRDLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "src/app/store";
 
 import Container from "@mui/material/Container";
@@ -44,8 +44,6 @@ const Register: React.FC = () => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.auth.isLoading);
 
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
 
   const { control, handleSubmit, watch } = useForm<RegisterFormValues>({
@@ -75,8 +73,6 @@ const Register: React.FC = () => {
           type: FetchResultType.success,
         })
       );
-
-      navigate("/", { replace: true });
     }
 
     if (requestStatus === "rejected") {
