@@ -7,13 +7,16 @@ import { RouterProvider } from "react-router-dom";
 import store from "src/app/store";
 import theme from "src/theme";
 import router from "src/app/navigation/clientRouter";
+import RefreshTokensProvider from "src/app/RefreshTokensContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ReduxProvider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <RouterProvider router={router} />
+        <RefreshTokensProvider>
+          <RouterProvider router={router} />
+        </RefreshTokensProvider>
       </ThemeProvider>
     </ReduxProvider>
   </React.StrictMode>

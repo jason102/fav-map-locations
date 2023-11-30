@@ -95,7 +95,7 @@ const NavBar: React.FC = () => {
             {...(isLoading && { sx: { width: "88px", height: "36px" } })}
           >
             {isLoading ? (
-              <CircularProgress size={18} color="inherit" sx={{ ml: 1 }} />
+              <CircularProgress size={18} color="inherit" />
             ) : (
               "Log out"
             )}
@@ -106,8 +106,14 @@ const NavBar: React.FC = () => {
             sx={{ my: 1, mx: 1.5 }}
             component={RRDLink}
             to={"login"}
+            disabled={isLoading}
+            {...(isLoading && { sx: { width: "88px", height: "36px" } })}
           >
-            Log in
+            {isLoading ? (
+              <CircularProgress size={18} color="inherit" />
+            ) : (
+              "Log in"
+            )}
           </Button>
         )}
       </Toolbar>
