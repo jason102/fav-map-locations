@@ -196,10 +196,16 @@ const Register: React.FC = () => {
             </Grid>
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-            <Button variant="contained" type="submit" disabled={isLoading}>
-              Submit
-              {isLoading && (
-                <CircularProgress size={18} color="inherit" sx={{ ml: 1 }} />
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isLoading}
+              {...(isLoading && { sx: { width: "88px", height: "36px" } })}
+            >
+              {isLoading ? (
+                <CircularProgress size={18} color="inherit" />
+              ) : (
+                "Submit"
               )}
             </Button>
           </Box>
@@ -208,7 +214,7 @@ const Register: React.FC = () => {
       <Typography variant="inherit" align="center">
         {`Already have an account? `}
         <Link component={RRDLink} to="/login">
-          Login
+          Log in
         </Link>
       </Typography>
     </Container>

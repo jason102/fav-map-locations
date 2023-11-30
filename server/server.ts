@@ -3,7 +3,9 @@ import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
 import cookieParser from "cookie-parser";
-import authRouter from "./routes/authRoutes";
+import registerRoute from "./routes/auth/register";
+import loginRoute from "./routes/auth/login";
+import logoutRoute from "./routes/auth/logout";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -50,7 +52,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(REACT_BUILD_DIR, "index.html"));
 });
 
-app.use("/api/auth", authRouter);
+app.use("/api/auth", [registerRoute, loginRoute, logoutRoute]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);

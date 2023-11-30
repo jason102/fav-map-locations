@@ -1,19 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import login from "src/app/api/auth/loginThunk";
 import register from "src/app/api/auth/registerThunk";
-import { UserInfo } from "src/types";
+import logout from "src/app/api/auth/logoutThunk";
+import { UserToken } from "src/types";
 
 interface AuthState {
   isLoading: boolean;
   accessToken: string;
-  userInfo: UserInfo;
+  userToken: UserToken | null;
   registerSuccess: boolean;
 }
 
 const initialState: AuthState = {
   isLoading: false,
   accessToken: "",
-  userInfo: { username: "", email: "" },
+  userToken: null,
   registerSuccess: false,
 };
 
@@ -28,10 +29,10 @@ const authSlice = createSlice({
     });
     builder.addCase(
       login.fulfilled,
-      (state, { payload: { accessToken, userInfo } }) => {
+      (state, { payload: { accessToken, userToken } }) => {
         state.isLoading = false;
         state.accessToken = accessToken;
-        state.userInfo = userInfo;
+        state.userToken = userToken;
       }
     );
     builder.addCase(login.rejected, (state) => {
@@ -44,13 +45,26 @@ const authSlice = createSlice({
     });
     builder.addCase(
       register.fulfilled,
-      (state, { payload: { accessToken, userInfo } }) => {
+      (state, { payload: { accessToken, userToken } }) => {
         state.isLoading = false;
         state.accessToken = accessToken;
-        state.userInfo = userInfo;
+        state.userToken = userToken;
       }
     );
     builder.addCase(register.rejected, (state) => {
+      state.isLoading = false;
+    });
+
+    // Logout
+    builder.addCase(logout.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(logout.fulfilled, (state) => {
+      state.isLoading = false;
+      state.accessToken = "";
+      state.userToken = null;
+    });
+    builder.addCase(logout.rejected, (state) => {
       state.isLoading = false;
     });
   },
