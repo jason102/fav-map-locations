@@ -12,16 +12,29 @@ router.get("/refreshToken", async (req: Request, res: Response) => {
       return res.sendStatus(401);
     }
 
+    // Check if the existing refreshToken has expired or is invalid
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET as Secret,
-      (error, userInfoToSign) => {
+      (error, userToken) => {
         if (error) {
           return res.status(403).json({ error: error.message });
         }
+
+        // The existing refreshToken is still valid, so let's get
+        // a new accessToken and refreshToken - Remove the old iat
+        // and exp values in userToken so we can resign the same
+        // information and get updated iat and exp timestamps
+        const userInfoToSign = {
+          username: userToken.username,
+          email: userToken.email,
+        };
+
         const { refreshToken, accessToken } =
           getSignedJwtTokens(userInfoToSign);
 
+        // Set the updated refreshToken cookie and return the updated
+        // accessToken to the frontend
         res.cookie("refresh_token", refreshToken, {
           ...(process.env.COOKIE_DOMAIN && {
             domain: process.env.COOKIE_DOMAIN,

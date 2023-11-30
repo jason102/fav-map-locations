@@ -5,11 +5,11 @@ import { PublicUserInfo } from "../types";
 // Copied from https://github.com/morganpage/jwt-pg/blob/main/utils/jwt-helpers.js
 const getSignedJwtTokens = (user: PublicUserInfo) => {
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET ?? "", {
-    expiresIn: "20s",
+    expiresIn: "15m",
   });
 
   const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET ?? "", {
-    expiresIn: "5m",
+    expiresIn: "1d",
   });
 
   return { accessToken, refreshToken };
