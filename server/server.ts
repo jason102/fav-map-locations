@@ -7,6 +7,7 @@ import registerRoute from "./routes/auth/register";
 import loginRoute from "./routes/auth/login";
 import logoutRoute from "./routes/auth/logout";
 import refreshTokenRoute from "./routes/auth/refreshToken";
+import userDetailsRoute from "./routes/profile/user";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -59,6 +60,8 @@ app.use("/api/auth", [
   logoutRoute,
   refreshTokenRoute,
 ]);
+
+app.use("/api/user", [userDetailsRoute]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);

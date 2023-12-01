@@ -1,16 +1,39 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from "src/app/store";
+import { UserDetails } from "src/app/api/types";
 // import { LoginFormValues, LoginResponse } from "src/types";
 // import { HttpResponseCodes } from "src/utils";
 
+const PUBLIC_ENDPOINTS = ["getAllFavoritedPlaces"];
+
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
-  tagTypes: ["Contact"],
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${import.meta.env.VITE_BASE_URL}/api`,
+    prepareHeaders: (headers, { getState, endpoint }) => {
+      if (!PUBLIC_ENDPOINTS.includes(endpoint)) {
+        const token = (getState() as RootState).auth.accessToken;
+
+        if (token) {
+          headers.set("authorization", `Bearer ${token}`);
+        }
+      }
+
+      return headers;
+    },
+  }),
+  // tagTypes: ["Contact"],
   endpoints: (builder) => ({
-    getContacts: builder.query<string, void>({
-      query: () => "/contacts",
-      providesTags: ["Contact"],
+    getUserDetails: builder.query<UserDetails, string>({
+      query: (username) => ({
+        url: `/user`,
+        params: { username },
+      }),
     }),
+    // getContacts: builder.query<string, void>({
+    //   query: () => "/contacts",
+    //   providesTags: ["Contact"],
+    // }),
     // addContact: builder.mutation<TransformedResponse, ContactInfo>({
     //   query: (newContact) => ({
     //     url: "/addContact",
@@ -28,4 +51,4 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetContactsQuery } = apiSlice;
+export const { useGetUserDetailsQuery } = apiSlice;
