@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "src/app/store";
 import refreshToken from "src/app/api/auth/refreshTokenThunk";
 
@@ -16,16 +16,19 @@ const RefreshTokensProvider: React.FC<Props> = ({ children }) => {
   const dispatch = useAppDispatch();
   const accessToken = useAppSelector((state) => state.auth.accessToken);
 
+  // TODO: Figure out why the component is rerendering so many times, causing refreshToken() to be dispatched twice on startup
+  const firstRender = useRef(true);
+
   const [hasRefreshedToken, setHasRefreshedToken] = useState(!!accessToken);
 
   useEffect(() => {
     const getRefreshedAccessToken = async () => {
       await dispatch(refreshToken());
-
       setHasRefreshedToken(true);
     };
 
-    if (!accessToken) {
+    if (!accessToken && firstRender.current) {
+      firstRender.current = false;
       getRefreshedAccessToken();
     }
   }, [accessToken, dispatch]);

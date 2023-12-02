@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
-import { apiSlice } from "src/app/api/apiSlice";
+import apiSlice from "src/app/api";
 import fetchResultSnackbarReducer from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import authReducer from "src/app/api/auth/authSlice";
 

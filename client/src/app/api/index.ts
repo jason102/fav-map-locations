@@ -6,7 +6,7 @@ import { UserDetails } from "src/app/api/types";
 
 const PUBLIC_ENDPOINTS = ["getAllFavoritedPlaces"];
 
-export const apiSlice = createApi({
+const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_BASE_URL}/api`,
@@ -52,3 +52,5 @@ export const apiSlice = createApi({
 });
 
 export const { useGetUserDetailsQuery } = apiSlice;
+
+export default apiSlice;

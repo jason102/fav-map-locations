@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetUserDetailsQuery } from "src/app/api/apiSlice";
+import { useGetUserDetailsQuery } from "src/app/api";
 import { useAppSelector } from "src/app/store";
 
 const Profile: React.FC = () => {
@@ -8,7 +8,7 @@ const Profile: React.FC = () => {
   const { data, error, isLoading, isFetching } = useGetUserDetailsQuery(
     userToken!.username
   );
-  console.log({ data, error });
+  console.log({ data, error, isLoading, isFetching });
   return "Profile page";
 };
 
