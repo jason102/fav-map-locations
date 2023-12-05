@@ -15,6 +15,51 @@ const Map: React.FC = () => {
   // When I tried it originally, I couldn't get the info window to appear
   const infoWindow = useRef<google.maps.InfoWindow>();
 
+  const getInfoWindowContent = (place: google.maps.places.PlaceResult) => {
+    const infoWindowContentDiv = document.createElement("div");
+    infoWindowContentDiv.id = "infowindow-content";
+
+    const placeIconImage = document.createElement("img");
+    placeIconImage.id = "place-icon";
+    placeIconImage.src = place.icon as string;
+    placeIconImage.height = 16;
+    placeIconImage.width = 16;
+    infoWindowContentDiv.appendChild(placeIconImage);
+
+    const placeNameSpan = document.createElement("span");
+    placeNameSpan.id = "place-name";
+    placeNameSpan.innerHTML = place.name as string;
+    infoWindowContentDiv.appendChild(placeNameSpan);
+
+    infoWindowContentDiv.appendChild(document.createElement("br"));
+
+    const placeDescription = document.createElement("span");
+    placeDescription.id = "place-description";
+    placeDescription.innerHTML = place.formatted_address as string;
+    infoWindowContentDiv.appendChild(placeDescription);
+
+    infoWindowContentDiv.appendChild(document.createElement("br"));
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.id = "place-details-button-container";
+    buttonContainer.setAttribute(
+      "style",
+      "display: flex; justify-content: center; padding-top: 10px"
+    );
+
+    const placeDetailsButton = document.createElement("button");
+    placeDetailsButton.id = "place-details-button";
+    placeDetailsButton.innerHTML = "Details";
+    placeDetailsButton.onclick = () => {
+      console.log("clicked me!");
+    };
+    buttonContainer.appendChild(placeDetailsButton);
+
+    infoWindowContentDiv.appendChild(buttonContainer);
+
+    return infoWindowContentDiv;
+  };
+
   const onPoiClick = (
     placeId: string,
     placesService: google.maps.places.PlacesService
@@ -26,14 +71,7 @@ const Map: React.FC = () => {
         status: google.maps.places.PlacesServiceStatus
       ) => {
         if (status === "OK" && place) {
-          infoWindow.current!.setContent(
-            `<div id="infowindow-content">
-              <img id="place-icon" src="${place.icon}" height="16" width="16" />
-              <span id="place-name">${place.name}</span>
-              <br />
-              <span id="place-description">${place.formatted_address}</span>
-            </div>`
-          );
+          infoWindow.current!.setContent(getInfoWindowContent(place));
         } else {
           infoWindow.current!.setContent(
             `<div id="infowindow-content">
