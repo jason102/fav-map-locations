@@ -14,6 +14,7 @@ interface Props {
 
 // Based on this article's ideas for using RTK Query and React Router loaders together:
 // https://medium.com/@bitsol/using-react-tool-kit-rtk-query-with-react-router-v6-9eac07521bc5
+// https://reactrouter.com/en/main/guides/data-libs
 const baseLoader = async ({
   needsAccess,
   endpointQuery,

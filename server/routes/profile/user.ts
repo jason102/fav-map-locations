@@ -6,10 +6,14 @@ import verifyToken from "../auth/middleware";
 const router = express.Router();
 const db = getDatabase();
 
+interface QueryStringParams {
+  username?: string;
+}
+
 router.get(
   "/",
   verifyToken,
-  async (req: Request<{}, {}, {}, { username?: string }>, res: Response) => {
+  async (req: Request<{}, {}, {}, QueryStringParams>, res: Response) => {
     const usernameParam = req.query.username;
 
     if (!usernameParam) {
