@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 
 import RHFTextField from "src/components/RHFTextField";
-import { LoginFormValues } from "src/types";
+import { LoginFormValues } from "./types";
 import login from "src/app/api/auth/loginThunk";
 import {
   FetchResult,

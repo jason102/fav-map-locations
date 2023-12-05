@@ -3,7 +3,8 @@ import {
   FetchResult,
   FetchResultType,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import { UserToken, LoginFormValues } from "src/types";
+import { LoginFormValues } from "src/pages/logged-out-pages/types";
+import { UserToken } from "./types";
 import { trimObjectStringValues } from "src/utils";
 import { jwtDecode } from "src/utils/jwtDecode";
 

@@ -10,31 +10,7 @@ import {
   MutationDefinition,
 } from "@reduxjs/toolkit/query/react";
 
-export type LoginFormValues = {
-  usernameOrEmail: string;
-  password: string;
-};
-
-export type RegisterFormValues = {
-  username: string;
-  email: string;
-  password: string;
-  repeatedPassword: string;
-};
-
-export type UserToken = {
-  username: string;
-  email: string;
-  exp: number;
-  iat: number;
-};
-
 export type TransformedResponse = { status: number; message: string };
-
-export type LoginResponse = {
-  error?: string;
-  accessToken: string;
-};
 
 // Used for the special case where we're directly passing the apiSlice.useXXXMutation() return value to a custom hook
 // This is simply the useXXXMutation() return type but with specific types replaced with 'any' and { isLoading: boolean } added on

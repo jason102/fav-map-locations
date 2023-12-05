@@ -3,7 +3,7 @@ import login from "src/app/api/auth/loginThunk";
 import register from "src/app/api/auth/registerThunk";
 import logout from "src/app/api/auth/logoutThunk";
 import refreshToken from "src/app/api/auth/refreshTokenThunk";
-import { UserToken } from "src/types";
+import { UserToken } from "./types";
 
 interface AuthState {
   isLoading: boolean;

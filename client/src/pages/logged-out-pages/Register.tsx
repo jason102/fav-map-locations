@@ -13,7 +13,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 import RHFTextField from "src/components/RHFTextField";
-import { RegisterFormValues } from "src/types";
 import register from "src/app/api/auth/registerThunk";
 import {
   FetchResult,
@@ -24,6 +23,7 @@ import {
 import { validateEmail, validatePassword } from "src/utils";
 import TogglePasswordVisibility from "./TogglePasswordVisibility";
 import LoadingButton from "src/components/LoadingButton";
+import { RegisterFormValues } from "./types";
 
 interface PasswordRequirementProps {
   label: string;

@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "src/app/store";
 import { UserDetails } from "src/app/api/types";
-// import { LoginFormValues, LoginResponse } from "src/types";
 // import { HttpResponseCodes } from "src/utils";
 
 const PUBLIC_ENDPOINTS = ["getAllFavoritedPlaces"];

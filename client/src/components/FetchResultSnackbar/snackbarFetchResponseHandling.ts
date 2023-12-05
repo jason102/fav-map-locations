@@ -6,7 +6,7 @@ import {
   FetchResult,
   FetchResultType,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import { UseMutationHookReturnType } from "src/types";
+import { UseMutationHookReturnType } from "./types";
 
 // Returns a FetchResultSnackbar FetchResult so the snackbar shows the correct information based on the
 // triggerFunction API response data
