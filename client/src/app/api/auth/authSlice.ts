@@ -9,14 +9,12 @@ interface AuthState {
   isLoading: boolean;
   accessToken: string;
   userToken: UserToken | null;
-  registerSuccess: boolean;
 }
 
 const initialState: AuthState = {
   isLoading: false,
   accessToken: "",
   userToken: null,
-  registerSuccess: false,
 };
 
 const authSlice = createSlice({
