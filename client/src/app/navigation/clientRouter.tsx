@@ -8,6 +8,7 @@ import RegisterPage from "src/pages/logged-out-pages/Register";
 import ProfilePage from "src/pages/logged-in-pages/Profile";
 import profileLoader from "src/pages/logged-in-pages/Profile/loader";
 import LocationPage from "src/pages/logged-in-pages/Location";
+import locationLoader from "src/pages/logged-in-pages/Location/loader";
 import UnAuthenticatedRoute from "src/app/navigation/UnAuthenticatedRoute";
 import PrivateRoute from "src/app/navigation/PrivateRoute";
 
@@ -41,7 +42,8 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "location/:locationId",
+            path: "location/:googlePlaceID",
+            loader: locationLoader,
             element: (
               <PrivateRoute>
                 <LocationPage />

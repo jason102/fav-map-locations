@@ -16,7 +16,7 @@ const RefreshTokensProvider: React.FC<Props> = ({ children }) => {
   const dispatch = useAppDispatch();
   const accessToken = useAppSelector((state) => state.auth.accessToken);
 
-  // TODO: Figure out why the component is rerendering so many times, causing refreshToken() to be dispatched twice on startup
+  // React.StrictMode rerenders the app twice in dev mode
   const firstRender = useRef(true);
 
   const [hasRefreshedToken, setHasRefreshedToken] = useState(!!accessToken);
