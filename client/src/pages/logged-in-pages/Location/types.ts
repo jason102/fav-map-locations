@@ -1,4 +1,4 @@
-type GooglePlaceResultPhoto = {
+export type GooglePlacePhoto = {
   name: string;
   heightPx: number;
   widthPx: number;
@@ -7,22 +7,17 @@ type GooglePlaceResultPhoto = {
     photoUri: string;
     uri: string;
   };
+  url: string;
 };
 
-export type GooglePlaceResult = {
+export type GooglePlace = {
   displayName: { text: string; languageCode: string };
   formattedAddress: string;
   iconMaskBaseUri: string;
-  photos?: GooglePlaceResultPhoto[];
-  error?: { code: number; message: string; status: string };
-};
-
-type GooglePlacePhoto = GooglePlaceResultPhoto & { url: string };
-
-export type GooglePlace = GooglePlaceResult & {
   placeId: string;
   icon: string;
   photos: GooglePlacePhoto[];
+  error?: { code: number; message: string; status: string };
 };
 
 export type LocationLoaderData = {

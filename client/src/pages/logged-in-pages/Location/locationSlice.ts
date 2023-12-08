@@ -4,12 +4,10 @@ import { GooglePlace } from "./types";
 
 interface LocationState {
   selectedGooglePlace: GooglePlace | null;
-  isLoading: boolean;
 }
 
 const initialState: LocationState = {
   selectedGooglePlace: null,
-  isLoading: false,
 };
 
 const locationSlice = createSlice({
@@ -21,19 +19,12 @@ const locationSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getGooglePlace.pending, (state) => {
-      state.isLoading = true;
-    });
     builder.addCase(
       getGooglePlace.fulfilled,
       (state, { payload }: PayloadAction<GooglePlace>) => {
-        state.isLoading = false;
         state.selectedGooglePlace = payload;
       }
     );
-    builder.addCase(getGooglePlace.rejected, (state) => {
-      state.isLoading = false;
-    });
   },
 });
 

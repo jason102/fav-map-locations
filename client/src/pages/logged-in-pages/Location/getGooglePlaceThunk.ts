@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GooglePlaceResult, GooglePlace } from "./types";
+import { GooglePlace, GooglePlacePhoto } from "./types";
 
 export enum GoogleError {
   invalidPlace = "Not a valid Place ID",
@@ -28,7 +28,7 @@ const getGooglePlace = createAsyncThunk<GooglePlace, Props>(
         }
       );
 
-      const placeResponseData: GooglePlaceResult = await placeResponse.json();
+      const placeResponseData: GooglePlace = await placeResponse.json();
 
       // Check for errors
       if (placeResponseData.error) {
@@ -58,7 +58,7 @@ const getGooglePlace = createAsyncThunk<GooglePlace, Props>(
             fetch(
               `https://places.googleapis.com/v1/${name}/media?key=${
                 import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-              }&maxHeightPx=400&maxWidthPx=600`
+              }&maxHeightPx=400`
             ),
           ];
         }
@@ -77,10 +77,13 @@ const getGooglePlace = createAsyncThunk<GooglePlace, Props>(
         ...placeResponseData,
         placeId,
         icon: `${placeResponseData.iconMaskBaseUri}.svg`,
-        photos: placeResponseData.photos.map((photo, index) => ({
-          ...photo,
-          url: photos[index],
-        })),
+        photos: placeResponseData.photos.reduce((accumulated, photo, index) => {
+          if (index < NUMBER_OF_PHOTOS) {
+            return [...accumulated, { ...photo, url: photos[index] }];
+          }
+
+          return accumulated;
+        }, [] as GooglePlacePhoto[]),
       };
 
       return googlePlace;
