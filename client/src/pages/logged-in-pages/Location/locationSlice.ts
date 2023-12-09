@@ -1,35 +1,41 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import getGooglePlace from "src/pages/logged-in-pages/Location/getGooglePlaceThunk";
-import { GooglePlace } from "./types";
+import { createSlice } from "@reduxjs/toolkit";
+import { OSMPlace } from "./types";
+import reverseGeocode from "src/pages/logged-in-pages/Location/reverseGeocode";
 
 interface LocationState {
-  selectedGooglePlace: GooglePlace | null;
+  osmPlace: OSMPlace | null;
+  isLoading: boolean;
 }
 
 const initialState: LocationState = {
-  selectedGooglePlace: null,
+  osmPlace: null,
+  isLoading: false,
 };
 
 const locationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
-    clearSelectedGooglePlace(state) {
-      state.selectedGooglePlace = null;
+    clearSelectedOSMPlace(state) {
+      state.osmPlace = null;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      getGooglePlace.fulfilled,
-      (state, { payload }: PayloadAction<GooglePlace>) => {
-        state.selectedGooglePlace = payload;
-      }
-    );
+    builder.addCase(reverseGeocode.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(reverseGeocode.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.osmPlace = payload;
+    });
+    builder.addCase(reverseGeocode.rejected, (state) => {
+      state.isLoading = false;
+    });
   },
 });
 
 const { reducer, actions } = locationSlice;
 
-export const { clearSelectedGooglePlace } = actions;
+export const { clearSelectedOSMPlace } = actions;
 
 export default reducer;
