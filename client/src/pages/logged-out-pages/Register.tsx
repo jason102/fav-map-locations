@@ -17,8 +17,7 @@ import register from "src/app/api/auth/registerThunk";
 import {
   FetchResult,
   FetchResultType,
-  setFetchResult,
-  setIsSnackbarOpen,
+  openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import { validateEmail, validatePassword } from "src/utils";
 import TogglePasswordVisibility from "./TogglePasswordVisibility";
@@ -67,7 +66,7 @@ const Register: React.FC = () => {
 
     if (requestStatus === "fulfilled") {
       dispatch(
-        setFetchResult({
+        openSnackbarWithFetchResult({
           message: "Welcome to Favorite Map Locations!",
           type: FetchResultType.success,
         })
@@ -76,10 +75,8 @@ const Register: React.FC = () => {
 
     if (requestStatus === "rejected") {
       const fetchResult = payload as FetchResult;
-      dispatch(setFetchResult(fetchResult));
+      dispatch(openSnackbarWithFetchResult(fetchResult));
     }
-
-    dispatch(setIsSnackbarOpen(true));
   };
 
   return (

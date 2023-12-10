@@ -14,6 +14,9 @@ export type Place = {
   id: PlaceId;
   name: string;
   address: string;
+  lat: number;
+  lng: number;
+  isFavorited: boolean;
 };
 
 export type PlaceDetails = Place & {

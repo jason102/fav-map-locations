@@ -23,6 +23,9 @@ const reverseGeocode = createAsyncThunk<Place, LatLng>(
         id: String(placeId),
         name,
         address,
+        lat,
+        lng,
+        isFavorited: false,
       };
     } catch (error) {
       const e = String(error);

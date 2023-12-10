@@ -10,8 +10,7 @@ import logout from "src/app/api/auth/logoutThunk";
 import {
   FetchResult,
   FetchResultType,
-  setFetchResult,
-  setIsSnackbarOpen,
+  openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import LoadingButton from "src/components/LoadingButton";
 
@@ -29,7 +28,7 @@ const NavBar: React.FC = () => {
 
     if (requestStatus === "fulfilled") {
       dispatch(
-        setFetchResult({
+        openSnackbarWithFetchResult({
           message: "Goodbye! Come again soon!",
           type: FetchResultType.success,
         })
@@ -38,10 +37,8 @@ const NavBar: React.FC = () => {
 
     if (requestStatus === "rejected") {
       const fetchResult = payload as FetchResult;
-      dispatch(setFetchResult(fetchResult));
+      dispatch(openSnackbarWithFetchResult(fetchResult));
     }
-
-    dispatch(setIsSnackbarOpen(true));
   };
 
   return (

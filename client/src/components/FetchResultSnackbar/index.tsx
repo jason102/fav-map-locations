@@ -2,7 +2,7 @@ import React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useAppDispatch, useAppSelector } from "src/app/store";
-import { setIsSnackbarOpen } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
+import { closeSnackbar } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 
 const FetchResultSnackbar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ const FetchResultSnackbar: React.FC = () => {
       return;
     }
 
-    dispatch(setIsSnackbarOpen(false));
+    dispatch(closeSnackbar());
   };
 
   return (
@@ -30,6 +30,7 @@ const FetchResultSnackbar: React.FC = () => {
       <Alert
         onClose={handleClose}
         severity={fetchResult.type}
+        elevation={6}
         sx={{ width: "100%" }}
       >
         {fetchResult.message}

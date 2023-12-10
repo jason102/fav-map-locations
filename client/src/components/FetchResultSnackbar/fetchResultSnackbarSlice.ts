@@ -30,17 +30,21 @@ const fetchResultSnackbarSlice = createSlice({
   name: "fetchResultSnackbar",
   initialState,
   reducers: {
-    setIsSnackbarOpen(state, { payload }: PayloadAction<boolean>) {
-      state.isSnackbarOpen = payload;
+    closeSnackbar(state) {
+      state.isSnackbarOpen = false;
     },
-    setFetchResult(state, { payload }: PayloadAction<FetchResult>) {
+    openSnackbarWithFetchResult(
+      state,
+      { payload }: PayloadAction<FetchResult>
+    ) {
       state.fetchResult = payload;
+      state.isSnackbarOpen = true;
     },
   },
 });
 
 const { actions, reducer } = fetchResultSnackbarSlice;
 
-export const { setFetchResult, setIsSnackbarOpen } = actions;
+export const { openSnackbarWithFetchResult, closeSnackbar } = actions;
 
 export default reducer;

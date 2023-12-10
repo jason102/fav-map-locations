@@ -16,8 +16,7 @@ import login from "src/app/api/auth/loginThunk";
 import {
   FetchResult,
   FetchResultType,
-  setFetchResult,
-  setIsSnackbarOpen,
+  openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import TogglePasswordVisibility from "src/pages/logged-out-pages/TogglePasswordVisibility";
 import LoadingButton from "src/components/LoadingButton";
@@ -46,7 +45,7 @@ const Login: React.FC = () => {
 
     if (requestStatus === "fulfilled") {
       dispatch(
-        setFetchResult({
+        openSnackbarWithFetchResult({
           message: "Logged in successfully!",
           type: FetchResultType.success,
         })
@@ -61,10 +60,8 @@ const Login: React.FC = () => {
 
     if (requestStatus === "rejected") {
       const fetchResult = payload as FetchResult;
-      dispatch(setFetchResult(fetchResult));
+      dispatch(openSnackbarWithFetchResult(fetchResult));
     }
-
-    dispatch(setIsSnackbarOpen(true));
   };
 
   return (

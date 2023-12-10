@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link as RRDLink } from "react-router-dom";
 import { MapContainer, TileLayer, Popup } from "react-leaflet";
 import { LeafletMouseEvent, LatLng } from "leaflet";
 import "./index.css";
@@ -11,13 +11,23 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useFavoritePlaceMutation } from "src/app/api";
+import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
+import { Place } from "src/pages/logged-in-pages/Location/types";
+import { openSnackbarWithFetchResult } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 
 const Map: React.FC = () => {
   const dispatch = useAppDispatch();
   const isLoadingPlace = useAppSelector((state) => state.location.isLoading);
   const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
 
-  const navigate = useNavigate();
+  const [dispatchFavoritePlace] = useSnackbarFetchResponse<Place>(
+    useFavoritePlaceMutation(),
+    {}
+  );
 
   const [popupLatLng, setPopupLatLng] = useState(new LatLng(0, 0));
 
@@ -26,10 +36,9 @@ const Map: React.FC = () => {
     await dispatch(reverseGeocode(latlng));
   };
 
-  const onPopupButtonClick = () => {
-    if (selectedPlace) {
-      navigate(`/location/${selectedPlace.id}`);
-    }
+  const onFavoritePlace = async () => {
+    const fetchResult = await dispatchFavoritePlace(selectedPlace!);
+    dispatch(openSnackbarWithFetchResult(fetchResult));
   };
 
   // TODO: Change the position to be based on the user's location?
@@ -55,7 +64,25 @@ const Map: React.FC = () => {
                 </Typography>
               )}
               <Typography variant="body2">{selectedPlace.address}</Typography>
-              <Button onClick={onPopupButtonClick}>Details</Button>
+              {selectedPlace.isFavorited ? (
+                <Box display="flex" flexDirection="row">
+                  <Box flex={1}>
+                    <Button
+                      component={RRDLink}
+                      to={`/location/${selectedPlace.id}`}
+                    >
+                      Details
+                    </Button>
+                  </Box>
+                  <IconButton>
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              ) : (
+                <Button onClick={onFavoritePlace} endIcon={<FavoriteIcon />}>
+                  Favorite Me!
+                </Button>
+              )}
             </Box>
           )}
         </Popup>
