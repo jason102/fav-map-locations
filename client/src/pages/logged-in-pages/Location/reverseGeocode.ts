@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LatLng } from "leaflet";
-import { OSMPlace } from "./types";
+import { OSMPlace, Place } from "./types";
 
-const reverseGeocode = createAsyncThunk<OSMPlace, LatLng>(
+const reverseGeocode = createAsyncThunk<Place, LatLng>(
   "location/osmPlace",
   async ({ lat, lng }, { rejectWithValue }) => {
     try {
@@ -12,7 +12,18 @@ const reverseGeocode = createAsyncThunk<OSMPlace, LatLng>(
 
       const place: OSMPlace = await response.json();
 
-      return place;
+      const { place_id: placeId, display_name: displayName, name } = place;
+
+      const address =
+        name && displayName.startsWith(name)
+          ? displayName.substring(name.length + 1)
+          : displayName;
+
+      return {
+        id: String(placeId),
+        name,
+        address,
+      };
     } catch (error) {
       const e = String(error);
       return rejectWithValue(e);

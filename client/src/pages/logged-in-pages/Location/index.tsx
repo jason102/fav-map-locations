@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useAppSelector, useAppDispatch } from "src/app/store";
-import { clearSelectedOSMPlace } from "src/pages/logged-in-pages/Location/locationSlice";
+import { clearSelectedPlace } from "src/pages/logged-in-pages/Location/locationSlice";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -11,8 +11,8 @@ import Button from "@mui/material/Button";
 
 const Location: React.FC = () => {
   const dispatch = useAppDispatch();
-  const place = useAppSelector((state) => state.location.osmPlace);
-  console.log({ place });
+  const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
+  console.log({ selectedPlace });
   // React.StrictMode rerenders the app twice in dev mode
   const firstRender = useRef(true);
 
@@ -24,7 +24,7 @@ const Location: React.FC = () => {
         (import.meta.env.DEV && !firstRender.current) ||
         import.meta.env.PROD
       ) {
-        dispatch(clearSelectedOSMPlace());
+        dispatch(clearSelectedPlace());
       }
 
       firstRender.current = false;

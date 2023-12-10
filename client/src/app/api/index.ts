@@ -1,9 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { LatLng } from "leaflet";
 import { RootState } from "src/app/store";
 import { UserDetails } from "src/app/api/types";
+import {
+  Place,
+  PlaceDetails,
+  PlaceId,
+} from "src/pages/logged-in-pages/Location/types";
 // import { HttpResponseCodes } from "src/utils";
 
-const PUBLIC_ENDPOINTS = ["getAllFavoritedPlaces"];
+const PUBLIC_ENDPOINTS = ["getPlacesNearby"];
 
 const apiSlice = createApi({
   reducerPath: "api",
@@ -29,6 +35,23 @@ const apiSlice = createApi({
         params: { username },
       }),
     }),
+    // Or maybe this one should take both a LatLng and
+    // the paginated max number of places to return?
+    getPlacesNearby: builder.query<Place[], LatLng>({
+      query: ({ lat, lng }) => ({
+        url: "/placesNearby",
+        params: {
+          lat,
+          lng,
+        },
+      }),
+    }),
+    getPlaceDetails: builder.query<PlaceDetails, PlaceId>({
+      query: (placeId) => ({
+        url: "/placeDetails",
+        params: { placeId },
+      }),
+    }),
     // getContacts: builder.query<string, void>({
     //   query: () => "/contacts",
     //   providesTags: ["Contact"],
@@ -50,6 +73,10 @@ const apiSlice = createApi({
   }),
 });
 
-export const { useGetUserDetailsQuery } = apiSlice;
+export const {
+  useGetUserDetailsQuery,
+  useGetPlacesNearbyQuery,
+  useGetPlaceDetailsQuery,
+} = apiSlice;
 
 export default apiSlice;

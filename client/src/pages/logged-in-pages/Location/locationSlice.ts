@@ -1,14 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { OSMPlace } from "./types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Place } from "./types";
 import reverseGeocode from "src/pages/logged-in-pages/Location/reverseGeocode";
 
 interface LocationState {
-  osmPlace: OSMPlace | null;
+  selectedPlace: Place | null;
   isLoading: boolean;
 }
 
 const initialState: LocationState = {
-  osmPlace: null,
+  selectedPlace: null,
   isLoading: false,
 };
 
@@ -16,8 +16,11 @@ const locationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
-    clearSelectedOSMPlace(state) {
-      state.osmPlace = null;
+    setSelectedPlace(state, { payload }: PayloadAction<Place>) {
+      state.selectedPlace = payload;
+    },
+    clearSelectedPlace(state) {
+      state.selectedPlace = null;
     },
   },
   extraReducers: (builder) => {
@@ -26,7 +29,7 @@ const locationSlice = createSlice({
     });
     builder.addCase(reverseGeocode.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      state.osmPlace = payload;
+      state.selectedPlace = payload;
     });
     builder.addCase(reverseGeocode.rejected, (state) => {
       state.isLoading = false;
@@ -36,6 +39,6 @@ const locationSlice = createSlice({
 
 const { reducer, actions } = locationSlice;
 
-export const { clearSelectedOSMPlace } = actions;
+export const { setSelectedPlace, clearSelectedPlace } = actions;
 
 export default reducer;

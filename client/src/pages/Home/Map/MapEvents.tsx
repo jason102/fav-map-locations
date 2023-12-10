@@ -1,15 +1,16 @@
 import React from "react";
 import { useMapEvents } from "react-leaflet";
-import { useAppDispatch } from "src/app/store";
-import reverseGeocode from "src/pages/logged-in-pages/Location/reverseGeocode";
+import { LeafletMouseEvent } from "leaflet";
 
-const MapEvents: React.FC = () => {
-  const dispatch = useAppDispatch();
+interface Props {
+  onRightClickLongPress: (e: LeafletMouseEvent) => void;
+}
 
+const MapEvents: React.FC<Props> = ({ onRightClickLongPress }) => {
   useMapEvents({
     // contextmenu() can be used for right clicks and long-presses
     async contextmenu(e) {
-      await dispatch(reverseGeocode(e.latlng));
+      onRightClickLongPress(e);
     },
   });
 

@@ -7,10 +7,20 @@ interface LoaderArgs extends LoaderFunctionArgs {
 }
 
 export default async ({ params, request }: LoaderArgs) => {
+  const username = params.username;
+
+  if (!username) {
+    throw new Response("", {
+      status: 422,
+      statusText:
+        "Invalid username. Please try fixing the URL and loading the page again.",
+    });
+  }
+
   return await baseLoader({
     request,
     endpointQuery: api.endpoints.getUserDetails,
-    queryArg: params.username,
+    queryArg: username,
     needsAccess: true,
   });
 };

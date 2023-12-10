@@ -42,7 +42,7 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "location/:googlePlaceID",
+            path: "location/:placeId",
             loader: locationLoader,
             element: (
               <PrivateRoute>
