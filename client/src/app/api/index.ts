@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LatLng } from "leaflet";
 import { RootState } from "src/app/store";
-import { UserDetails } from "src/app/api/types";
+import { SerializableLatLng, UserDetails } from "src/app/api/types";
 import {
   Place,
   PlaceDetails,
@@ -13,9 +13,6 @@ const PUBLIC_ENDPOINTS = ["getPlacesNearby"];
 
 const apiSlice = createApi({
   reducerPath: "api",
-  // TODO: Switch out fetchBaseQuery to be custom query that throws an error type that I know from my backend
-  // Can also transform successful response data to be TransformedResponse<T> and use the generics
-  // https://stackoverflow.com/questions/70017789/react-redux-how-to-handle-errors-in-rtk-queries-mutation-typescript
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_BASE_URL}/api`,
     prepareHeaders: (headers, { getState, endpoint }) => {
@@ -41,7 +38,7 @@ const apiSlice = createApi({
     }),
     // TODO: Or maybe this one should take both a LatLng and
     // the paginated max number of places to return?
-    getPlacesNearby: builder.query<Place[], LatLng>({
+    getPlacesNearby: builder.query<Place[], SerializableLatLng>({
       query: ({ lat, lng }) => ({
         url: "places/nearby",
         params: {
@@ -88,7 +85,7 @@ const apiSlice = createApi({
 
 export const {
   useGetUserDetailsQuery,
-  useGetPlacesNearbyQuery,
+  useLazyGetPlacesNearbyQuery,
   useGetPlaceDetailsQuery,
   useFavoritePlaceMutation,
   useRemoveFavoritePlaceMutation,
