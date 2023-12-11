@@ -26,6 +26,7 @@ router.get("/refreshToken", async (req: Request, res: Response) => {
         // and exp values in userToken so we can resign the same
         // information and get updated iat and exp timestamps
         const userInfoToSign = {
+          userId: userToken.userId,
           username: userToken.username,
           email: userToken.email,
         };

@@ -1,12 +1,12 @@
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-export interface UserTokenRequst extends Request {
-  userToken?: string | JwtPayload;
+export interface UserTokenRequest extends Request {
+  userToken?: JwtPayload & { userId: string };
 }
 
-const verifyToken = (
-  req: UserTokenRequst,
+export const verifyToken = (
+  req: UserTokenRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -27,11 +27,34 @@ const verifyToken = (
         return res.status(403).json({ error: error.message });
       }
 
-      req.userToken = userToken;
+      req.userToken = userToken as JwtPayload & { userId: string };
 
       next();
     }
   );
 };
 
-export default verifyToken;
+export const verifyIsSameUser = (
+  req: UserTokenRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.headers["userid"];
+  const userToken = req.userToken;
+
+  if (!userToken) {
+    return res
+      .status(403)
+      .json({ error: "Middleware requires the JWT userToken." });
+  }
+
+  if (userId !== userToken.userId) {
+    return res
+      .status(403)
+      .json({ error: "User is unauthorized to perform this action." });
+  }
+
+  req.userToken!.userId = userId;
+
+  next();
+};

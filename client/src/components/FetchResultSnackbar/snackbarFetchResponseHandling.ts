@@ -7,6 +7,7 @@ import {
   FetchResultType,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import { UseMutationHookReturnType } from "./types";
+import { HttpResponseCodes } from "src/utils";
 
 // Returns a FetchResultSnackbar FetchResult so the snackbar shows the correct information based on the
 // triggerFunction API response data
@@ -18,14 +19,13 @@ export const useSnackbarFetchResponse = <T>(
 ): [(payload: T) => Promise<FetchResult>, { isLoading: boolean }] => {
   const dispatchMutation = async (payload: T): Promise<FetchResult> => {
     try {
-      const { message, status } = await triggerFunction(payload).unwrap();
+      const { message } = await triggerFunction(payload).unwrap();
 
-      if (httpResponseCodeMessageMap) {
-        const customFetchResult = httpResponseCodeMessageMap[status];
-
-        if (customFetchResult !== undefined) {
-          return customFetchResult;
-        }
+      if (
+        httpResponseCodeMessageMap &&
+        HttpResponseCodes.Success in httpResponseCodeMessageMap
+      ) {
+        return httpResponseCodeMessageMap[HttpResponseCodes.Success];
       }
 
       return {
@@ -42,8 +42,19 @@ export const useSnackbarFetchResponse = <T>(
           }
         }
 
-        const errorMessage =
-          "error" in error ? (error.error as string) : (error.data as string);
+        let errorMessage = "Unknown error";
+
+        if ("error" in error) {
+          errorMessage = error.error;
+        }
+
+        if (
+          typeof error.data === "object" &&
+          error.data !== null &&
+          "message" in error.data
+        ) {
+          errorMessage = error.data.message as string;
+        }
 
         return {
           message: errorMessage,

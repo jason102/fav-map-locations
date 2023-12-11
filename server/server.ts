@@ -8,6 +8,7 @@ import loginRoute from "./routes/auth/login";
 import logoutRoute from "./routes/auth/logout";
 import refreshTokenRoute from "./routes/auth/refreshToken";
 import userDetailsRoute from "./routes/profile/user";
+import addFavoriteRoute from "./routes/places/addFavorite";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId"
   );
   res.header("Access-Control-Allow-Credentials", "true");
 
@@ -62,6 +63,8 @@ app.use("/api/auth", [
 ]);
 
 app.use("/api/user", [userDetailsRoute]);
+
+app.use("/api/places", [addFavoriteRoute]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);

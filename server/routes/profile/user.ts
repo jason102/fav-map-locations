@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import { DatabaseUser } from "../../types";
+import { DatabaseUser } from "../auth/types";
 import { getDatabase } from "../../db/dbSetup";
-import verifyToken from "../auth/middleware";
+import { verifyToken, verifyIsSameUser } from "../auth/middleware";
 
 const router = express.Router();
 const db = getDatabase();
@@ -42,7 +42,7 @@ router.get(
 
       return res.status(200).json({ userDetails });
     } catch (error) {
-      return res.status(401).json({ error: error.message });
+      return res.status(401).json({ message: error.message });
     }
   }
 );

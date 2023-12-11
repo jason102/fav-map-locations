@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { getDatabase } from "../../db/dbSetup";
 import { getSignedJwtTokens } from "../../utils/jwt";
 import { validateLoginFields } from "./authFieldValidation";
-import { DatabaseUser, LoginFormValues } from "../../types";
+import { DatabaseUser, LoginFormValues } from "./types";
 
 const router = express.Router();
 const db = getDatabase();
@@ -54,6 +54,7 @@ router.post(
 
       // Sign and return tokens
       const userInfoToSign = {
+        userId: user.user_id,
         username: user.username,
         email: user.email,
       };

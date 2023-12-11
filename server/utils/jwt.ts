@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { PublicUserInfo } from "../types";
+import { PublicUserInfo } from "../routes/auth/types";
 
 // Generate an access token and a refresh token for this database user
 // Copied from https://github.com/morganpage/jwt-pg/blob/main/utils/jwt-helpers.js

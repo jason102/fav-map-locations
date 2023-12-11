@@ -10,7 +10,11 @@ import {
   MutationDefinition,
 } from "@reduxjs/toolkit/query/react";
 
-export type TransformedResponse = { status: number; message: string };
+export type TransformedResponse<T = any> = {
+  status: number;
+  message: string;
+  data?: T;
+};
 
 // Used for the special case where we're directly passing the apiSlice.useXXXMutation() return value to a custom hook
 // This is simply the useXXXMutation() return type but with specific types replaced with 'any' and { isLoading: boolean } added on

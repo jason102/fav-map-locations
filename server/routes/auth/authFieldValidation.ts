@@ -1,4 +1,4 @@
-import { LoginFormValues, RegisterFormValues } from "../../types";
+import { LoginFormValues, RegisterFormValues } from "./types";
 
 // Most popular upvoted Stack Overflow regex for testing email format validity
 // https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript

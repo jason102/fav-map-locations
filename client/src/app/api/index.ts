@@ -13,14 +13,19 @@ const PUBLIC_ENDPOINTS = ["getPlacesNearby"];
 
 const apiSlice = createApi({
   reducerPath: "api",
+  // TODO: Switch out fetchBaseQuery to be custom query that throws an error type that I know from my backend
+  // Can also transform successful response data to be TransformedResponse<T> and use the generics
+  // https://stackoverflow.com/questions/70017789/react-redux-how-to-handle-errors-in-rtk-queries-mutation-typescript
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_BASE_URL}/api`,
     prepareHeaders: (headers, { getState, endpoint }) => {
       if (!PUBLIC_ENDPOINTS.includes(endpoint)) {
         const token = (getState() as RootState).auth.accessToken;
+        const userId = (getState() as RootState).auth.userToken?.userId ?? "";
 
         if (token) {
           headers.set("authorization", `Bearer ${token}`);
+          headers.set("userid", userId);
         }
       }
 
@@ -38,7 +43,7 @@ const apiSlice = createApi({
     // the paginated max number of places to return?
     getPlacesNearby: builder.query<Place[], LatLng>({
       query: ({ lat, lng }) => ({
-        url: "/placesNearby",
+        url: "places/nearby",
         params: {
           lat,
           lng,
@@ -47,15 +52,15 @@ const apiSlice = createApi({
     }),
     getPlaceDetails: builder.query<PlaceDetails, PlaceId>({
       query: (placeId) => ({
-        url: "/placeDetails",
+        url: "places/details",
         params: { placeId },
       }),
     }),
     favoritePlace: builder.mutation<TransformedResponse, Place>({
       query: (place) => ({
-        url: "/favoritePlace",
+        url: "places/addFavorite",
         method: "POST",
-        body: place,
+        body: { ...place, isFavorited: undefined }, // No need to send isFavorited
       }),
       onQueryStarted: (place, { dispatch, queryFulfilled }) => {
         const dispatchResult = dispatch(
@@ -73,7 +78,7 @@ const apiSlice = createApi({
     }),
     removeFavoritePlace: builder.mutation<TransformedResponse, PlaceId>({
       query: (placeId) => ({
-        url: "/removeFavoritePlace",
+        url: "places/removeFavorite",
         method: "DELETE",
         body: placeId,
       }),

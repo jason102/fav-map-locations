@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { getDatabase } from "../../db/dbSetup";
 import { getSignedJwtTokens } from "../../utils/jwt";
 import { validateRegistrationFields } from "./authFieldValidation";
-import { DatabaseUser, RegisterFormValues } from "../../types";
+import { DatabaseUser, RegisterFormValues } from "./types";
 import { PgErrorCodes } from "../../db/utils";
 
 const router = express.Router();
@@ -41,6 +41,7 @@ router.post(
 
       // Sign and return tokens
       const userInfoToSign = {
+        userId: newUser.user_id,
         username: newUser.username,
         email: newUser.email,
       };
@@ -54,11 +55,7 @@ router.post(
         secure: true,
       });
 
-      return res.status(201).location("/").json({
-        username: newUser.username,
-        email: newUser.email,
-        accessToken,
-      });
+      return res.status(201).location("/").json({ accessToken });
     } catch (error) {
       if (error.code === PgErrorCodes.duplicateRecord) {
         return res.status(409).json({ error: "User already exists" });
