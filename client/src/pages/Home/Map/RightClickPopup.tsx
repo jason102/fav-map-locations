@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link as RRDLink } from "react-router-dom";
+
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Popup, useMapEvent } from "react-leaflet";
 import { LeafletMouseEvent, LatLng } from "leaflet";
 import "./index.css";
@@ -12,19 +13,29 @@ import {
   FetchResultType,
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
+import RHFTextField from "src/components/RHFTextField";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { FavNewPlaceValues } from "./types";
 
 const RightClickPopup: React.FC = () => {
   const dispatch = useAppDispatch();
   const isLoadingPlace = useAppSelector((state) => state.location.isLoading);
   const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
+
+  const {
+    control,
+    handleSubmit,
+    reset: resetForm,
+  } = useForm<FavNewPlaceValues>({
+    defaultValues: {
+      placeName: "",
+    },
+  });
 
   const [popupLatLng, setPopupLatLng] = useState<LatLng | null>(null);
 
@@ -38,12 +49,20 @@ const RightClickPopup: React.FC = () => {
     await dispatch(reverseGeocode(latlng));
   });
 
-  const onFavoritePlace = async () => {
-    const fetchResult = await dispatchFavoritePlace(selectedPlace!);
+  const onFavoritePlace: SubmitHandler<FavNewPlaceValues> = async (
+    formValues
+  ) => {
+    const placeToDispatch = !selectedPlace!.name
+      ? { ...selectedPlace!, name: formValues.placeName.trim() }
+      : selectedPlace!;
+
+    const fetchResult = await dispatchFavoritePlace(placeToDispatch);
 
     if (fetchResult.type !== FetchResultType.success) {
       dispatch(openSnackbarWithFetchResult(fetchResult));
     }
+
+    resetForm();
   };
 
   return (
@@ -55,33 +74,33 @@ const RightClickPopup: React.FC = () => {
               <CircularProgress size={18} color="inherit" />
             </Box>
           ) : (
-            <Box display="flex" flexDirection="column">
-              {selectedPlace.name && (
-                <Typography textAlign="center">
-                  <b>{selectedPlace.name}</b>
-                </Typography>
-              )}
-              <Typography variant="body2">{selectedPlace.address}</Typography>
-              {selectedPlace.isFavorited ? (
-                <Box display="flex" flexDirection="row">
-                  <Box flex={1}>
-                    <Button
-                      component={RRDLink}
-                      to={`/location/${selectedPlace.id}`}
-                    >
-                      Details
-                    </Button>
-                  </Box>
-                  <IconButton>
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              ) : (
-                <Button onClick={onFavoritePlace} endIcon={<FavoriteIcon />}>
+            <form onSubmit={handleSubmit(onFavoritePlace)}>
+              <Box display="flex" flexDirection="column">
+                {selectedPlace.name ? (
+                  <Typography textAlign="center">
+                    <b>{selectedPlace.name}</b>
+                  </Typography>
+                ) : (
+                  <RHFTextField
+                    required
+                    id="placeName"
+                    name="placeName"
+                    label="Enter a place name (required)"
+                    fullWidth
+                    variant="standard"
+                    control={control}
+                    maxLength={{
+                      value: 255,
+                      message: "Name cannot exceed 255 characters",
+                    }}
+                  />
+                )}
+                <Typography variant="body2">{selectedPlace.address}</Typography>
+                <Button type="submit" endIcon={<FavoriteIcon />}>
                   Favorite Me!
                 </Button>
-              )}
-            </Box>
+              </Box>
+            </form>
           )}
         </Popup>
       )}
