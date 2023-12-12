@@ -40,7 +40,7 @@ router.get(
         memberSince: user.created_at,
       };
 
-      return res.status(200).json({ userDetails });
+      return res.status(200).json(userDetails);
     } catch (error) {
       return res.status(401).json({ message: error.message });
     }

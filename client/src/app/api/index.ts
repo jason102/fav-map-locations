@@ -29,6 +29,7 @@ const apiSlice = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Places"],
   endpoints: (builder) => ({
     getUserDetails: builder.query<UserDetails, string>({
       query: (username) => ({
@@ -46,6 +47,7 @@ const apiSlice = createApi({
           lng,
         },
       }),
+      providesTags: ["Places"],
     }),
     getPlaceDetails: builder.query<PlaceDetails, PlaceId>({
       query: (placeId) => ({
@@ -63,7 +65,7 @@ const apiSlice = createApi({
         const dispatchResult = dispatch(
           apiSlice.util.updateQueryData(
             "getPlacesNearby",
-            new LatLng(place.lat, place.lng),
+            { lat: place.lat, lng: place.lng },
             (draft) => {
               draft.push(place);
             }
@@ -72,6 +74,7 @@ const apiSlice = createApi({
 
         queryFulfilled.catch(dispatchResult.undo);
       },
+      invalidatesTags: ["Places"],
     }),
     removeFavoritePlace: builder.mutation<TransformedResponse, PlaceId>({
       query: (placeId) => ({
@@ -79,13 +82,14 @@ const apiSlice = createApi({
         method: "DELETE",
         body: placeId,
       }),
+      invalidatesTags: ["Places"],
     }),
   }),
 });
 
 export const {
   useGetUserDetailsQuery,
-  useLazyGetPlacesNearbyQuery,
+  useGetPlacesNearbyQuery,
   useGetPlaceDetailsQuery,
   useFavoritePlaceMutation,
   useRemoveFavoritePlaceMutation,

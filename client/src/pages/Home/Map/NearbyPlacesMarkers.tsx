@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useMapEvent, useMap } from "react-leaflet";
-import { useLazyGetPlacesNearbyQuery } from "src/app/api";
+import { useGetPlacesNearbyQuery } from "src/app/api";
+import { useAppDispatch, useAppSelector } from "src/app/store";
+import { setMapCenter } from "src/pages/logged-in-pages/Location/locationSlice";
 // const markerIcon = L.icon({
 //   iconSize: [25, 41],
 //   iconAnchor: [10, 41],
@@ -10,14 +12,19 @@ import { useLazyGetPlacesNearbyQuery } from "src/app/api";
 // });
 
 const NearbyPlacesMarkers: React.FC = () => {
-  const [dispatchGetPlacesNearby, { data, error, isError, isFetching }] =
-    useLazyGetPlacesNearbyQuery();
+  const dispatch = useAppDispatch();
+
+  const mapCenter = useAppSelector((state) => state.location.mapCenter);
+  const { data, error, isError, isFetching } = useGetPlacesNearbyQuery(
+    mapCenter!,
+    { skip: !mapCenter }
+  );
 
   const map = useMap();
 
-  const loadPlaces = async () => {
+  const loadPlaces = () => {
     const { lat, lng } = map.getCenter();
-    await dispatchGetPlacesNearby({ lat, lng });
+    dispatch(setMapCenter({ lat, lng }));
   };
 
   useEffect(() => {
@@ -26,7 +33,7 @@ const NearbyPlacesMarkers: React.FC = () => {
     }
   }, [map]);
 
-  useMapEvent("moveend", loadPlaces);
+  // useMapEvent("moveend", loadPlaces);
 
   return null;
 };

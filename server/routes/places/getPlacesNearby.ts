@@ -30,7 +30,7 @@ router.get(
         lng: place.longitude,
       }));
 
-      return res.status(200).json({ places });
+      return res.status(200).json(places);
     } catch (error) {
       return res.status(401).json({ message: error.message });
     }

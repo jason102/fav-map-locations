@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Place } from "./types";
 import reverseGeocode from "src/pages/logged-in-pages/Location/reverseGeocode";
+import { SerializableLatLng } from "src/app/api/types";
 
 interface LocationState {
   selectedPlace: Place | null;
   isLoading: boolean;
+  mapCenter: SerializableLatLng | null;
 }
 
 const initialState: LocationState = {
   selectedPlace: null,
   isLoading: false,
+  mapCenter: null,
 };
 
 const locationSlice = createSlice({
@@ -21,6 +24,9 @@ const locationSlice = createSlice({
     },
     clearSelectedPlace(state) {
       state.selectedPlace = null;
+    },
+    setMapCenter(state, { payload }: PayloadAction<SerializableLatLng>) {
+      state.mapCenter = payload;
     },
   },
   extraReducers: (builder) => {
@@ -39,6 +45,6 @@ const locationSlice = createSlice({
 
 const { reducer, actions } = locationSlice;
 
-export const { setSelectedPlace, clearSelectedPlace } = actions;
+export const { setSelectedPlace, clearSelectedPlace, setMapCenter } = actions;
 
 export default reducer;
