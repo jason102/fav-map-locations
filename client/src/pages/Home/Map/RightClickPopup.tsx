@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Popup, useMapEvent } from "react-leaflet";
 import { LeafletMouseEvent, LatLng } from "leaflet";
 import "./index.css";
 import { useAppDispatch, useAppSelector } from "src/app/store";
+
 import reverseGeocode from "src/pages/logged-in-pages/Location/reverseGeocode";
 import { useFavoritePlaceMutation } from "src/app/api";
 import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
@@ -14,13 +14,13 @@ import {
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import RHFTextField from "src/components/RHFTextField";
+import { FavNewPlaceValues } from "./types";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { FavNewPlaceValues } from "./types";
 
 const RightClickPopup: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -63,49 +63,50 @@ const RightClickPopup: React.FC = () => {
     }
 
     resetForm();
+    setPopupLatLng(null);
   };
 
-  return (
-    <>
-      {selectedPlace && popupLatLng && (
-        <Popup position={popupLatLng}>
-          {isLoadingPlace ? (
-            <Box display="flex" justifyContent="center">
-              <CircularProgress size={18} color="inherit" />
+  if (selectedPlace && popupLatLng) {
+    return (
+      <Popup position={popupLatLng}>
+        {isLoadingPlace ? (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress size={18} color="inherit" />
+          </Box>
+        ) : (
+          <form onSubmit={handleSubmit(onFavoritePlace)}>
+            <Box display="flex" flexDirection="column">
+              {selectedPlace.name ? (
+                <Typography textAlign="center">
+                  <b>{selectedPlace.name}</b>
+                </Typography>
+              ) : (
+                <RHFTextField
+                  required
+                  id="placeName"
+                  name="placeName"
+                  label="Enter a place name (required)"
+                  fullWidth
+                  variant="standard"
+                  control={control}
+                  maxLength={{
+                    value: 255,
+                    message: "Name cannot exceed 255 characters",
+                  }}
+                />
+              )}
+              <Typography variant="body2">{selectedPlace.address}</Typography>
+              <Button type="submit" endIcon={<FavoriteIcon />}>
+                Favorite Me!
+              </Button>
             </Box>
-          ) : (
-            <form onSubmit={handleSubmit(onFavoritePlace)}>
-              <Box display="flex" flexDirection="column">
-                {selectedPlace.name ? (
-                  <Typography textAlign="center">
-                    <b>{selectedPlace.name}</b>
-                  </Typography>
-                ) : (
-                  <RHFTextField
-                    required
-                    id="placeName"
-                    name="placeName"
-                    label="Enter a place name (required)"
-                    fullWidth
-                    variant="standard"
-                    control={control}
-                    maxLength={{
-                      value: 255,
-                      message: "Name cannot exceed 255 characters",
-                    }}
-                  />
-                )}
-                <Typography variant="body2">{selectedPlace.address}</Typography>
-                <Button type="submit" endIcon={<FavoriteIcon />}>
-                  Favorite Me!
-                </Button>
-              </Box>
-            </form>
-          )}
-        </Popup>
-      )}
-    </>
-  );
+          </form>
+        )}
+      </Popup>
+    );
+  }
+
+  return null;
 };
 
 export default RightClickPopup;

@@ -1,0 +1,15 @@
+.place-icon {
+  width: 45px;
+  height: 61px;
+  text-align: center;
+}
+
+.place-icon-not-selected svg {
+  fill: crimson;
+  stroke: black;
+}
+
+.place-icon-selected svg {
+  fill: gold;
+  stroke: black;
+}
