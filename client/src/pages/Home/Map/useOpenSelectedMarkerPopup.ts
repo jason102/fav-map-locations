@@ -4,7 +4,7 @@ import { Popup } from "leaflet";
 import { useAppSelector } from "src/app/store";
 import { Place } from "src/pages/logged-in-pages/Location/types";
 
-export const useOpenSelectedPopup = (places?: Place[]) => {
+export const useOpenSelectedMarkerPopup = (places?: Place[]) => {
   const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
 
   const map = useMap();

@@ -25,7 +25,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 const RightClickPopup: React.FC = () => {
   const dispatch = useAppDispatch();
   const isLoadingPlace = useAppSelector((state) => state.location.isLoading);
-  const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
+  const rightClickedPlace = useAppSelector(
+    (state) => state.location.rightClickedPlace
+  );
 
   const {
     control,
@@ -52,9 +54,9 @@ const RightClickPopup: React.FC = () => {
   const onFavoritePlace: SubmitHandler<FavNewPlaceValues> = async (
     formValues
   ) => {
-    const placeToDispatch = !selectedPlace!.name
-      ? { ...selectedPlace!, name: formValues.placeName.trim() }
-      : selectedPlace!;
+    const placeToDispatch = !rightClickedPlace!.name
+      ? { ...rightClickedPlace!, name: formValues.placeName.trim() }
+      : rightClickedPlace!;
 
     const fetchResult = await dispatchFavoritePlace(placeToDispatch);
 
@@ -66,7 +68,7 @@ const RightClickPopup: React.FC = () => {
     setPopupLatLng(null);
   };
 
-  if (selectedPlace && popupLatLng) {
+  if (rightClickedPlace && popupLatLng) {
     return (
       <Popup position={popupLatLng}>
         {isLoadingPlace ? (
@@ -76,9 +78,9 @@ const RightClickPopup: React.FC = () => {
         ) : (
           <form onSubmit={handleSubmit(onFavoritePlace)}>
             <Box display="flex" flexDirection="column">
-              {selectedPlace.name ? (
+              {rightClickedPlace.name ? (
                 <Typography textAlign="center">
-                  <b>{selectedPlace.name}</b>
+                  <b>{rightClickedPlace.name}</b>
                 </Typography>
               ) : (
                 <RHFTextField
@@ -95,7 +97,9 @@ const RightClickPopup: React.FC = () => {
                   }}
                 />
               )}
-              <Typography variant="body2">{selectedPlace.address}</Typography>
+              <Typography variant="body2">
+                {rightClickedPlace.address}
+              </Typography>
               <Button type="submit" endIcon={<FavoriteIcon />}>
                 Favorite Me!
               </Button>

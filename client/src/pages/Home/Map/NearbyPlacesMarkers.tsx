@@ -12,7 +12,7 @@ import {
   setSelectedPlace,
 } from "src/pages/logged-in-pages/Location/locationSlice";
 import { Place } from "src/pages/logged-in-pages/Location/types";
-import { useOpenSelectedPopup } from "./useOpenSelectedPopup";
+import { useOpenSelectedMarkerPopup } from "./useOpenSelectedMarkerPopup";
 
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -32,7 +32,7 @@ const NearbyPlacesMarkers: React.FC = () => {
   });
 
   const map = useMap();
-  const popupRefs = useOpenSelectedPopup(places);
+  const popupRefs = useOpenSelectedMarkerPopup(places);
 
   const loadPlaces = () => {
     const { lat, lng } = map.getCenter();

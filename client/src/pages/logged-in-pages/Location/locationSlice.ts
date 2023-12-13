@@ -5,12 +5,14 @@ import { SerializableLatLng } from "src/app/api/types";
 
 interface LocationState {
   selectedPlace: Place | null;
+  rightClickedPlace: Place | null;
   isLoading: boolean;
   mapCenter: SerializableLatLng | null;
 }
 
 const initialState: LocationState = {
   selectedPlace: null,
+  rightClickedPlace: null,
   isLoading: false,
   mapCenter: null,
 };
@@ -35,7 +37,7 @@ const locationSlice = createSlice({
     });
     builder.addCase(reverseGeocode.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      state.selectedPlace = payload;
+      state.rightClickedPlace = payload;
     });
     builder.addCase(reverseGeocode.rejected, (state) => {
       state.isLoading = false;

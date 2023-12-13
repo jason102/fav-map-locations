@@ -19,11 +19,9 @@ const PlacesList: React.FC = () => {
   const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
 
   const mapCenter = useAppSelector((state) => state.location.mapCenter);
-  const {
-    data: places,
-    isFetching,
-    isUninitialized,
-  } = useGetPlacesNearbyQuery(mapCenter!, { skip: !mapCenter });
+  const { data: places } = useGetPlacesNearbyQuery(mapCenter!, {
+    skip: !mapCenter,
+  });
 
   const cardRefs = useScrollToCard(places);
 
@@ -31,7 +29,7 @@ const PlacesList: React.FC = () => {
     dispatch(setSelectedPlace(place));
   };
 
-  if (isFetching || isUninitialized || !places) {
+  if (!places) {
     return (
       <Box display="flex" justifyContent="center" pt={15}>
         <CircularProgress size={30} color="inherit" />
