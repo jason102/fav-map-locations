@@ -9,7 +9,7 @@ router.get("/refreshToken", async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refresh_token;
 
     if (!refreshToken) {
-      return res.sendStatus(401);
+      return res.status(401).json({ error: "Login required" });
     }
 
     // Check if the existing refreshToken has expired or is invalid
