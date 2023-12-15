@@ -24,14 +24,27 @@ import TogglePasswordVisibility from "./TogglePasswordVisibility";
 import LoadingButton from "src/components/LoadingButton";
 import { RegisterFormValues } from "./types";
 
+const PasswordRegex = {
+  uppercase: /(?=.*[A-Z])/,
+  lowercase: /(?=.*[a-z])/,
+  symbol: /(?=.*\W)/,
+  minChars: /.{8,}/,
+};
+
 interface PasswordRequirementProps {
   label: string;
+  type: RegExp;
+  password: string;
 }
 
-const PasswordRequirement: React.FC<PasswordRequirementProps> = ({ label }) => (
+const PasswordRequirement: React.FC<PasswordRequirementProps> = ({
+  label,
+  type,
+  password,
+}) => (
   <Grid item xs={12} sm={6}>
     <FormControlLabel
-      control={<Checkbox checked size="small" />}
+      control={<Checkbox checked={type.test(password)} size="small" />}
       label={label}
       componentsProps={{ typography: { variant: "subtitle2" } }}
     />
@@ -53,7 +66,7 @@ const Register: React.FC = () => {
     },
   });
 
-  const password = useRef({});
+  const password = useRef("");
   password.current = watch("password", "");
 
   const onSubmit: SubmitHandler<RegisterFormValues> = async (
@@ -180,10 +193,26 @@ const Register: React.FC = () => {
                     Password requirements:
                   </Typography>
                 </Grid>
-                <PasswordRequirement label="1 uppercase letter" />
-                <PasswordRequirement label="1 symbol" />
-                <PasswordRequirement label="1 lowercase letter" />
-                <PasswordRequirement label="At least 8 characters long" />
+                <PasswordRequirement
+                  label="1 uppercase letter"
+                  type={PasswordRegex.uppercase}
+                  password={password.current}
+                />
+                <PasswordRequirement
+                  label="1 symbol"
+                  type={PasswordRegex.symbol}
+                  password={password.current}
+                />
+                <PasswordRequirement
+                  label="1 lowercase letter"
+                  type={PasswordRegex.lowercase}
+                  password={password.current}
+                />
+                <PasswordRequirement
+                  label="At least 8 characters long"
+                  type={PasswordRegex.minChars}
+                  password={password.current}
+                />
               </Grid>
             </Grid>
           </Grid>
