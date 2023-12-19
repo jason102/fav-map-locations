@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { LatLng } from "leaflet";
 import { RootState } from "src/app/store";
 import { SerializableLatLng, UserDetails } from "src/app/api/types";
 import {

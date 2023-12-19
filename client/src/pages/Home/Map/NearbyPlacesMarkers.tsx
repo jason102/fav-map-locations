@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOMServer from "react-dom/server";
 import { Link as RRDLink } from "react-router-dom";
 import { Marker, useMap, Popup } from "react-leaflet";
-import L, { LatLng } from "leaflet";
+import L from "leaflet";
 import "./marker.css";
 
 import { useGetPlacesNearbyQuery } from "src/app/api";
@@ -24,9 +24,10 @@ import PlaceIcon from "@mui/icons-material/Place";
 const NearbyPlacesMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
-
   const mapCenter = useAppSelector((state) => state.location.mapCenter);
+
   const { data: places } = useGetPlacesNearbyQuery(mapCenter!, {
     skip: !mapCenter,
   });
@@ -43,6 +44,11 @@ const NearbyPlacesMarkers: React.FC = () => {
     if (map) {
       loadPlaces();
     }
+
+    return () => {
+      dispatch(setSelectedPlace(null));
+      dispatch(setMapCenter(null));
+    };
   }, [map]);
 
   // useMapEvent("moveend", loadPlaces);
@@ -72,14 +78,14 @@ const NearbyPlacesMarkers: React.FC = () => {
           return (
             <Marker
               key={place.id}
-              position={new LatLng(place.lat, place.lng)}
+              position={[place.lat, place.lng]}
               icon={markerIcon}
               eventHandlers={{
                 click: () => onMarkerClick(place),
               }}
             >
               <Popup
-                position={new LatLng(place.lat, place.lng)}
+                position={[place.lat, place.lng]}
                 ref={popupRefs[place.id]}
               >
                 <Box display="flex" flexDirection="column">
@@ -87,16 +93,25 @@ const NearbyPlacesMarkers: React.FC = () => {
                     <b>{place.name}</b>
                   </Typography>
                   <Typography variant="body2">{place.address}</Typography>
-                  <Box display="flex" flexDirection="row">
-                    <Box flex={1}>
-                      <Button component={RRDLink} to={`/location/${place.id}`}>
-                        Details
-                      </Button>
+                  {accessToken ? (
+                    <Box display="flex" flexDirection="row">
+                      <Box flex={1}>
+                        <Button
+                          component={RRDLink}
+                          to={`/location/${place.id}`}
+                        >
+                          Details
+                        </Button>
+                      </Box>
+                      <IconButton>
+                        <DeleteIcon />
+                      </IconButton>
                     </Box>
-                    <IconButton>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
+                  ) : (
+                    <Button component={RRDLink} to={`login`}>
+                      Log in to view details!
+                    </Button>
+                  )}
                 </Box>
               </Popup>
             </Marker>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { Link as RRDLink } from "react-router-dom";
 import { Popup, useMapEvent } from "react-leaflet";
 import { LeafletMouseEvent, LatLng } from "leaflet";
 import "./index.css";
@@ -28,6 +29,7 @@ const RightClickPopup: React.FC = () => {
   const rightClickedPlace = useAppSelector(
     (state) => state.location.rightClickedPlace
   );
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
 
   const {
     control,
@@ -87,10 +89,15 @@ const RightClickPopup: React.FC = () => {
                   required
                   id="placeName"
                   name="placeName"
-                  label="Enter a place name (required)"
+                  label={
+                    accessToken
+                      ? "Enter a place name (required)"
+                      : "Log in to favorite place"
+                  }
                   fullWidth
                   variant="standard"
                   control={control}
+                  disabled={!accessToken}
                   maxLength={{
                     value: 255,
                     message: "Name cannot exceed 255 characters",
@@ -100,9 +107,15 @@ const RightClickPopup: React.FC = () => {
               <Typography variant="body2">
                 {rightClickedPlace.address}
               </Typography>
-              <Button type="submit" endIcon={<FavoriteIcon />}>
-                Favorite Me!
-              </Button>
+              {accessToken ? (
+                <Button type="submit" endIcon={<FavoriteIcon />}>
+                  Favorite Me!
+                </Button>
+              ) : (
+                <Button component={RRDLink} to={`login`}>
+                  Log in to favorite place!
+                </Button>
+              )}
             </Box>
           </form>
         )}

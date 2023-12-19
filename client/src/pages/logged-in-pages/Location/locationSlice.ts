@@ -21,13 +21,13 @@ const locationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
-    setSelectedPlace(state, { payload }: PayloadAction<Place>) {
+    setSelectedPlace(state, { payload }: PayloadAction<Place | null>) {
       state.selectedPlace = payload;
     },
     clearSelectedPlace(state) {
       state.selectedPlace = null;
     },
-    setMapCenter(state, { payload }: PayloadAction<SerializableLatLng>) {
+    setMapCenter(state, { payload }: PayloadAction<SerializableLatLng | null>) {
       state.mapCenter = payload;
     },
   },
