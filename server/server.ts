@@ -1,5 +1,5 @@
 import express from "express";
-// import cors from "cors";
+import cors from "cors";
 import { fileURLToPath } from "url";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -18,25 +18,14 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// CORS
-// app.use(cors({ credentials: true, origin: process.env.URL || "*" }));
-app.use((req, res, next) => {
-  const origin = process.env.URL || req.headers.origin;
-  const host = req.headers?.host ?? "";
-
-  res.header(
-    "Access-Control-Allow-Origin",
-    host.includes("localhost") ? "http://localhost:5173" : origin
-  );
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-
-  next();
-});
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.URL || "http://localhost:5173",
+    allowedHeaders:
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId",
+  })
+);
 
 app.use(cookieParser());
 
