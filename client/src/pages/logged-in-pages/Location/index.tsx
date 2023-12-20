@@ -7,24 +7,23 @@ import { useAppDispatch } from "src/app/store";
 
 import { clearSelectedPlace } from "src/pages/logged-in-pages/Location/locationSlice";
 import { useGetPlaceDetailsQuery } from "src/app/api";
+import UploadPhotosSlide from "./UploadPhotosSlide";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Location: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const { placeId } = useParams();
 
-  const {
-    data: placeDetails,
-    error,
-    isLoading,
-    isFetching,
-  } = useGetPlaceDetailsQuery(placeId ?? "");
-  console.log({ placeDetails, error, isLoading, isFetching });
+  const { data: placeDetails, isFetching } = useGetPlaceDetailsQuery(
+    placeId ?? ""
+  );
+
   // React.StrictMode rerenders the app twice in dev mode
   const firstRender = useRef(true);
 
@@ -44,24 +43,31 @@ const Location: React.FC = () => {
     []
   );
 
+  if (isFetching) {
+    return (
+      <Box display="flex" justifyContent="center" pt={15}>
+        <CircularProgress size={30} color="inherit" />
+      </Box>
+    );
+  }
+
   return (
     <Container component="main" maxWidth={false} disableGutters>
       <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
-        {/* {place?.displayName.text} */}
+        {placeDetails!.name}
       </Typography>
       <Slider dots infinite speed={500} autoplay centerMode>
-        {placeDetails?.photoUrls.map((photo, index) => (
+        {placeDetails!.photoUrls.map((photo, index) => (
           <Box
             key={index}
             component="img"
             src={photo}
             sx={{
               height: "400px",
-              width: "auto",
-              margin: "0 auto",
             }}
           />
         ))}
+        <UploadPhotosSlide />
       </Slider>
       <Container maxWidth="lg" sx={{ my: 4 }}>
         <Box display="flex" flexDirection="row">
