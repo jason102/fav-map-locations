@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import Slider from "react-slick";
+import { useParams } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useAppSelector, useAppDispatch } from "src/app/store";
+import { useAppDispatch } from "src/app/store";
+
 import { clearSelectedPlace } from "src/pages/logged-in-pages/Location/locationSlice";
+import { useGetPlaceDetailsQuery } from "src/app/api";
+
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -11,8 +15,16 @@ import Button from "@mui/material/Button";
 
 const Location: React.FC = () => {
   const dispatch = useAppDispatch();
-  const selectedPlace = useAppSelector((state) => state.location.selectedPlace);
-  console.log({ selectedPlace });
+
+  const { placeId } = useParams();
+
+  const {
+    data: placeDetails,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetPlaceDetailsQuery(placeId ?? "");
+  console.log({ placeDetails, error, isLoading, isFetching });
   // React.StrictMode rerenders the app twice in dev mode
   const firstRender = useRef(true);
 
@@ -33,16 +45,16 @@ const Location: React.FC = () => {
   );
 
   return (
-    <Container maxWidth={false} disableGutters>
+    <Container component="main" maxWidth={false} disableGutters>
       <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
         {/* {place?.displayName.text} */}
       </Typography>
-      {/* <Slider dots infinite speed={500} autoplay centerMode>
-        {place?.photos.map((photo, index) => (
+      <Slider dots infinite speed={500} autoplay centerMode>
+        {placeDetails?.photoUrls.map((photo, index) => (
           <Box
             key={index}
             component="img"
-            src={photo.url}
+            src={photo}
             sx={{
               height: "400px",
               width: "auto",
@@ -50,8 +62,8 @@ const Location: React.FC = () => {
             }}
           />
         ))}
-      </Slider> */}
-      <Container component="main" maxWidth="lg" sx={{ my: 4 }}>
+      </Slider>
+      <Container maxWidth="lg" sx={{ my: 4 }}>
         <Box display="flex" flexDirection="row">
           <Box flex={1}>Average Rating</Box>
           <Box flex={1}>

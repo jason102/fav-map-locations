@@ -10,6 +10,7 @@ import refreshTokenRoute from "./routes/auth/refreshToken";
 import userDetailsRoute from "./routes/profile/user";
 import addFavoriteRoute from "./routes/places/addFavorite";
 import getPlacesNearbyRoute from "./routes/places/getPlacesNearby";
+import getPlaceDetailsRoute from "./routes/places/getPlaceDetails";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -65,7 +66,11 @@ app.use("/api/auth", [
 
 app.use("/api/user", [userDetailsRoute]);
 
-app.use("/api/places", [addFavoriteRoute, getPlacesNearbyRoute]);
+app.use("/api/places", [
+  addFavoriteRoute,
+  getPlacesNearbyRoute,
+  getPlaceDetailsRoute,
+]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);

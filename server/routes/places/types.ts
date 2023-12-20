@@ -18,3 +18,7 @@ export type DatabasePlace = {
   photo_urls: string[];
   created_at: Date;
 };
+
+export type PlaceDetails = Place & {
+  photoUrls: string[];
+};

@@ -16,11 +16,11 @@ export type Place = {
   address: string;
   lat: number;
   lng: number;
-  isFavorited: boolean;
+  isFavorited?: boolean; // Only exists in the frontend data
 };
 
 export type PlaceDetails = Place & {
   photoUrls: string[];
-  averageRating: number;
-  userRating?: number;
+  // averageRating: number;
+  // userRating?: number;
 };

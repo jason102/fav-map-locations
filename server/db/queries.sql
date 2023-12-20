@@ -38,6 +38,9 @@ CREATE TABLE places (
 -- Add a new favorite place
 INSERT INTO places (place_id, user_id, place_name, place_address, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6);
 
+-- Get a specific favorite place
+SELECT * FROM places WHERE place_id = $1;
+
 -- Get one or more favorites
 SELECT * FROM places WHERE place_id = ANY($1);
 

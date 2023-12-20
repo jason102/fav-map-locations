@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { DatabaseUser } from "../auth/types";
 import { getDatabase } from "../../db/dbSetup";
-import { verifyToken, verifyIsSameUser } from "../auth/middleware";
+import { verifyToken } from "../auth/middleware";
 
 const router = express.Router();
 const db = getDatabase();
