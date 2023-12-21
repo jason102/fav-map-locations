@@ -22,3 +22,10 @@ export type DatabasePlace = {
 export type PlaceDetails = Place & {
   photoUrls: string[];
 };
+
+export type DatabasePhoto = {
+  photo_file_key: string;
+  place_id: PlaceId;
+  user_id: string;
+  upload_timestamp: Date;
+};

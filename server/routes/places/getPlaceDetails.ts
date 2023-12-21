@@ -1,13 +1,13 @@
 import express, { Request, Response } from "express";
 import { getDatabase } from "../../db/dbSetup";
-import { DatabasePlace, PlaceDetails } from "./types";
+import { DatabasePlace, PlaceDetails, PlaceId } from "./types";
 import { verifyToken } from "../auth/middleware";
 
 const router = express.Router();
 const db = getDatabase();
 
 interface QueryStringParams {
-  placeId?: string;
+  placeId?: PlaceId;
 }
 
 router.get(

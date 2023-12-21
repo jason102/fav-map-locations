@@ -47,3 +47,14 @@ SELECT * FROM places WHERE place_id = ANY($1);
 -- Remove a favorite
 DELETE FROM places WHERE place_id = 'your_place_id' AND user_id = 'your_user_id';
 
+-- Favorited place photos
+CREATE TABLE photos (
+  photo_file_key VARCHAR(255) PRIMARY KEY, 
+  place_id VARCHAR(255) REFERENCES places(place_id) NOT NULL, 
+  user_id uuid REFERENCES users(user_id) NOT NULL, 
+  upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Add a photo
+INSERT INTO photos (photo_file_key, place_id, user_id) VALUES ($1, $2, $3);
+

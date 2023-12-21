@@ -54,6 +54,17 @@ const apiSlice = createApi({
         params: { placeId },
       }),
     }),
+    addPlacePhotos: builder.mutation<
+      TransformedResponse,
+      { filesFormData: FormData; placeId: PlaceId }
+    >({
+      query: ({ filesFormData, placeId }) => ({
+        url: "places/addPhotos",
+        method: "POST",
+        body: filesFormData,
+        params: { placeId },
+      }),
+    }),
     favoritePlace: builder.mutation<TransformedResponse, Place>({
       query: (place) => ({
         url: "places/addFavorite",
@@ -92,6 +103,7 @@ export const {
   useGetPlaceDetailsQuery,
   useFavoritePlaceMutation,
   useRemoveFavoritePlaceMutation,
+  useAddPlacePhotosMutation,
 } = apiSlice;
 
 export default apiSlice;
