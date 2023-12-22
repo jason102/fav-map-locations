@@ -1,15 +1,35 @@
 import express from "express";
 import cors from "cors";
-import { setupDatabase } from "./db/db-connection";
 import { fileURLToPath } from "url";
 import path from "path";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
+import registerRoute from "./routes/auth/register";
+import loginRoute from "./routes/auth/login";
+import logoutRoute from "./routes/auth/logout";
+import refreshTokenRoute from "./routes/auth/refreshToken";
+import userDetailsRoute from "./routes/profile/user";
+import addFavoriteRoute from "./routes/places/addFavorite";
+import getPlacesNearbyRoute from "./routes/places/getPlacesNearby";
+import getPlaceDetailsRoute from "./routes/places/getPlaceDetails";
+import addPhotosRoute from "./routes/places/addPhotos";
+
 dotenv.config();
-const db = setupDatabase();
+
 const app = express();
-app.use(cors());
 app.use(express.json());
+
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.URL || "http://localhost:5173",
+    allowedHeaders:
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization, UserId",
+  })
+);
+
+app.use(cookieParser());
 
 // For serving the static files from the React build directory.
 const __filename = fileURLToPath(import.meta.url);
@@ -28,27 +48,21 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(REACT_BUILD_DIR, "index.html"));
 });
 
-// app.post("/addContact", async (req, res) => {
-//   try {
-//     const newContact = {
-//       name: req.body.name,
-//       email: req.body.email,
-//       phone: req.body.phone,
-//       notes: req.body.notes,
-//     };
+app.use("/api/auth", [
+  registerRoute,
+  loginRoute,
+  logoutRoute,
+  refreshTokenRoute,
+]);
 
-//     const result = await db.query(
-//       "INSERT INTO contacts(name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
-//       [newContact.name, newContact.email, newContact.phone, newContact.notes]
-//     );
+app.use("/api/user", [userDetailsRoute]);
 
-//     res.json(result.rows[0]);
-//   } catch (e) {
-//     console.log(e);
-
-//     return res.status(400).json({ e });
-//   }
-// });
+app.use("/api/places", [
+  addFavoriteRoute,
+  getPlacesNearbyRoute,
+  getPlaceDetailsRoute,
+  addPhotosRoute,
+]);
 
 app.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);
