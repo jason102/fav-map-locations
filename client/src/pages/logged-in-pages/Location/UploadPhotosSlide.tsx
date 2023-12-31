@@ -1,5 +1,6 @@
 import React, { useRef, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
+import { useAppDispatch } from "src/app/store";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -7,18 +8,26 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
+
 import { useAddPlacePhotosMutation } from "src/app/api";
+import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
+import { PlaceId } from "./types";
+import {
+  FetchResultType,
+  openSnackbarWithFetchResult,
+} from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 
 const UploadPhotosSlide: React.FC = () => {
-  const [dispatchAddPlacePhotos] = useAddPlacePhotosMutation();
+  const dispatch = useAppDispatch();
+
+  const [dispatchAddPlacePhotos] = useSnackbarFetchResponse<{
+    filesFormData: FormData;
+    placeId: PlaceId;
+  }>(useAddPlacePhotosMutation());
 
   const { placeId } = useParams();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const onUploadFileCardClick = () => {
-    fileInputRef.current!.click();
-  };
 
   const onUploadPhoto = async (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
@@ -29,16 +38,18 @@ const UploadPhotosSlide: React.FC = () => {
     }
 
     const formData = new FormData();
-    Array.from(selectedFiles).forEach((file) => {
+    for (const file of selectedFiles) {
       formData.append(`images`, file);
-    });
+    }
 
-    const result = await dispatchAddPlacePhotos({
+    const fetchResult = await dispatchAddPlacePhotos({
       filesFormData: formData,
       placeId: placeId || "",
     });
 
-    console.log({ result });
+    if (fetchResult.type !== FetchResultType.success) {
+      dispatch(openSnackbarWithFetchResult(fetchResult));
+    }
   };
 
   return (
@@ -63,7 +74,7 @@ const UploadPhotosSlide: React.FC = () => {
           }}
         >
           <Card elevation={6}>
-            <CardActionArea onClick={onUploadFileCardClick}>
+            <CardActionArea onClick={() => fileInputRef.current!.click()}>
               <CardContent>
                 <Box
                   sx={{

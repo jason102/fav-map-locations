@@ -14,6 +14,7 @@ import addFavoriteRoute from "./routes/places/addFavorite";
 import getPlacesNearbyRoute from "./routes/places/getPlacesNearby";
 import getPlaceDetailsRoute from "./routes/places/getPlaceDetails";
 import addPhotosRoute from "./routes/places/addPhotos";
+import getPhotosRoute from "./routes/places/getPhotos";
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use("/api/places", [
   getPlacesNearbyRoute,
   getPlaceDetailsRoute,
   addPhotosRoute,
+  getPhotosRoute,
 ]);
 
 app.listen(process.env.PORT, () => {

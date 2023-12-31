@@ -58,3 +58,5 @@ CREATE TABLE photos (
 -- Add a photo
 INSERT INTO photos (photo_file_key, place_id, user_id) VALUES ($1, $2, $3);
 
+-- Get photos for a specific place
+SELECT * FROM photos WHERE place_id = $1;

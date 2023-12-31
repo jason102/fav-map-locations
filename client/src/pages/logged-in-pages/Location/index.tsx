@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import { useParams } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useAppDispatch } from "src/app/store";
+import { useAppDispatch, useAppSelector } from "src/app/store";
 
 import { clearSelectedPlace } from "src/pages/logged-in-pages/Location/locationSlice";
 import { useGetPlaceDetailsQuery } from "src/app/api";
@@ -18,7 +18,38 @@ import CircularProgress from "@mui/material/CircularProgress";
 const Location: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  const userToken = useAppSelector((state) => state.auth.userToken);
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
+
+  const [imageSrc, setImageSrc] = useState<string[]>([]);
+
   const { placeId } = useParams();
+
+  useEffect(() => {
+    // Make a request to your server to fetch the image data
+    // Replace 'YOUR_SERVER_ENDPOINT' with the actual endpoint
+    fetch(
+      `${
+        import.meta.env.VITE_BASE_URL
+      }/api/places/getPhotos?placeId=${placeId}`,
+      {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          userid: userToken?.userId || "",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const base64Images: string[] = data.base64Images;
+        setImageSrc(
+          base64Images.map((base64) => `data:image/jpeg;base64,${base64}`)
+        );
+      })
+      .catch((error) => {
+        console.error("Error fetching image:", error);
+      });
+  }, []);
 
   const { data: placeDetails, isFetching } = useGetPlaceDetailsQuery(
     placeId ?? ""
@@ -70,6 +101,9 @@ const Location: React.FC = () => {
         <UploadPhotosSlide />
       </Slider>
       <Container maxWidth="lg" sx={{ my: 4 }}>
+        {imageSrc.map((image, index) => (
+          <img key={index} src={image} alt="Uploaded Image" />
+        ))}
         <Box display="flex" flexDirection="row">
           <Box flex={1}>Average Rating</Box>
           <Box flex={1}>

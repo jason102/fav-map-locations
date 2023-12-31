@@ -7,6 +7,8 @@ import { PlaceId } from "./types";
 import { UserTokenRequest, verifyToken } from "../auth/middleware";
 import { awsS3Client } from "../../aws";
 
+const MAX_ALLOWED_FILES_PER_UPLOAD = 5;
+
 const router = express.Router();
 const db = getDatabase();
 
@@ -29,7 +31,7 @@ interface QueryStringParams {
 router.post(
   "/addPhotos",
   verifyToken,
-  multerUploader.array("images", 5),
+  multerUploader.array("images", MAX_ALLOWED_FILES_PER_UPLOAD),
   async (req: Request<{}, {}, {}, QueryStringParams>, res: Response) => {
     const placeIdParam = req.query.placeId;
 
