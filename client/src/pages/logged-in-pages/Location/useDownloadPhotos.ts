@@ -54,5 +54,5 @@ export const useDownloadPhotos = (placeId?: PlaceId) => {
     }
   }, []);
 
-  return { images, isFetchingImages };
+  return { images, isFetchingImages, setImages };
 };

@@ -22,7 +22,7 @@ const Location: React.FC = () => {
 
   const { placeId } = useParams();
 
-  const { images, isFetchingImages } = useDownloadPhotos(placeId);
+  const { images, isFetchingImages, setImages } = useDownloadPhotos(placeId);
 
   const { data: placeDetails, isFetching } = useGetPlaceDetailsQuery(
     placeId ?? ""
@@ -76,7 +76,7 @@ const Location: React.FC = () => {
             }}
           />
         ))}
-        <UploadPhotosSlide />
+        <UploadPhotosSlide setImages={setImages} />
       </Slider>
       <Container maxWidth="lg" sx={{ my: 4 }}>
         <Box display="flex" flexDirection="row">

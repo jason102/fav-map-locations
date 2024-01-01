@@ -7,7 +7,9 @@ import { PlaceId } from "./types";
 import { UserTokenRequest, verifyToken } from "../auth/middleware";
 import { awsS3Client } from "../../aws";
 
+// Aligned with client/src/pages/logged-in-pages/Location/UploadPhotosSlide.tsx
 const MAX_ALLOWED_FILES_PER_UPLOAD = 5;
+const MAX_FILE_SIZE_IN_BYTES = 1024 * 1024 * 5; // 5 MB
 
 const router = express.Router();
 const db = getDatabase();
@@ -21,7 +23,7 @@ const multerUploader = multer({
       cb(null, Date.now().toString() + "-" + file.originalname);
     },
   }),
-  limits: { fileSize: 1024 * 1024 * 5 }, // 5 MB filesize limit
+  limits: { fileSize: MAX_FILE_SIZE_IN_BYTES },
 });
 
 interface QueryStringParams {
