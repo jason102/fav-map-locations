@@ -16,6 +16,7 @@ import {
   FetchResultType,
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
+import SlideContainer from "./SlideContainer";
 
 const UploadPhotosSlide: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -53,55 +54,34 @@ const UploadPhotosSlide: React.FC = () => {
   };
 
   return (
-    <Box
-      sx={{
-        height: "400px",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignContent: "center",
-          height: "400px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Card elevation={6}>
-            <CardActionArea onClick={() => fileInputRef.current!.click()}>
-              <CardContent>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    pb: 2,
-                  }}
-                >
-                  <AddAPhotoIcon
-                    sx={{ width: 100, height: 100, color: "dodgerblue" }}
-                  />
-                </Box>
-                <Typography>Add photos for this place!</Typography>
-              </CardContent>
-            </CardActionArea>
-            <input
-              type="file"
-              ref={fileInputRef}
-              accept="image/png, image/jpeg, image/jpg"
-              hidden
-              multiple
-              onChange={onUploadPhoto}
-            />
-          </Card>
-        </Box>
-      </Box>
-    </Box>
+    <SlideContainer>
+      <Card elevation={6}>
+        <CardActionArea onClick={() => fileInputRef.current!.click()}>
+          <CardContent>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                pb: 2,
+              }}
+            >
+              <AddAPhotoIcon
+                sx={{ width: 100, height: 100, color: "dodgerblue" }}
+              />
+            </Box>
+            <Typography>Add photos for this place!</Typography>
+          </CardContent>
+        </CardActionArea>
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept="image/png, image/jpeg, image/jpg"
+          hidden
+          multiple
+          onChange={onUploadPhoto}
+        />
+      </Card>
+    </SlideContainer>
   );
 };
 

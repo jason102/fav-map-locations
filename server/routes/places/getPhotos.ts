@@ -31,29 +31,34 @@ router.get(
         [placeId]
       );
 
-      // Fetch image data from S3 and convert to it base64 encoded strings
-      // that can be parsed as JSON on the frontend
-      const base64Images: string[] = [];
-
-      for (const dbPhoto of dbPhotos) {
-        const response = await awsS3Client.send(
+      // Fetch all photo files from S3
+      const getObjectCommands = dbPhotos.map((dbPhoto) =>
+        awsS3Client.send(
           new GetObjectCommand({
             Bucket: process.env.AWS_S3_BUCKET_NAME || "",
             Key: dbPhoto.photo_file_key,
           })
-        );
+        )
+      );
 
+      const s3responses = await Promise.all(getObjectCommands);
+
+      // And convert them base64 encoded strings that can be parsed as JSON on the frontend
+      const base64Images: string[] = [];
+
+      for (const response of s3responses) {
         const chunks: Uint8Array[] = [];
+
         for await (const chunk of response.Body as Readable) {
           chunks.push(chunk);
         }
+
         const buffer = Buffer.concat(chunks);
         const base64Image = buffer.toString("base64");
         base64Images.push(base64Image);
       }
 
-      // Send base64-encoded images to the client
-      res.json({ base64Images });
+      res.json(base64Images);
     } catch (error) {
       return res.status(401).json({ message: error.message });
     }
