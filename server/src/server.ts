@@ -5,16 +5,16 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
-import registerRoute from "./routes/auth/register";
-import loginRoute from "./routes/auth/login";
-import logoutRoute from "./routes/auth/logout";
-import refreshTokenRoute from "./routes/auth/refreshToken";
-import userDetailsRoute from "./routes/profile/user";
-import addFavoriteRoute from "./routes/places/addFavorite";
-import getPlacesNearbyRoute from "./routes/places/getPlacesNearby";
-import getPlaceDetailsRoute from "./routes/places/getPlaceDetails";
-import addPhotosRoute from "./routes/places/addPhotos";
-import getPhotosRoute from "./routes/places/getPhotos";
+import registerRoute from "routes/auth/register";
+import loginRoute from "routes/auth/login";
+import logoutRoute from "routes/auth/logout";
+import refreshTokenRoute from "routes/auth/refreshToken";
+import userDetailsRoute from "routes/profile/user";
+import addFavoriteRoute from "routes/places/addFavorite";
+import getPlacesNearbyRoute from "routes/places/getPlacesNearby";
+import getPlaceDetailsRoute from "routes/places/getPlaceDetails";
+import addPhotosRoute from "routes/places/addPhotos";
+import getPhotosRoute from "routes/places/getPhotos";
 
 dotenv.config();
 

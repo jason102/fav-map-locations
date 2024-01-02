@@ -2,10 +2,10 @@ import express, { Request, Response } from "express";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
-import { getDatabase } from "../../db/dbSetup";
+import { getDatabase } from "db/dbSetup";
 import { PlaceId } from "./types";
-import { UserTokenRequest, verifyToken } from "../auth/middleware";
-import { awsS3Client } from "../../aws";
+import { UserTokenRequest, verifyToken } from "routes/auth/middleware";
+import { awsS3Client } from "aws";
 
 // Aligned with client/src/pages/logged-in-pages/Location/UploadPhotosSlide.tsx
 const MAX_ALLOWED_FILES_PER_UPLOAD = 5;

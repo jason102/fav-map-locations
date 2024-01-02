@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import jwt, { Secret } from "jsonwebtoken";
-import { getSignedJwtTokens } from "../../utils/jwt";
+import { getSignedJwtTokens } from "utils/jwt";
 
 const router = express.Router();
 

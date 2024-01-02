@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import { getDatabase } from "../../db/dbSetup";
+import { getDatabase } from "db/dbSetup";
 import { DatabasePlace, PlaceDetails, PlaceId } from "./types";
-import { verifyToken } from "../auth/middleware";
+import { verifyToken } from "routes/auth/middleware";
 
 const router = express.Router();
 const db = getDatabase();

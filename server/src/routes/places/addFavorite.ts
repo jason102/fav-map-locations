@@ -3,10 +3,10 @@ import {
   verifyToken,
   verifyIsSameUser,
   UserTokenRequest,
-} from "../auth/middleware";
-import { getDatabase } from "../../db/dbSetup";
+} from "routes/auth/middleware";
+import { getDatabase } from "db/dbSetup";
 import { DatabasePlace, Place } from "./types";
-import { PgErrorCodes } from "../../db/utils";
+import { PgErrorCodes } from "db/utils";
 
 const router = express.Router();
 const db = getDatabase();

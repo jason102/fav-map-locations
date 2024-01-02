@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { getDatabase } from "../../db/dbSetup";
-import { getSignedJwtTokens } from "../../utils/jwt";
+import { getDatabase } from "db/dbSetup";
+import { getSignedJwtTokens } from "utils/jwt";
 import { validateLoginFields } from "./authFieldValidation";
 import { DatabaseUser, LoginFormValues } from "./types";
 

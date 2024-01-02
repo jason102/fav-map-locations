@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { getDatabase } from "../../db/dbSetup";
+import { getDatabase } from "db/dbSetup";
 import { DatabasePlace, Place } from "./types";
 
 const router = express.Router();

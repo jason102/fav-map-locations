@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { getDatabase } from "../../db/dbSetup";
-import { getSignedJwtTokens } from "../../utils/jwt";
+import { getDatabase } from "db/dbSetup";
+import { getSignedJwtTokens } from "utils/jwt";
 import { validateRegistrationFields } from "./authFieldValidation";
 import { DatabaseUser, RegisterFormValues } from "./types";
-import { PgErrorCodes } from "../../db/utils";
+import { PgErrorCodes } from "db/utils";
 
 const router = express.Router();
 const db = getDatabase();

@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
-import { getDatabase } from "../../db/dbSetup";
-import { DatabasePhoto, PlaceId } from "./types";
-import { verifyToken } from "../auth/middleware";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { awsS3Client } from "../../aws";
 import { Readable } from "stream";
+import { getDatabase } from "db/dbSetup";
+import { DatabasePhoto, PlaceId } from "./types";
+import { verifyToken } from "routes/auth/middleware";
+import { awsS3Client } from "aws";
 
 const router = express.Router();
 const db = getDatabase();

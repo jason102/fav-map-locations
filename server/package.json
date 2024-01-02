@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "server.ts",
 	"scripts": {
-		"dev": " concurrently 'pnpm start' 'cd .. && cd client && pnpm run dev' ",
-		"start": "tsx watch server.ts",
-		"server": "tsx watch server.ts"
+		"dev": " concurrently 'pnpm run server' 'cd .. && cd client && pnpm run dev' ",
+		"start": "tsx -r tsconfig-paths/register src/server.ts",
+		"server": "tsx watch -r tsconfig-paths/register src/server.ts"
 	},
 	"author": "Jason Stine",
 	"license": "ISC",
@@ -24,6 +24,7 @@
 		"@typescript-eslint/parser": "^6.8.0",
 		"concurrently": "^8.2.2",
 		"eslint": "^8.52.0",
+		"tsconfig-paths": "^4.2.0",
 		"tsx": "^3.14.0",
 		"typescript": "^5.2.2"
 	},
