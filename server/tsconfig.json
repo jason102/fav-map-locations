@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "module": "ES2022",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
@@ -8,7 +9,7 @@
     },
     "outDir": "./dist",
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "sourceMap": true
   },
