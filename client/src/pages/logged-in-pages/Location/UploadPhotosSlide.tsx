@@ -18,6 +18,11 @@ import {
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import SlideContainer from "./SlideContainer";
+import {
+  compressImage,
+  convertImageFilesToBase64Strings,
+  resizeImage,
+} from "./photoUtils";
 
 // Aligned with server/routes/places/addPhotos.ts
 const MAX_ALLOWED_FILES_PER_UPLOAD = 5;
@@ -60,9 +65,11 @@ const UploadPhotosSlide: React.FC<Props> = ({ setImages }) => {
       return;
     }
 
-    const formData = new FormData();
+    // Convert from a FileList (IterableIterator) to a File array for easier processing
+    const files = Array.from(selectedFiles);
 
-    for (const file of selectedFiles) {
+    // Check the file sizes
+    for (const file of files) {
       if (file.size > MAX_FILE_SIZE_IN_BYTES) {
         dispatch(
           openSnackbarWithFetchResult({
@@ -73,12 +80,44 @@ const UploadPhotosSlide: React.FC<Props> = ({ setImages }) => {
 
         return;
       }
-
-      formData.append(`images`, file);
     }
 
     setIsUploading(true);
 
+    // Resize and compress the files before uploading
+    const formData = new FormData();
+
+    const resizeImagePromises = files.map((file) => resizeImage(file));
+
+    try {
+      const resizedImagesFiles = await Promise.all(resizeImagePromises);
+
+      const compressImagePromises = resizedImagesFiles.map((file) =>
+        compressImage(file)
+      );
+
+      const compressedImageFiles = await Promise.all(compressImagePromises);
+
+      compressedImageFiles.forEach((file, index) =>
+        formData.append(`images`, file, files[index].name)
+      );
+    } catch (error) {
+      console.log("resizeImage() or compressImage(): ", error);
+
+      dispatch(
+        openSnackbarWithFetchResult({
+          message:
+            "Oops, something went wrong! Please contact Jason to get it fixed!",
+          type: FetchResultType.error,
+        })
+      );
+
+      setIsUploading(false);
+
+      return;
+    }
+
+    // Upload the compressed photos
     const fetchResult = await dispatchAddPlacePhotos({
       filesFormData: formData,
       placeId: placeId || "",
@@ -87,26 +126,14 @@ const UploadPhotosSlide: React.FC<Props> = ({ setImages }) => {
     if (fetchResult.type !== FetchResultType.success) {
       dispatch(openSnackbarWithFetchResult(fetchResult));
 
+      setIsUploading(false);
+
       return;
     }
 
     // At this point, we can add the new images to the carousel component
-    // and the format they must be in are base 64 strings
-    // https://stackoverflow.com/a/65586375
-    const file2Base64 = (file: File): Promise<string> => {
-      return new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result?.toString() || "");
-        reader.onerror = (error) => reject(error);
-      });
-    };
-
-    const file2Base64Promises = Array.from(selectedFiles).map((file) =>
-      file2Base64(file)
-    );
-
-    const base64Files = await Promise.all(file2Base64Promises);
+    // We are storing the state of the images as base 64 strings
+    const base64Files = await convertImageFilesToBase64Strings(formData);
 
     setIsUploading(false);
     setImages((previousImages) => [...previousImages, ...base64Files]);

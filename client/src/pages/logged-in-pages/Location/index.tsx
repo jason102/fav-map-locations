@@ -67,14 +67,15 @@ const Location: React.FC = () => {
           </SlideContainer>
         )}
         {images.map((photo, index) => (
-          <Box
-            key={index}
-            component="img"
-            src={photo}
-            sx={{
-              height: "400px",
-            }}
-          />
+          <SlideContainer key={index}>
+            <Box
+              component="img"
+              src={photo}
+              sx={{
+                height: "400px",
+              }}
+            />
+          </SlideContainer>
         ))}
         <UploadPhotosSlide setImages={setImages} />
       </Slider>
