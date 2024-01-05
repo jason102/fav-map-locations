@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { PlaceId } from "./types";
+import { useParams } from "react-router-dom";
 import { useAppSelector } from "src/app/store";
 
 // We shoudn't use RTK Query for downloading large files
 // https://github.com/reduxjs/redux-toolkit/issues/1545
-export const useDownloadPhotos = (placeId?: PlaceId) => {
+export const useDownloadPhotos = () => {
   const userToken = useAppSelector((state) => state.auth.userToken);
   const accessToken = useAppSelector((state) => state.auth.accessToken);
+
+  const { placeId } = useParams();
 
   const [images, setImages] = useState<string[]>([]);
   const [isFetchingImages, setIsFetchingImages] = useState(false);

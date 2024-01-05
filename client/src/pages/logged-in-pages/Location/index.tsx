@@ -1,15 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import Slider from "react-slick";
 import { useParams } from "react-router-dom";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { useAppDispatch } from "src/app/store";
 
 import { clearSelectedPlace } from "src/pages/logged-in-pages/Location/locationSlice";
 import { useGetPlaceDetailsQuery } from "src/app/api";
-import UploadPhotosSlide from "./UploadPhotosSlide";
-import { useDownloadPhotos } from "./useDownloadPhotos";
-import SlideContainer from "./SlideContainer";
+import ImageCarousel from "./ImageCarousel";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -21,8 +16,6 @@ const Location: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const { placeId } = useParams();
-
-  const { images, isFetchingImages, setImages } = useDownloadPhotos(placeId);
 
   const { data: placeDetails, isFetching } = useGetPlaceDetailsQuery(
     placeId ?? ""
@@ -60,25 +53,7 @@ const Location: React.FC = () => {
       <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
         {placeDetails!.name}
       </Typography>
-      <Slider dots infinite={false} speed={500} centerMode>
-        {isFetchingImages && (
-          <SlideContainer>
-            <CircularProgress size={30} color="inherit" />
-          </SlideContainer>
-        )}
-        {images.map((photo, index) => (
-          <SlideContainer key={index}>
-            <Box
-              component="img"
-              src={photo}
-              sx={{
-                height: "400px",
-              }}
-            />
-          </SlideContainer>
-        ))}
-        <UploadPhotosSlide setImages={setImages} />
-      </Slider>
+      <ImageCarousel />
       <Container maxWidth="lg" sx={{ my: 4 }}>
         <Box display="flex" flexDirection="row">
           <Box flex={1}>Average Rating</Box>

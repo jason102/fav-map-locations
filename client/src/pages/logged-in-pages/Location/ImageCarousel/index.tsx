@@ -1,50 +1,48 @@
-import React, { useRef, ChangeEvent, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { ChangeEvent, useRef, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { useAppDispatch } from "src/app/store";
+import { useParams } from "react-router-dom";
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardContent from "@mui/material/CardContent";
-import CircularProgress from "@mui/material/CircularProgress";
-
-import { useAddPlacePhotosMutation } from "src/app/api";
-import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
-import { PlaceId } from "./types";
+import UploadPhotosSlide from "./UploadPhotosSlide";
+import SlideContainer from "./SlideContainer";
+import { useDownloadPhotos } from "./useDownloadPhotos";
 import {
   FetchResultType,
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import SlideContainer from "./SlideContainer";
 import {
   compressImage,
   convertImageFilesToBase64Strings,
   resizeImage,
 } from "./photoUtils";
+import { useAddPlacePhotosMutation } from "src/app/api";
+import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
+import { PlaceId } from "src/pages/logged-in-pages/Location/types";
+
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 // Aligned with server/routes/places/addPhotos.ts
 const MAX_ALLOWED_FILES_PER_UPLOAD = 5;
 const MAX_FILE_SIZE_IN_BYTES = 1024 * 1024 * 5; // 5 MB
 
-interface Props {
-  setImages: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-const UploadPhotosSlide: React.FC<Props> = ({ setImages }) => {
+const ImageCarousel: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { placeId } = useParams();
 
+  const { images, isFetchingImages, setImages } = useDownloadPhotos();
   const [isUploading, setIsUploading] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [dispatchAddPlacePhotos] = useSnackbarFetchResponse<{
     filesFormData: FormData;
     placeId: PlaceId;
   }>(useAddPlacePhotosMutation());
-
-  const { placeId } = useParams();
-
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const onUploadPhoto = async (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
@@ -139,47 +137,54 @@ const UploadPhotosSlide: React.FC<Props> = ({ setImages }) => {
     setImages((previousImages) => [...previousImages, ...base64Files]);
   };
 
+  const onUploadButtonClick = () => {
+    fileInputRef.current!.click();
+  };
+
   return (
-    <SlideContainer>
-      {isUploading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <CircularProgress size={30} color="inherit" />
+    <>
+      <Slider dots infinite speed={500} autoplay autoplaySpeed={5000}>
+        {isFetchingImages && (
+          <SlideContainer>
+            <CircularProgress size={30} color="inherit" />
+          </SlideContainer>
+        )}
+        {images.map((photo, index) => (
+          <SlideContainer key={index}>
+            <Box
+              component="img"
+              src={photo}
+              sx={{
+                height: "400px",
+              }}
+            />
+          </SlideContainer>
+        ))}
+        {images.length === 0 && (
+          <UploadPhotosSlide
+            isUploading={isUploading}
+            onCardClick={onUploadButtonClick}
+          />
+        )}
+      </Slider>
+      {images.length > 0 && (
+        <Box sx={{ display: "flex", justifyContent: "space-around", mt: 4 }}>
+          <Button variant="contained" onClick={onUploadButtonClick}>
+            Add photos
+            <AddAPhotoIcon sx={{ color: "white", ml: 1 }} />
+          </Button>
         </Box>
-      ) : (
-        <Card elevation={6}>
-          <CardActionArea onClick={() => fileInputRef.current!.click()}>
-            <CardContent>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  pb: 2,
-                }}
-              >
-                <AddAPhotoIcon
-                  sx={{ width: 100, height: 100, color: "dodgerblue" }}
-                />
-              </Box>
-              <Typography>Add photos for this place!</Typography>
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept="image/png, image/jpeg, image/jpg"
-                hidden
-                multiple
-                onChange={onUploadPhoto}
-              />
-            </CardContent>
-          </CardActionArea>
-        </Card>
       )}
-    </SlideContainer>
+      <input
+        type="file"
+        ref={fileInputRef}
+        accept="image/png, image/jpeg, image/jpg"
+        hidden
+        multiple
+        onChange={onUploadPhoto}
+      />
+    </>
   );
 };
 
-export default UploadPhotosSlide;
+export default ImageCarousel;

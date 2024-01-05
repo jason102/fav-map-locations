@@ -1,5 +1,8 @@
 import Compressor from "compressorjs";
 
+const RESIZE_IMAGE_HEIGHT = 800; // px
+const FILE_COMPRESSION_QUALITY = 0.8; // 80%
+
 // Initially I tried to use https://github.com/Donaldcwl/browser-image-compression
 // to do both resizing and compressing but could not achieve as good a result
 // as using resizeImage() and compressorjs below
@@ -19,9 +22,9 @@ export const resizeImage = (file: File): Promise<Blob> => {
         let width = img.width;
         let height = img.height;
 
-        if (height > 800) {
-          width *= 800 / height;
-          height = 800;
+        if (height > RESIZE_IMAGE_HEIGHT) {
+          width *= RESIZE_IMAGE_HEIGHT / height;
+          height = RESIZE_IMAGE_HEIGHT;
         }
 
         const canvas = document.createElement("canvas");
@@ -57,7 +60,7 @@ export const resizeImage = (file: File): Promise<Blob> => {
 export const compressImage = (file: Blob): Promise<File | Blob> => {
   return new Promise((resolve, reject) => {
     new Compressor(file, {
-      quality: 0.8,
+      quality: FILE_COMPRESSION_QUALITY,
       success(result) {
         resolve(result);
       },
