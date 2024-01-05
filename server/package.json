@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": " concurrently 'pnpm run server' 'cd .. && cd client && pnpm run dev' ",
 		"start": "tsx -r tsconfig-paths/register src/server.ts",
-		"server": "tsx watch -r tsconfig-paths/register src/server.ts"
+		"server": "tsx watch -r tsconfig-paths/register src/server.ts",
+		"knex": "ts-node --project tsconfig.json -r tsconfig-paths/register node_modules/knex/bin/cli"
 	},
 	"author": "Jason Stine",
 	"license": "ISC",
@@ -24,6 +25,7 @@
 		"@typescript-eslint/parser": "^6.8.0",
 		"concurrently": "^8.2.2",
 		"eslint": "^8.52.0",
+		"ts-node": "^10.9.2",
 		"tsconfig-paths": "^4.2.0",
 		"tsx": "^3.14.0",
 		"typescript": "^5.2.2"
@@ -36,6 +38,7 @@
 		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
 		"jsonwebtoken": "^9.0.2",
+		"knex": "^3.1.0",
 		"multer": "1.4.5-lts.1",
 		"multer-s3": "^3.0.1",
 		"node-fetch": "^3.3.2",
