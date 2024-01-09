@@ -1,7 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { fileURLToPath } from "url";
-import path from "path";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
@@ -31,23 +29,6 @@ app.use(
 );
 
 app.use(cookieParser());
-
-// For serving the static files from the React build directory.
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Set the path to the React application's build directory. This assumes that the production-ready frontend code
-// is located in the 'client/dist' directory, which is a common convention for React applications.
-const REACT_BUILD_DIR = path.join(__dirname, "..", "client", "dist");
-
-// Serve the static files from the React build directory. This middleware enables the Express server to
-// serve the optimized, production build of the React app, including HTML, CSS, JavaScript, and any other static assets.
-app.use(express.static(REACT_BUILD_DIR));
-
-// Serve the frontend
-app.get("/", (req, res) => {
-  res.sendFile(path.join(REACT_BUILD_DIR, "index.html"));
-});
 
 app.use("/api/auth", [
   registerRoute,
