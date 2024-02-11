@@ -3,7 +3,7 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import { matchedData } from "express-validator";
 import { getDatabase } from "db/dbSetup";
-import { DatabasePhoto, PlaceId } from "./types";
+import { DatabasePhoto, PlaceId, Photo } from "./types";
 import { verifyToken } from "middleware/verifyToken";
 import { awsS3Client } from "aws";
 import { respondWith } from "utils/responseHandling";
@@ -43,21 +43,26 @@ router.get(
       const s3responses = await Promise.all(getObjectCommands);
 
       // And convert them base64 encoded strings that can be parsed as JSON on the frontend
-      const base64Images: string[] = [];
+      const photos: Photo[] = [];
 
-      for (const response of s3responses) {
+      // for (const response of s3responses) {
+      for (let i = 0; i < s3responses.length; i++) {
         const chunks: Uint8Array[] = [];
 
-        for await (const chunk of response.Body as Readable) {
+        for await (const chunk of s3responses[i].Body as Readable) {
           chunks.push(chunk);
         }
 
         const buffer = Buffer.concat(chunks);
         const base64Image = buffer.toString("base64");
-        base64Images.push(base64Image);
+        photos.push({
+          base64Image: `data:image/jpeg;base64,${base64Image}`,
+          fileKey: dbPhotos[i].photo_file_key,
+          userId: dbPhotos[i].user_id,
+        });
       }
 
-      respondWith({ res, status: 200, data: base64Images });
+      respondWith({ res, status: 200, data: photos });
     } catch (error) {
       next(error);
     }

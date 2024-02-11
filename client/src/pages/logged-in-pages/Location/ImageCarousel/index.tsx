@@ -2,7 +2,7 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useAppDispatch } from "src/app/store";
+import { useAppDispatch, useAppSelector } from "src/app/store";
 import { useParams } from "react-router-dom";
 
 import UploadPhotosSlide from "./UploadPhotosSlide";
@@ -22,6 +22,8 @@ import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/sna
 import { PlaceId } from "src/pages/logged-in-pages/Location/types";
 import LoadingButton from "src/components/LoadingButton";
 import { OOPS_MESSAGE } from "src/app/api/apiErrorUtils";
+import { Photo } from "./types";
+import { UserToken } from "src/app/api/auth/types";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -32,18 +34,24 @@ const MAX_ALLOWED_FILES_PER_UPLOAD = 5;
 const MAX_FILE_SIZE_IN_BYTES = 1024 * 1024 * 5; // 5 MB
 
 const ImageCarousel: React.FC = () => {
-  const dispatch = useAppDispatch();
   const { placeId } = useParams();
+  const dispatch = useAppDispatch();
+  const { userId } = useAppSelector(
+    (state) => state.auth.userToken
+  ) as UserToken;
 
   const { images, isFetchingImages, setImages } = useDownloadPhotos();
   const [isUploading, setIsUploading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [dispatchAddPlacePhotos] = useSnackbarFetchResponse<{
-    filesFormData: FormData;
-    placeId: PlaceId;
-  }>(useAddPlacePhotosMutation());
+  const [dispatchAddPlacePhotos] = useSnackbarFetchResponse<
+    {
+      filesFormData: FormData;
+      placeId: PlaceId;
+    },
+    string[]
+  >(useAddPlacePhotosMutation());
 
   const onUploadPhoto = async (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
@@ -116,7 +124,7 @@ const ImageCarousel: React.FC = () => {
     }
 
     // Upload the compressed photos
-    const { isSuccess } = await dispatchAddPlacePhotos({
+    const { isSuccess, data: fileKeys } = await dispatchAddPlacePhotos({
       filesFormData: formData,
       placeId: placeId || "",
     });
@@ -130,8 +138,14 @@ const ImageCarousel: React.FC = () => {
     // We are storing the state of the images as base 64 strings
     const base64Files = await convertImageFilesToBase64Strings(formData);
 
+    const newImages = base64Files.map<Photo>((file, index) => ({
+      userId,
+      fileKey: fileKeys ? fileKeys[index] : "",
+      base64Image: file,
+    }));
+
     setIsUploading(false);
-    setImages((previousImages) => [...previousImages, ...base64Files]);
+    setImages((previousImages) => [...previousImages, ...newImages]);
   };
 
   const onUploadButtonClick = () => {
@@ -151,7 +165,7 @@ const ImageCarousel: React.FC = () => {
             <Box
               key={index}
               component="img"
-              src={photo}
+              src={photo.base64Image}
               sx={{
                 height: "400px",
               }}

@@ -9,6 +9,7 @@ import {
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import { OOPS_MESSAGE } from "src/app/api/apiErrorUtils";
+import { Photo } from "./types";
 
 // We shoudn't use RTK Query for downloading large files
 // https://github.com/reduxjs/redux-toolkit/issues/1545
@@ -18,7 +19,7 @@ export const useDownloadPhotos = () => {
 
   const { placeId } = useParams();
 
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<Photo[]>([]);
   const [isFetchingImages, setIsFetchingImages] = useState(false);
 
   // React.StrictMode rerenders the app twice in dev mode
@@ -41,7 +42,7 @@ export const useDownloadPhotos = () => {
           }
         );
 
-        const responseData: ApiResponse<string[]> = await response.json();
+        const responseData: ApiResponse<Photo[]> = await response.json();
 
         if (responseData.error) {
           const fetchResult: FetchResult = {
@@ -51,13 +52,7 @@ export const useDownloadPhotos = () => {
 
           dispatch(openSnackbarWithFetchResult(fetchResult));
         } else {
-          const { data: base64Images } = responseData as SuccessfulResponse<
-            string[]
-          >;
-
-          const images = base64Images.map(
-            (base64) => `data:image/jpeg;base64,${base64}`
-          );
+          const { data: images } = responseData as SuccessfulResponse<Photo[]>;
 
           setImages(images);
         }

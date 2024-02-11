@@ -63,7 +63,7 @@ export const placesApi = api
         }
       ),
       addPlacePhotos: builder.mutation<
-        SuccessMessageResponse,
+        string[],
         { filesFormData: FormData; placeId: PlaceId }
       >({
         query: ({ filesFormData, placeId }) => ({

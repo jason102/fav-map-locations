@@ -10,20 +10,20 @@ import { useAppDispatch } from "src/app/store";
 
 // "Hides away" all the try/catch and open snackbar logic so we don't have so much of
 // this as redundant code in components. Returns the flag isSuccess for use in components.
-export const useSnackbarFetchResponse = <T>(
+export const useSnackbarFetchResponse = <T, D = void>(
   [triggerFunction, { isLoading }]: UseMutationHookReturnType,
   httpResponseCodeMessageMap?: {
     [responseCode: number]: FetchResult;
   }
 ): [
-  (payload: T) => Promise<{ isSuccess: boolean }>,
+  (payload: T) => Promise<{ isSuccess: boolean; data?: D }>,
   { isLoading: boolean }
 ] => {
   const dispatch = useAppDispatch();
 
   const dispatchMutation = async (payload: T) => {
     try {
-      await triggerFunction(payload).unwrap();
+      const data: D = await triggerFunction(payload).unwrap();
 
       if (
         httpResponseCodeMessageMap &&
@@ -36,7 +36,7 @@ export const useSnackbarFetchResponse = <T>(
         );
       }
 
-      return { isSuccess: true };
+      return { isSuccess: true, data };
     } catch (error) {
       let loginSessionHasExpired = false;
 

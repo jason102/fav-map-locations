@@ -4,10 +4,10 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import { matchedData } from "express-validator";
 import { getDatabase } from "db/dbSetup";
-import { PlaceId } from "./types";
+import { DatabasePhoto, PlaceId } from "./types";
 import { UserTokenRequest, verifyToken } from "middleware/verifyToken";
 import { awsS3Client } from "aws";
-import { SUCCESS_MESSAGE, respondWith } from "utils/responseHandling";
+import { respondWith } from "utils/responseHandling";
 import { queryHas, validateResult } from "middleware/validation";
 
 // Aligned with client/src/pages/logged-in-pages/Location/ImageCarousel/index.tsx
@@ -56,18 +56,21 @@ router.post(
     const userId = (req as UserTokenRequest).userToken!.userId;
 
     try {
-      await db.query(
+      const { rows: dbPhotos } = await db.query<DatabasePhoto>(
         "INSERT INTO photos (photo_file_key, place_id, user_id) VALUES " +
           files
             .map(
               (_, index) =>
                 `($${index * 3 + 1}, $${index * 3 + 2}, $${index * 3 + 3})`
             )
-            .join(", "),
+            .join(", ") +
+          " RETURNING *",
         files.flatMap((file) => [file.key, placeId, userId])
       );
 
-      respondWith({ res, status: 200, data: SUCCESS_MESSAGE });
+      const fileKeys = dbPhotos.map((photo) => photo.photo_file_key);
+
+      respondWith({ res, status: 200, data: fileKeys });
     } catch (error) {
       // If there's an error, roll back the S3 uploads
       const deleteCommandPromises = files.map((file) =>

@@ -38,3 +38,5 @@ export type DatabasePhoto = {
   user_id: string;
   upload_timestamp: Date;
 };
+
+export type Photo = { fileKey: string; base64Image: string; userId: string };

@@ -25,7 +25,7 @@ export type UseMutationHookReturnType = readonly [
         FetchBaseQueryMeta
       >,
       string,
-      SuccessMessageResponse,
+      SuccessMessageResponse | any,
       string
     >
   >,
@@ -40,7 +40,7 @@ export type UseMutationHookReturnType = readonly [
         FetchBaseQueryMeta
       >,
       string,
-      SuccessMessageResponse,
+      SuccessMessageResponse | any,
       "api"
     >,
     Record<string, any> & { isLoading: boolean }
