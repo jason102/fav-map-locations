@@ -17,17 +17,24 @@ import {
   convertImageFilesToBase64Strings,
   resizeImage,
 } from "./photoUtils";
-import { useAddPlacePhotosMutation } from "src/app/api/places";
+import {
+  useAddPlacePhotosMutation,
+  useDeletePhotoMutation,
+} from "src/app/api/places";
 import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
 import { PlaceId } from "src/pages/logged-in-pages/Location/types";
 import LoadingButton from "src/components/LoadingButton";
 import { OOPS_MESSAGE } from "src/app/api/apiErrorUtils";
 import { Photo } from "./types";
 import { UserToken } from "src/app/api/auth/types";
+import LoadingDialog from "src/components/LoadingDialog";
+import { HttpResponseCodes } from "src/utils";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // Aligned with server/routes/places/addPhotos.ts
 const MAX_ALLOWED_FILES_PER_UPLOAD = 5;
@@ -36,9 +43,12 @@ const MAX_FILE_SIZE_IN_BYTES = 1024 * 1024 * 5; // 5 MB
 const ImageCarousel: React.FC = () => {
   const { placeId } = useParams();
   const dispatch = useAppDispatch();
-  const { userId } = useAppSelector(
+  const { userId: currentUserId } = useAppSelector(
     (state) => state.auth.userToken
   ) as UserToken;
+
+  const [showDeleteConfirmDialog, setShowDeleteConfirmDialog] = useState(false);
+  const fileKeyToDelete = useRef("");
 
   const { images, isFetchingImages, setImages } = useDownloadPhotos();
   const [isUploading, setIsUploading] = useState(false);
@@ -52,6 +62,14 @@ const ImageCarousel: React.FC = () => {
     },
     string[]
   >(useAddPlacePhotosMutation());
+
+  const [dispatchDeletePhoto, { isLoading: isDeletingPhoto }] =
+    useSnackbarFetchResponse<{ fileKey: string }>(useDeletePhotoMutation(), {
+      [HttpResponseCodes.Success]: {
+        message: "Photo deleted",
+        type: FetchResultType.success,
+      },
+    });
 
   const onUploadPhoto = async (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
@@ -139,7 +157,7 @@ const ImageCarousel: React.FC = () => {
     const base64Files = await convertImageFilesToBase64Strings(formData);
 
     const newImages = base64Files.map<Photo>((file, index) => ({
-      userId,
+      userId: currentUserId,
       fileKey: fileKeys ? fileKeys[index] : "",
       base64Image: file,
     }));
@@ -152,6 +170,30 @@ const ImageCarousel: React.FC = () => {
     fileInputRef.current!.click();
   };
 
+  const onClickDeletePhoto = (fileKey: string) => {
+    setShowDeleteConfirmDialog(true);
+    fileKeyToDelete.current = fileKey;
+  };
+
+  const onDeletePhoto = async () => {
+    await dispatchDeletePhoto({ fileKey: fileKeyToDelete.current });
+    setShowDeleteConfirmDialog(false);
+
+    const imagesWithoutDeletedOne = images.reduce<Photo[]>(
+      (accumulated, nextImage) => {
+        if (nextImage.fileKey === fileKeyToDelete.current) {
+          return accumulated;
+        }
+
+        return [...accumulated, nextImage];
+      },
+      []
+    );
+
+    setImages(imagesWithoutDeletedOne);
+  };
+
+  // TODO: Make the slider show the pictures better?
   return (
     <>
       <Slider dots infinite speed={500} autoplay autoplaySpeed={5000}>
@@ -160,18 +202,36 @@ const ImageCarousel: React.FC = () => {
             <CircularProgress size={30} color="inherit" />
           </SlideContainer>
         )}
-        {images.map((photo, index) => (
-          <SlideContainer key={index}>
-            <Box
-              key={index}
-              component="img"
-              src={photo.base64Image}
-              sx={{
-                height: "400px",
-              }}
-            />
-          </SlideContainer>
-        ))}
+        {images.map(({ userId, base64Image, fileKey }, index) => {
+          const isAddedByCurrentUser = currentUserId === userId;
+
+          return (
+            <SlideContainer key={index}>
+              <Box
+                key={index}
+                component="img"
+                src={base64Image}
+                sx={{
+                  height: "400px",
+                }}
+              />
+              {isAddedByCurrentUser && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    backgroundColor: "lightgray",
+                    borderRadius: 6,
+                  }}
+                >
+                  <IconButton onClick={() => onClickDeletePhoto(fileKey)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              )}
+            </SlideContainer>
+          );
+        })}
         {images.length === 0 && (
           <UploadPhotosSlide
             isUploading={isUploading}
@@ -191,6 +251,15 @@ const ImageCarousel: React.FC = () => {
           </LoadingButton>
         </Box>
       )}
+      <LoadingDialog
+        isOpen={showDeleteConfirmDialog}
+        isLoading={isDeletingPhoto}
+        onConfirmButtonClick={onDeletePhoto}
+        title="Confirm Photo Deletion"
+        contentText="Are you sure you want to delete this photo?"
+        yesNoOption
+        onNoOptionClick={() => setShowDeleteConfirmDialog(false)}
+      />
       <input
         type="file"
         ref={fileInputRef}

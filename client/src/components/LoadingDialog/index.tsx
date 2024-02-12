@@ -40,7 +40,11 @@ const LoadingDialog: React.FC<Props> = ({
       </DialogContentText>
     </DialogContent>
     <DialogActions>
-      {yesNoOption && <Button onClick={onNoOptionClick}>No</Button>}
+      {yesNoOption && (
+        <Button onClick={onNoOptionClick} disabled={isLoading}>
+          No
+        </Button>
+      )}
       <LoadingButton isLoading={isLoading} onClick={onConfirmButtonClick}>
         {yesNoOption ? "Yes" : "Ok"}
       </LoadingButton>

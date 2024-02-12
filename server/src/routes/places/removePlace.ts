@@ -25,6 +25,7 @@ router.delete(
 
     // First get all photos for the place in the DB
     try {
+      // TODO: Add an index for the place_id column in the photos table?
       const { rows: dbPhotos } = await db.query<DatabasePhoto>(
         "SELECT * FROM photos WHERE place_id = $1",
         [placeId]

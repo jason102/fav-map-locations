@@ -17,6 +17,7 @@ import addPhotosRoute from "routes/places/addPhotos";
 import getPhotosRoute from "routes/places/getPhotos";
 import ratePlaceRoute from "routes/places/ratePlace";
 import removePlaceRoute from "routes/places/removePlace";
+import deletePhotoRoute from "routes/places/deletePhoto";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use("/api/auth", [
 
 app.use("/api/user", [userDetailsRoute]);
 
+// TODO: Move photo endpoints into own set of endpoints
 app.use("/api/places", [
   getVisibleAreaPlacesRoute,
   addFavoriteRoute,
@@ -53,6 +55,7 @@ app.use("/api/places", [
   getPhotosRoute,
   ratePlaceRoute,
   removePlaceRoute,
+  deletePhotoRoute,
 ]);
 
 app.use(errorHandler);

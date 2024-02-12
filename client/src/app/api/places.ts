@@ -10,6 +10,7 @@ import {
   SubmittedRemovePlaceData,
 } from "src/pages/logged-in-pages/Location/types";
 
+// TODO: Move photo endpoints into own set of endpoints
 export const placesApi = api
   .enhanceEndpoints({ addTagTypes: ["Places", "PlaceDetails"] })
   .injectEndpoints({
@@ -128,6 +129,16 @@ export const placesApi = api
         },
         invalidatesTags: invalidateOn({ success: ["Places"] }),
       }),
+      deletePhoto: builder.mutation<
+        SuccessMessageResponse,
+        { fileKey: string }
+      >({
+        query: ({ fileKey }) => ({
+          url: "places/deletePhoto",
+          method: "DELETE",
+          body: { fileKey },
+        }),
+      }),
     }),
   });
 
@@ -138,4 +149,5 @@ export const {
   useRemovePlaceMutation,
   useAddPlacePhotosMutation,
   useRatePlaceMutation,
+  useDeletePhotoMutation,
 } = placesApi;
