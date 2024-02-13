@@ -33,6 +33,7 @@ interface QueryParams {
   placeId: PlaceId;
 }
 
+// TODO: Limit number of total photos allowed to be uploaded per place until pagination is implemented
 router.post(
   "/addPhotos",
   verifyToken,
