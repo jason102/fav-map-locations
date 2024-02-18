@@ -31,9 +31,7 @@ export const useDownloadPhotos = () => {
 
       try {
         const response = await fetch(
-          `${
-            import.meta.env.VITE_BASE_URL
-          }/api/places/getPhotos?placeId=${placeId}`,
+          `${import.meta.env.VITE_BASE_URL}/api/photos?placeId=${placeId}`,
           {
             credentials: "include",
             headers: {

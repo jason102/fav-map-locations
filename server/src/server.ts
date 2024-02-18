@@ -9,15 +9,18 @@ import registerRoute from "routes/auth/register";
 import loginRoute from "routes/auth/login";
 import logoutRoute from "routes/auth/logout";
 import refreshTokenRoute from "routes/auth/refreshToken";
+
 import userDetailsRoute from "routes/profile/user";
+
 import addFavoriteRoute from "routes/places/addFavorite";
 import getVisibleAreaPlacesRoute from "routes/places/getVisibleAreaPlaces";
 import getPlaceDetailsRoute from "routes/places/getPlaceDetails";
-import addPhotosRoute from "routes/places/addPhotos";
-import getPhotosRoute from "routes/places/getPhotos";
 import ratePlaceRoute from "routes/places/ratePlace";
 import removePlaceRoute from "routes/places/removePlace";
-import deletePhotoRoute from "routes/places/deletePhoto";
+
+import getPhotosRoute from "routes/photos/getPhotos";
+import addPhotosRoute from "routes/photos/addPhotos";
+import deletePhotoRoute from "routes/photos/deletePhoto";
 
 dotenv.config();
 
@@ -46,17 +49,15 @@ app.use("/api/auth", [
 
 app.use("/api/user", [userDetailsRoute]);
 
-// TODO: Move photo endpoints into own set of endpoints
 app.use("/api/places", [
   getVisibleAreaPlacesRoute,
   addFavoriteRoute,
   getPlaceDetailsRoute,
-  addPhotosRoute,
-  getPhotosRoute,
   ratePlaceRoute,
   removePlaceRoute,
-  deletePhotoRoute,
 ]);
+
+app.use("/api/photos", [getPhotosRoute, addPhotosRoute, deletePhotoRoute]);
 
 app.use(errorHandler);
 

@@ -3,11 +3,12 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import { matchedData } from "express-validator";
 import { getDatabase } from "db/dbSetup";
-import { DatabasePhoto, PlaceId, Photo } from "./types";
+import { DatabasePhoto, Photo } from "./types";
 import { verifyToken } from "middleware/verifyToken";
 import { awsS3Client } from "aws";
 import { respondWith } from "utils/responseHandling";
 import { queryHas, validateResult } from "middleware/validation";
+import { PlaceId } from "routes/places/types";
 
 const router = express.Router();
 const db = getDatabase();
@@ -17,7 +18,7 @@ interface QueryParams {
 }
 
 router.get(
-  "/getPhotos",
+  "/",
   verifyToken,
   queryHas("placeId", { isNumber: true }),
   validateResult,

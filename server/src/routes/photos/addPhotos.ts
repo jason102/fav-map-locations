@@ -4,11 +4,12 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import { matchedData } from "express-validator";
 import { getDatabase } from "db/dbSetup";
-import { DatabasePhoto, PlaceId } from "./types";
+import { DatabasePhoto } from "./types";
 import { UserTokenRequest, verifyToken } from "middleware/verifyToken";
 import { awsS3Client } from "aws";
 import { respondWith } from "utils/responseHandling";
 import { queryHas, validateResult } from "middleware/validation";
+import { PlaceId } from "routes/places/types";
 
 // Aligned with client/src/pages/logged-in-pages/Location/ImageCarousel/index.tsx
 const MAX_ALLOWED_FILES_PER_UPLOAD = 5;

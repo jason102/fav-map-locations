@@ -13,7 +13,7 @@ import {
   convertImageFilesToBase64Strings,
   resizeImage,
 } from "./photoUtils";
-import { useAddPlacePhotosMutation } from "src/app/api/places";
+import { useAddPlacePhotosMutation } from "src/app/api/photos";
 import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
 import { PlaceId } from "src/pages/logged-in-pages/Location/types";
 import { OOPS_MESSAGE } from "src/app/api/apiErrorUtils";

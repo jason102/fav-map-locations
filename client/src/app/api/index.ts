@@ -89,6 +89,7 @@ export const fetchWithTransformedResponse: BaseQueryFn<
 // Base API - see the injected endpoints in their own files:
 // client/src/app/api/user.ts
 // client/src/app/api/places.ts
+// client/src/app/api/photos.ts
 const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchWithTransformedResponse,

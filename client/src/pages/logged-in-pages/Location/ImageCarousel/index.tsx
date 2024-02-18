@@ -8,7 +8,7 @@ import UploadPhotosSlide from "./UploadPhotosSlide";
 import SlideContainer from "./SlideContainer";
 import { useDownloadPhotos } from "./useDownloadPhotos";
 import { FetchResultType } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import { useDeletePhotoMutation } from "src/app/api/places";
+import { useDeletePhotoMutation } from "src/app/api/photos";
 import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
 import LoadingButton from "src/components/LoadingButton";
 import { Photo } from "./types";
@@ -72,6 +72,7 @@ const ImageCarousel: React.FC = () => {
   };
 
   // TODO: Make the slider show the pictures better?
+  // TODO: While the photos are loading, it shows two dots at the bottom for two slides, need to fix this
   return (
     <>
       <Slider dots infinite speed={500} autoplay autoplaySpeed={5000}>

@@ -10,7 +10,6 @@ import {
   SubmittedRemovePlaceData,
 } from "src/pages/logged-in-pages/Location/types";
 
-// TODO: Move photo endpoints into own set of endpoints
 export const placesApi = api
   .enhanceEndpoints({ addTagTypes: ["Places", "PlaceDetails"] })
   .injectEndpoints({
@@ -63,17 +62,6 @@ export const placesApi = api
           }),
         }
       ),
-      addPlacePhotos: builder.mutation<
-        string[],
-        { filesFormData: FormData; placeId: PlaceId }
-      >({
-        query: ({ filesFormData, placeId }) => ({
-          url: "places/addPhotos",
-          method: "POST",
-          body: filesFormData,
-          params: { placeId },
-        }),
-      }),
       favoritePlace: builder.mutation<
         SuccessMessageResponse,
         SubmittedAddPlaceData
@@ -129,16 +117,6 @@ export const placesApi = api
         },
         invalidatesTags: invalidateOn({ success: ["Places"] }),
       }),
-      deletePhoto: builder.mutation<
-        SuccessMessageResponse,
-        { fileKey: string }
-      >({
-        query: ({ fileKey }) => ({
-          url: "places/deletePhoto",
-          method: "DELETE",
-          body: { fileKey },
-        }),
-      }),
     }),
   });
 
@@ -147,7 +125,5 @@ export const {
   useGetPlaceDetailsQuery,
   useFavoritePlaceMutation,
   useRemovePlaceMutation,
-  useAddPlacePhotosMutation,
   useRatePlaceMutation,
-  useDeletePhotoMutation,
 } = placesApi;
