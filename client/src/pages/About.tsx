@@ -132,9 +132,6 @@ const About: React.FC = () => {
             }
           </ListRow>
           <ListRow>
-            Ability to delete photos that you have uploaded for a specific place
-          </ListRow>
-          <ListRow>
             {
               "Unit tests for testing the code using Vitest and React Testing Library (frontend) and Jest/supertest (backend) (other projects on my GitHub page demonstrate this)"
             }

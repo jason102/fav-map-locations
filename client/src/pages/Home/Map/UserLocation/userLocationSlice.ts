@@ -7,6 +7,7 @@ interface State {
   userLocation: SerializableLatLng | null;
 }
 
+// Map starts zoomed out over North America
 const initialState: State = {
   currentZoom: 4,
   currentCenter: { lat: 40.20376690670299, lng: -99.49598308788777 },

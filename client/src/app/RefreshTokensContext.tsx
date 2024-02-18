@@ -2,9 +2,7 @@ import React, { createContext, useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "src/app/store";
 import refreshToken from "src/app/api/auth/refreshTokenThunk";
 
-export const RefreshTokensContext = createContext<{
-  hasRefreshedToken: boolean;
-}>({
+export const RefreshTokensContext = createContext({
   hasRefreshedToken: false,
 });
 
