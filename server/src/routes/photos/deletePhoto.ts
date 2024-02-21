@@ -27,6 +27,7 @@ router.delete(
 
     try {
       // First make sure this user is allowed to delete the photo and that it even exists
+      // Add a temp code change as a comment
       const { rows: dbPhotos } = await db.query<DatabasePhoto>(
         "SELECT * FROM photos WHERE photo_file_key = $1",
         [fileKey]
