@@ -16,7 +16,7 @@ const db = getDatabase();
 interface QueryParams {
   placeId: PlaceId;
 }
-// Temp test comment testing CODEOWNERS file
+
 router.get(
   "/",
   verifyToken,
