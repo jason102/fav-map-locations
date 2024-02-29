@@ -3,6 +3,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import http from "http";
+
+import { setupChatWebsockets } from "setupChatWebsockets";
+
 import { errorHandler } from "middleware/errorHandler";
 
 import registerRoute from "routes/auth/register";
@@ -61,6 +65,10 @@ app.use("/api/photos", [getPhotosRoute, addPhotosRoute, deletePhotoRoute]);
 
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
+const server = http.createServer(app);
+
+setupChatWebsockets(server);
+
+server.listen(process.env.PORT, () => {
   console.log(`Hola, Server listening on ${process.env.PORT}`);
 });

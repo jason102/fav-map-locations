@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { useParams, Link as RRDLink } from "react-router-dom";
 import { useAppDispatch } from "src/app/store";
+import { ChatProvider, AutoDraft } from "@chatscope/use-chat";
+import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 
 import { clearSelectedPlace } from "src/pages/logged-in-pages/Location/placeSlice";
 import {
@@ -10,6 +12,8 @@ import {
 import ImageCarousel from "./ImageCarousel";
 import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/snackbarFetchResponseHandling";
 import { SubmittedPlaceRating } from "./types";
+import Chat from "./Chat";
+import { useChatService } from "./Chat/useChatService";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -30,6 +34,8 @@ const Location: React.FC = () => {
   const [dispatchRatePlace] = useSnackbarFetchResponse<SubmittedPlaceRating>(
     useRatePlaceMutation()
   );
+
+  const { showChat, chatStorage, chatServiceFactory } = useChatService();
 
   // React.StrictMode rerenders the app twice in dev mode
   const firstRender = useRef(true);
@@ -122,6 +128,17 @@ const Location: React.FC = () => {
           {` ${address}`}
         </Typography>
       </Paper>
+      {showChat && (
+        <ChatProvider
+          serviceFactory={chatServiceFactory}
+          storage={chatStorage}
+          config={{
+            autoDraft: AutoDraft.Save | AutoDraft.Restore,
+          }}
+        >
+          <Chat />
+        </ChatProvider>
+      )}
     </Container>
   );
 };
