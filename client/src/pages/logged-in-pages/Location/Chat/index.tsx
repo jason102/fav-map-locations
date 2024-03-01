@@ -53,7 +53,10 @@ const Chat: React.FC = () => {
   return (
     <MainContainer responsive>
       <ChatContainer>
-        <MessageList>
+        <MessageList
+          style={{ height: "500px", overflowY: "auto" }}
+          autoScrollToBottom
+        >
           {currentMessages.map(({ direction, messages }, index) => (
             <MessageGroup key={index} direction={direction}>
               <MessageGroup.Messages>

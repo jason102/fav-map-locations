@@ -129,15 +129,20 @@ const Location: React.FC = () => {
         </Typography>
       </Paper>
       {showChat && (
-        <ChatProvider
-          serviceFactory={chatServiceFactory}
-          storage={chatStorage}
-          config={{
-            autoDraft: AutoDraft.Save | AutoDraft.Restore,
-          }}
-        >
-          <Chat />
-        </ChatProvider>
+        <>
+          <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
+            {`Let's chat about this place!`}
+          </Typography>
+          <ChatProvider
+            serviceFactory={chatServiceFactory}
+            storage={chatStorage}
+            config={{
+              autoDraft: AutoDraft.Save | AutoDraft.Restore,
+            }}
+          >
+            <Chat />
+          </ChatProvider>
+        </>
       )}
     </Container>
   );
