@@ -72,7 +72,7 @@ export class ChatService implements IChatService {
     this.currentUsername = username;
     this.placeId = placeId;
 
-    const manager = new Manager("http://localhost:8080/", {
+    const manager = new Manager(import.meta.env.VITE_BASE_URL, {
       query: { token: accessToken },
       transports: ["websocket"],
     });
