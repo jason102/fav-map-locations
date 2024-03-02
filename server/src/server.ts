@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import http from "http";
 
-import { setupChatWebsockets } from "setupChatWebsockets";
+import { setupChatWebsockets } from "websockets/setupChatWebsockets";
 
 import { errorHandler } from "middleware/errorHandler";
 

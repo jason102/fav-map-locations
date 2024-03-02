@@ -129,9 +129,13 @@ const Location: React.FC = () => {
         </Typography>
       </Paper>
       {showChat && (
-        <>
+        <Paper
+          variant="elevation"
+          elevation={8}
+          sx={{ mt: 3, mb: 6, px: 3, pb: 3 }}
+        >
           <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
-            {`Let's chat about this place!`}
+            {`Place Discussion Chat Room`}
           </Typography>
           <ChatProvider
             serviceFactory={chatServiceFactory}
@@ -142,7 +146,7 @@ const Location: React.FC = () => {
           >
             <Chat />
           </ChatProvider>
-        </>
+        </Paper>
       )}
     </Container>
   );

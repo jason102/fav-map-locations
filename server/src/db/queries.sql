@@ -137,3 +137,19 @@ WHERE
 ORDER BY 
   distance_from_center
 LIMIT $7;
+
+-- Stores all the place details page chat logs
+CREATE TABLE chat_logs (
+  chat_id VARCHAR(255) PRIMARY KEY,
+  place_id VARCHAR(255) REFERENCES places(place_id) NOT NULL ON DELETE CASCADE, 
+  chat_status INTEGER NOT NULL,
+  content_type INTEGER NOT NULL,
+  sender_id VARCHAR(255) NOT NULL, -- username
+  direction INTEGER NOT NULL, -- 1 is incoming, 2 is outgoing
+  content VARCHAR(255) NOT NULL,
+  created_time TIMESTAMP NOT NULL,
+)
+
+-- Add a chat log
+INSERT INTO chat_logs (chat_id, place_id, chat_status, content_type, sender_id, direction, content, created_time)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)

@@ -70,7 +70,7 @@ const Chat: React.FC = () => {
                   }: ChatMessage<MessageContentType>) => (
                     <div key={id}>
                       <Message.Header
-                        sender={senderId === username ? "Me" : username}
+                        sender={senderId === username ? "Me" : senderId}
                         sentTime={new Date(createdTime).toLocaleString([], {
                           weekday: "short",
                           year: "numeric",

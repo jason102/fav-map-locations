@@ -83,20 +83,34 @@ export class ChatService implements IChatService {
       this.socket.emit("joinRoom", this.placeId);
     });
 
-    this.socket.on("message", (message: ChatMessage<MessageContentType>) => {
-      // Replace "Outgoing" with "Incoming" so the Chat UI lib can differentiate between the two types of messages
-      message.direction = MessageDirection.Incoming;
+    this.socket.on(
+      "message",
+      ({
+        status,
+        message,
+      }: {
+        status: string;
+        message?: ChatMessage<MessageContentType>;
+      }) => {
+        if (status === "success" && message) {
+          // Replace "Outgoing" with "Incoming" so the Chat UI lib can differentiate between the two types of messages
+          message.direction = MessageDirection.Incoming;
 
-      // Don't show the current user's own message twice (message.senderId !== this.currentUsername)
-      if (
-        this.eventHandlers.onMessage &&
-        message.senderId !== this.currentUsername
-      ) {
-        this.eventHandlers.onMessage(
-          new MessageEvent({ message, conversationId: `c_${this.placeId}` })
-        );
+          // Don't show the current user's own message twice (message.senderId !== this.currentUsername)
+          if (
+            this.eventHandlers.onMessage &&
+            message.senderId !== this.currentUsername
+          ) {
+            this.eventHandlers.onMessage(
+              new MessageEvent({ message, conversationId: `c_${this.placeId}` })
+            );
+          }
+        } else {
+          // TODO: Show FetchResultSnackbar error so user also has some feedback
+          console.error(status);
+        }
       }
-    });
+    );
 
     this.socket.on("connect_error", (error) => {
       console.log("Connection Error:", error);
