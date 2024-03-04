@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { validationResult, body, query } from "express-validator";
 import { respondWith } from "utils/responseHandling";
 
-const MAX_FIELD_LENGTH = 255;
+export const MAX_FIELD_LENGTH = 255;
 
 export const checkHas = (
   isBody: boolean,

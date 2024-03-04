@@ -30,3 +30,5 @@ export enum HttpResponseCodes {
   ServerError = 500,
   AuthTokenExpired = 403,
 }
+
+export const MAX_INPUT_TEXT_LENGTH = 255;

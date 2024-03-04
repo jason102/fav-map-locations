@@ -12,6 +12,7 @@ import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/sna
 import { SubmittedAddPlaceData } from "src/pages/logged-in-pages/Location/types";
 import RHFTextField from "src/components/RHFTextField";
 import { FavNewPlaceValues } from "./types";
+import { MAX_INPUT_TEXT_LENGTH } from "src/utils";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -100,7 +101,7 @@ const RightClickPopup: React.FC = () => {
                   control={control}
                   disabled={!accessToken}
                   maxLength={{
-                    value: 255,
+                    value: MAX_INPUT_TEXT_LENGTH,
                     message: "Name cannot exceed 255 characters",
                   }}
                 />

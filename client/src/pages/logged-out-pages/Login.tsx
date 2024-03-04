@@ -20,6 +20,7 @@ import {
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
 import TogglePasswordVisibility from "src/pages/logged-out-pages/TogglePasswordVisibility";
 import LoadingButton from "src/components/LoadingButton";
+import { MAX_INPUT_TEXT_LENGTH } from "src/utils";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -87,7 +88,7 @@ const Login: React.FC = () => {
                 variant="standard"
                 control={control}
                 maxLength={{
-                  value: 255,
+                  value: MAX_INPUT_TEXT_LENGTH,
                   message: "Username cannot exceed 255 characters",
                 }}
               />
@@ -103,7 +104,7 @@ const Login: React.FC = () => {
                 variant="standard"
                 control={control}
                 maxLength={{
-                  value: 255,
+                  value: MAX_INPUT_TEXT_LENGTH,
                   message: "Password cannot exceed 255 characters",
                 }}
                 type={showPassword ? "text" : "password"}

@@ -19,7 +19,11 @@ import {
   FetchResultType,
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import { validateEmail, validatePassword } from "src/utils";
+import {
+  MAX_INPUT_TEXT_LENGTH,
+  validateEmail,
+  validatePassword,
+} from "src/utils";
 import TogglePasswordVisibility from "./TogglePasswordVisibility";
 import LoadingButton from "src/components/LoadingButton";
 import { RegisterFormValues } from "./types";
@@ -115,7 +119,7 @@ const Register: React.FC = () => {
                 variant="standard"
                 control={control}
                 maxLength={{
-                  value: 255,
+                  value: MAX_INPUT_TEXT_LENGTH,
                   message: "Username cannot exceed 255 characters",
                 }}
               />
@@ -131,7 +135,8 @@ const Register: React.FC = () => {
                 variant="standard"
                 control={control}
                 validate={(value) =>
-                  (validateEmail(value) && value.length <= 255) ||
+                  (validateEmail(value) &&
+                    value.length <= MAX_INPUT_TEXT_LENGTH) ||
                   "Please enter a valid email address"
                 }
               />
@@ -146,7 +151,8 @@ const Register: React.FC = () => {
                 variant="standard"
                 control={control}
                 validate={(value) =>
-                  (validatePassword(value) && value.length <= 255) ||
+                  (validatePassword(value) &&
+                    value.length <= MAX_INPUT_TEXT_LENGTH) ||
                   "Please enter a valid password"
                 }
                 type={showPassword ? "text" : "password"}

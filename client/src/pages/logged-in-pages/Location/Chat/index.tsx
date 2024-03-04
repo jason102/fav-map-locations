@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "src/app/store";
 import {
   useChat,
@@ -17,8 +17,11 @@ import {
   MessageList,
   MessageInput,
 } from "@chatscope/chat-ui-kit-react";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 import { UserToken } from "src/app/api/auth/types";
+import { MAX_INPUT_TEXT_LENGTH } from "src/utils";
 
 const Chat: React.FC = () => {
   const {
@@ -29,9 +32,21 @@ const Chat: React.FC = () => {
     setCurrentMessage,
   } = useChat();
 
+  const [isMessageTooLong, setIsMessageTooLong] = useState(false);
+
   const { username } = useAppSelector(
     (state) => state.auth.userToken
   ) as UserToken;
+
+  const onSetCurrentMessage = (text: string) => {
+    if (text.trim().length > MAX_INPUT_TEXT_LENGTH) {
+      setIsMessageTooLong(true);
+    } else {
+      setIsMessageTooLong(false);
+    }
+
+    setCurrentMessage(text);
+  };
 
   const handleSend = (text: string) => {
     const message = new ChatMessage({
@@ -51,60 +66,75 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <MainContainer responsive>
-      <ChatContainer>
-        <MessageList
-          style={{ height: "500px", overflowY: "auto" }}
-          autoScrollToBottom
-        >
-          {currentMessages.map(({ direction, messages }, index) => (
-            <MessageGroup key={index} direction={direction}>
-              <MessageGroup.Messages>
-                {messages.map(
-                  ({
-                    id,
-                    senderId,
-                    content,
-                    direction,
-                    createdTime,
-                  }: ChatMessage<MessageContentType>) => (
-                    <div key={id}>
-                      <Message.Header
-                        sender={senderId === username ? "Me" : senderId}
-                        sentTime={new Date(createdTime).toLocaleString([], {
-                          weekday: "short",
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "numeric",
-                        })}
-                      />
-                      <Message
-                        model={{
-                          type: "html",
-                          payload: content,
-                          direction,
-                          position: "normal",
-                        }}
-                      />
-                    </div>
-                  )
-                )}
-              </MessageGroup.Messages>
-            </MessageGroup>
-          ))}
-        </MessageList>
-        <MessageInput
-          value={currentMessage}
-          onChange={setCurrentMessage}
-          onSend={handleSend}
-          disabled={!activeConversation}
-          attachButton={false}
-          placeholder="Type a comment here..."
-        />
-      </ChatContainer>
-    </MainContainer>
+    <>
+      <MainContainer responsive>
+        <ChatContainer>
+          <MessageList
+            style={{ height: "500px", overflowY: "auto" }}
+            autoScrollToBottom
+          >
+            {currentMessages.map(({ direction, messages }, index) => (
+              <MessageGroup key={index} direction={direction}>
+                <MessageGroup.Messages>
+                  {messages.map(
+                    ({
+                      id,
+                      senderId,
+                      content,
+                      direction,
+                      createdTime,
+                    }: ChatMessage<MessageContentType>) => (
+                      <div key={id}>
+                        <Message.Header
+                          sender={senderId === username ? "Me" : senderId}
+                          sentTime={new Date(createdTime).toLocaleString([], {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                          })}
+                        />
+                        <Message
+                          model={{
+                            type: "html",
+                            payload: content,
+                            direction,
+                            position: "normal",
+                          }}
+                        />
+                      </div>
+                    )
+                  )}
+                </MessageGroup.Messages>
+              </MessageGroup>
+            ))}
+          </MessageList>
+          <MessageInput
+            value={currentMessage}
+            onChange={onSetCurrentMessage}
+            onSend={handleSend}
+            disabled={!activeConversation}
+            attachButton={false}
+            placeholder="Type a comment here..."
+            sendDisabled={isMessageTooLong}
+            sendOnReturnDisabled={isMessageTooLong}
+          />
+        </ChatContainer>
+      </MainContainer>
+      <Box
+        sx={{
+          display: "flex",
+          flex: 1,
+          justifyContent: "end",
+        }}
+      >
+        <Typography variant="caption" sx={{ color: "red" }}>
+          {isMessageTooLong ? "Message is too long" : <>&nbsp;</>}
+        </Typography>
+      </Box>
+    </>
   );
 };
 

@@ -10,6 +10,7 @@ import {
   DatabaseChatMessage,
   ServerToClientEvents,
 } from "./types";
+import { MAX_FIELD_LENGTH } from "middleware/validation";
 
 const db = getDatabase();
 
@@ -63,6 +64,14 @@ export const setupChatWebsockets = (
           createdTime,
         } = message;
 
+        const trimmedContent = content.trim();
+
+        // TODO: Need to do more incoming data validation than just this?
+        if (trimmedContent.length > MAX_FIELD_LENGTH) {
+          websocket.to(room).emit("message", { status: "Message too long" });
+          return;
+        }
+
         // Convert the @chatscope/use-chat MessageDirection string enum to a number for storing in the DB
         const dbDirection =
           direction === ChatMessageDirection.Incoming
@@ -81,7 +90,7 @@ export const setupChatWebsockets = (
               contentType,
               senderId,
               dbDirection,
-              content,
+              trimmedContent,
               new Date(createdTime),
             ]
           );
