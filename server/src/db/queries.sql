@@ -148,8 +148,14 @@ CREATE TABLE chat_logs (
   direction INTEGER NOT NULL, -- 1 is incoming, 2 is outgoing
   content VARCHAR(255) NOT NULL,
   created_time TIMESTAMP NOT NULL,
-)
+);
 
 -- Add a chat log
 INSERT INTO chat_logs (chat_id, place_id, chat_status, content_type, sender_id, direction, content, created_time)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+
+-- Paginated selecting of chat messages
+SELECT * FROM chat_logs
+WHERE place_id = $1
+ORDER BY created_time ASC
+LIMIT $2 OFFSET $3;

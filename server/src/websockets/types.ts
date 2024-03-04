@@ -8,6 +8,7 @@ export enum ChatMessageDirection {
   Outgoing = "outgoing",
 }
 
+// TODO: Remove the "direction" field as all messages in the backend are "outgoing"
 export interface DatabaseChatMessage {
   chat_id: string;
   place_id: string;
@@ -19,14 +20,14 @@ export interface DatabaseChatMessage {
   created_time: Date;
 }
 
-interface ChatscopeMessage {
+export interface ChatscopeMessage {
   id: string;
   status: number;
   contentType: number;
   senderId: string;
   direction: ChatMessageDirection;
   content: string;
-  createdTime: string;
+  createdTime: Date;
 }
 
 export interface ClientToServerEvents {

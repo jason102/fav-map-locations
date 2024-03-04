@@ -82,7 +82,7 @@ export const setupChatWebsockets = (
           // Store the message in the DB
           await db.query<DatabaseChatMessage>(
             `INSERT INTO chat_logs (chat_id, place_id, chat_status, content_type, sender_id, direction, content, created_time)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
             [
               id,
               room,

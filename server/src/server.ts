@@ -6,6 +6,7 @@ import helmet from "helmet";
 import http from "http";
 
 import { setupChatWebsockets } from "websockets/setupChatWebsockets";
+import getPaginatedChatMessagesRoute from "routes/getPaginatedChatMessages";
 
 import { errorHandler } from "middleware/errorHandler";
 
@@ -62,6 +63,8 @@ app.use("/api/places", [
 ]);
 
 app.use("/api/photos", [getPhotosRoute, addPhotosRoute, deletePhotoRoute]);
+
+app.use("/api/chatMessages", getPaginatedChatMessagesRoute);
 
 app.use(errorHandler);
 

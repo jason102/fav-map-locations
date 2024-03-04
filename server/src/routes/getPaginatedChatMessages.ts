@@ -1,0 +1,59 @@
+import express, { NextFunction, Request, Response } from "express";
+import { matchedData } from "express-validator";
+import { getDatabase } from "db/dbSetup";
+import { verifyToken } from "middleware/verifyToken";
+import { respondWith } from "utils/responseHandling";
+import { queryHas, validateResult } from "middleware/validation";
+import { PlaceId } from "routes/places/types";
+import {
+  DatabaseChatMessage,
+  ChatscopeMessage,
+  ChatMessageDirection,
+} from "websockets/types";
+
+const router = express.Router();
+const db = getDatabase();
+
+interface QueryParams {
+  placeId: PlaceId;
+  limit: number;
+  offset: number;
+}
+
+router.get(
+  "/",
+  verifyToken,
+  queryHas("placeId", { isNumber: true }),
+  queryHas("limit", { isNumber: true }),
+  queryHas("offset", { isNumber: true }),
+  validateResult,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { placeId, limit, offset } = matchedData(req) as QueryParams;
+
+    try {
+      const { rows: dbChatMessages } = await db.query<DatabaseChatMessage>(
+        `SELECT * FROM chat_logs
+        WHERE place_id = $1
+        ORDER BY created_time ASC
+        LIMIT $2 OFFSET $3`,
+        [placeId, limit, offset]
+      );
+
+      const messages = dbChatMessages.map<ChatscopeMessage>((dbMsg) => ({
+        id: dbMsg.chat_id,
+        status: dbMsg.chat_status,
+        contentType: dbMsg.content_type,
+        senderId: dbMsg.sender_id,
+        direction: ChatMessageDirection.Outgoing,
+        content: dbMsg.content,
+        createdTime: dbMsg.created_time,
+      }));
+
+      respondWith({ res, status: 200, data: messages });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+export default router;
