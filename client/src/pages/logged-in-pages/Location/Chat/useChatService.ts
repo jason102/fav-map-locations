@@ -10,10 +10,13 @@ import {
   Conversation,
   Participant,
   ConversationRole,
+  MessageDirection,
 } from "@chatscope/use-chat";
 
 import { UserToken } from "src/app/api/auth/types";
 import { ChatService } from "./ChatService";
+
+const LOAD_MESSAGES_LIMIT = 50;
 
 // See the example project for how to use the @chatscope libs:
 // https://github.com/chatscope/use-chat-example
@@ -45,25 +48,72 @@ export const useChatService = () => {
   const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
+    const initializeStorage = async () => {
+      if (firstRender.current) {
+        firstRender.current = false;
 
-      const conversation = new Conversation({
-        id: `c_${placeId}`,
-        participants: [
-          new Participant({
-            id: username,
-            role: new ConversationRole([]),
-          }),
-        ],
-        draft: "",
-      });
+        const conversationId = `c_${placeId}`;
 
-      storage.current.addConversation(conversation);
-      storage.current.setActiveConversation(`c_${placeId}`);
+        const conversation = new Conversation({
+          id: conversationId,
+          participants: [
+            new Participant({
+              id: username,
+              role: new ConversationRole([]),
+            }),
+          ],
+          draft: "",
+        });
 
-      setShowChat(true);
-    }
+        storage.current.addConversation(conversation);
+        storage.current.setActiveConversation(conversationId);
+
+        try {
+          // TODO: Later pagination on the frontend side should be enabled for loading earlier and earlier messages
+          // when the user scrolls all the way up in the chat widget
+          const response = await fetch(
+            `${
+              import.meta.env.VITE_BASE_URL
+            }/api/chatMessages?placeId=${placeId}&limit=${LOAD_MESSAGES_LIMIT}&offset=0`,
+            {
+              credentials: "include",
+              headers: {
+                authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+
+          const {
+            data: downloadedMessages,
+          }: { data: Omit<ChatMessage<MessageContentType>, "direction">[] } =
+            await response.json();
+
+          downloadedMessages.forEach((message) => {
+            storage.current.addMessage(
+              {
+                ...message,
+                direction:
+                  username === message.senderId
+                    ? MessageDirection.Outgoing
+                    : MessageDirection.Incoming,
+              },
+              conversationId
+            );
+          });
+        } catch (error) {
+          // TODO: show snackbar
+          console.error(error);
+        }
+
+        setShowChat(true);
+      }
+    };
+
+    initializeStorage();
 
     return () => {
       if (chatService.current?.socket && chatService.current.socket.connected) {

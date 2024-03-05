@@ -11,6 +11,8 @@ import {
   ChatMessageDirection,
 } from "websockets/types";
 
+const MAX_LIMIT = 100;
+
 const router = express.Router();
 const db = getDatabase();
 
@@ -29,6 +31,14 @@ router.get(
   validateResult,
   async (req: Request, res: Response, next: NextFunction) => {
     const { placeId, limit, offset } = matchedData(req) as QueryParams;
+
+    if (limit > MAX_LIMIT) {
+      return respondWith({
+        res,
+        status: 422,
+        errorMessage: "Number of messages requested is too many",
+      });
+    }
 
     try {
       const { rows: dbChatMessages } = await db.query<DatabaseChatMessage>(
