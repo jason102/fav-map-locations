@@ -1,12 +1,4 @@
-export enum DBChatMessageDirection {
-  Incoming = 1,
-  Outgoing = 2,
-}
 
-export enum ChatMessageDirection {
-  Incoming = "incoming",
-  Outgoing = "outgoing",
-}
 
 // TODO: Remove the "direction" field as all messages in the backend are "outgoing"
 export interface DatabaseChatMessage {
@@ -15,7 +7,6 @@ export interface DatabaseChatMessage {
   chat_status: number;
   content_type: number;
   sender_id: string;
-  direction: DBChatMessageDirection; // 1 is incoming, 2 is outgoing
   content: string;
   created_time: Date;
 }
@@ -25,7 +16,6 @@ export interface ChatscopeMessage {
   status: number;
   contentType: number;
   senderId: string;
-  direction: ChatMessageDirection;
   content: string;
   createdTime: Date;
 }

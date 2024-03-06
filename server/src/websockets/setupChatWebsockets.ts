@@ -4,9 +4,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { getDatabase } from "db/dbSetup";
 import { SUCCESS_MESSAGE } from "utils/responseHandling";
 import {
-  ChatMessageDirection,
   ClientToServerEvents,
-  DBChatMessageDirection,
   DatabaseChatMessage,
   ServerToClientEvents,
 } from "./types";
@@ -54,15 +52,8 @@ export const setupChatWebsockets = (
 
       // Broadcast each person's message to everyone in the room
       socket.on("message", async ({ room, message }) => {
-        const {
-          id,
-          status,
-          contentType,
-          senderId,
-          direction,
-          content,
-          createdTime,
-        } = message;
+        const { id, status, contentType, senderId, content, createdTime } =
+          message;
 
         const trimmedContent = content.trim();
 
@@ -72,24 +63,17 @@ export const setupChatWebsockets = (
           return;
         }
 
-        // Convert the @chatscope/use-chat MessageDirection string enum to a number for storing in the DB
-        const dbDirection =
-          direction === ChatMessageDirection.Incoming
-            ? DBChatMessageDirection.Incoming
-            : DBChatMessageDirection.Outgoing;
-
         try {
           // Store the message in the DB
           await db.query<DatabaseChatMessage>(
-            `INSERT INTO chat_logs (chat_id, place_id, chat_status, content_type, sender_id, direction, content, created_time)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            `INSERT INTO chat_logs (chat_id, place_id, chat_status, content_type, sender_id, content, created_time)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
             [
               id,
               room,
               status,
               contentType,
               senderId,
-              dbDirection,
               trimmedContent,
               new Date(createdTime),
             ]

@@ -40,6 +40,7 @@ export const useDownloadPhotos = () => {
           }
         );
 
+        // TODO: Check all fetch() calls and make sure response.ok is being checked
         const responseData: ApiResponse<Photo[]> = await response.json();
 
         if (responseData.error) {

@@ -5,11 +5,7 @@ import { verifyToken } from "middleware/verifyToken";
 import { respondWith } from "utils/responseHandling";
 import { queryHas, validateResult } from "middleware/validation";
 import { PlaceId } from "routes/places/types";
-import {
-  DatabaseChatMessage,
-  ChatscopeMessage,
-  ChatMessageDirection,
-} from "websockets/types";
+import { DatabaseChatMessage, ChatscopeMessage } from "websockets/types";
 
 const MAX_LIMIT = 100;
 
@@ -54,7 +50,6 @@ router.get(
         status: dbMsg.chat_status,
         contentType: dbMsg.content_type,
         senderId: dbMsg.sender_id,
-        direction: ChatMessageDirection.Outgoing,
         content: dbMsg.content,
         createdTime: dbMsg.created_time,
       }));
