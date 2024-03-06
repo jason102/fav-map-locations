@@ -85,6 +85,7 @@ export class ChatService implements IChatService {
       }
     });
 
+    // TODO: Show user the connection was lost and maybe even a way for them to manually trigger reconnecting?
     this.socket.on("connect_error", (error) => {
       console.log("Connection Error:", error);
     });

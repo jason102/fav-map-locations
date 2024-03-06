@@ -17,7 +17,13 @@ export const setupChatWebsockets = (
   server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 ) => {
   const websocket = new Server<ClientToServerEvents, ServerToClientEvents>(
-    server
+    server,
+    {
+      connectionStateRecovery: {
+        maxDisconnectionDuration: 300000, // 5 minutes
+        skipMiddlewares: true,
+      },
+    }
   );
 
   websocket
