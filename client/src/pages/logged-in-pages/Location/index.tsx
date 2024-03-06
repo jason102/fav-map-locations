@@ -128,15 +128,15 @@ const Location: React.FC = () => {
           {` ${address}`}
         </Typography>
       </Paper>
-      {showChat && (
-        <Paper
-          variant="elevation"
-          elevation={8}
-          sx={{ mt: 3, mb: 6, px: 3, pb: 3 }}
-        >
-          <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
-            {`Place Discussion Chat Room`}
-          </Typography>
+      <Paper
+        variant="elevation"
+        elevation={8}
+        sx={{ mt: 3, mb: 6, px: 3, pb: 3 }}
+      >
+        <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
+          {`Place Discussion Chat Room`}
+        </Typography>
+        {showChat ? (
           <ChatProvider
             serviceFactory={chatServiceFactory}
             storage={chatStorage}
@@ -146,8 +146,12 @@ const Location: React.FC = () => {
           >
             <Chat />
           </ChatProvider>
-        </Paper>
-      )}
+        ) : (
+          <Box display="flex" justifyContent="center" pt={25} pb={42}>
+            <CircularProgress size={30} color="inherit" />
+          </Box>
+        )}
+      </Paper>
     </Container>
   );
 };
