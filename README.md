@@ -16,17 +16,19 @@ It is hosted using Amazon Web Services (AWS), including:
 
 ### Frontend libraries and services:
 
-| Dependency                                                               | Description                                                                          |
-| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| [Vite](https://vitejs.dev/)                                              | Frontend project tooling                                                             |
-| [Material UI (MUI)](https://mui.com/)                                    | Gives the app its look and feel                                                      |
-| [Redux Toolkit and RTK Query](https://redux-toolkit.js.org/)             | Global state management and API/caching management                                   |
-| [React Router](https://reactrouter.com/en/main)                          | Client-side routing and navigation                                                   |
-| [React Hook Form](https://react-hook-form.com/)                          | Form management and field validation                                                 |
-| [Leaflet.js](https://leafletjs.com/)                                     | Renders an interactive [OpenStreetMap.org (OSM)](https://www.openstreetmap.org/) map |
-| [OSM Nominatim](https://nominatim.org/release-docs/develop/api/Reverse/) | Reverse geocoding service to get place info when the user right-clicks on the map    |
-| [Compressor.js](https://fengyuanchen.github.io/compressorjs/)            | Helps resize and compress place image files for upload                               |
-| [React Slick](https://react-slick.neostack.com/)                         | Image carousel widget to display place photos                                        |
+| Dependency                                                               | Description                                                                                              |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| [Vite](https://vitejs.dev/)                                              | Frontend project tooling                                                                                 |
+| [Material UI (MUI)](https://mui.com/)                                    | Gives the app its look and feel                                                                          |
+| [Redux Toolkit and RTK Query](https://redux-toolkit.js.org/)             | Global state management and API/caching management                                                       |
+| [React Router](https://reactrouter.com/en/main)                          | Client-side routing and navigation                                                                       |
+| [React Hook Form](https://react-hook-form.com/)                          | Form management and field validation                                                                     |
+| [Leaflet.js](https://leafletjs.com/)                                     | Renders an interactive [OpenStreetMap.org (OSM)](https://www.openstreetmap.org/) map                     |
+| [OSM Nominatim](https://nominatim.org/release-docs/develop/api/Reverse/) | Reverse geocoding service to get place info when the user right-clicks on the map                        |
+| [Client Socket.IO](https://socket.io/)                                   | Client side WebSocket connection management for the place details page chat widget                       |
+| [Chatscope](https://chatscope.io/)                                       | UI chat widget building block components and client side "engine" for the place details page chat widget |
+| [Compressor.js](https://fengyuanchen.github.io/compressorjs/)            | Helps resize and compress place image files for upload                                                   |
+| [React Slick](https://react-slick.neostack.com/)                         | Image carousel widget to display place photos                                                            |
 
 ### Backend libraries and services:
 
@@ -37,6 +39,7 @@ It is hosted using Amazon Web Services (AWS), including:
 | [helmet.js](https://helmetjs.github.io/)                      | Helps with setting secure HTTP response headers                                                                        |
 | [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)    | JSON web token creation and validation for secure login sessions                                                       |
 | [multer](https://github.com/expressjs/multer)                 | Multipart/form data handling for image file uploads to AWS S3 using [multer-s3](https://github.com/anacronw/multer-s3) |
+| [Server Socket.IO](https://socket.io/)                        | Server side WebSocket connection management for the place details page chat widget                                     |
 | [Knex.js](https://knexjs.org/)                                | Database migrations management                                                                                         |
 
 ## Designs
