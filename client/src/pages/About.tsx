@@ -125,7 +125,6 @@ const About: React.FC = () => {
               "Responsive design for mobile screen layouts (currently UX is best on desktop screens)"
             }
           </ListRow>
-          <ListRow>Comments section on the place details page</ListRow>
           <ListRow>
             {
               "Improve the UI appearance (most of it is still using MUI default styling)"
@@ -207,6 +206,14 @@ const About: React.FC = () => {
             Reverse geocoding service to get place info when the user
             right-clicks on the map
           </DependencyRow>
+          <DependencyRow href="https://socket.io/" name="Client Socket.IO">
+            Client side WebSocket connection management for the place details
+            page chat widget
+          </DependencyRow>
+          <DependencyRow href="https://chatscope.io/" name="Chatscope">
+            UI chat widget building block components and client side "engine"
+            for the place details page chat widget
+          </DependencyRow>
           <DependencyRow
             href="https://fengyuanchen.github.io/compressorjs/"
             name="Compressor.js"
@@ -250,6 +257,10 @@ const About: React.FC = () => {
             <Link target="_blank" href="https://github.com/anacronw/multer-s3">
               multer-s3
             </Link>
+          </DependencyRow>
+          <DependencyRow href="https://socket.io/" name="Server Socket.IO">
+            Server side WebSocket connection management for the place details
+            page chat widget
           </DependencyRow>
           <DependencyRow href="https://knexjs.org/" name="Knex.js">
             Database migrations management
