@@ -14,6 +14,7 @@ import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/sna
 import { SubmittedPlaceRating } from "./types";
 import Chat from "./Chat";
 import { useChatService } from "./Chat/useChatService";
+import BackButton from "src/components/BackButton";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -81,9 +82,22 @@ const Location: React.FC = () => {
 
   return (
     <Container component="main" disableGutters>
-      <Typography variant="h6" textAlign="center" sx={{ py: 2 }}>
-        {name}
-      </Typography>
+      <Box sx={{ display: "flex", flex: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 60,
+          }}
+        >
+          <BackButton />
+        </Box>
+        <Typography variant="h6" textAlign="center" sx={{ flex: 1, py: 2 }}>
+          {name}
+        </Typography>
+        <Box sx={{ width: 60 }} />
+      </Box>
       <ImageCarousel />
       <Paper variant="outlined" sx={{ mt: 3, p: 3, borderRadius: 3 }}>
         <Box display="flex" flexDirection="row">
