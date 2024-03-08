@@ -14,7 +14,7 @@ import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/sna
 import { SubmittedPlaceRating } from "./types";
 import Chat from "./Chat";
 import { useChatService } from "./Chat/useChatService";
-import PageHeader from "src/components/PageHeader";
+import BreadCrumbs from "src/app/navigation/Breadcrumbs";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -81,8 +81,11 @@ const Location: React.FC = () => {
   } = placeDetails;
 
   return (
-    <Container component="main" disableGutters>
-      <PageHeader title={name} />
+    <Container component="main">
+      <BreadCrumbs currentPage="Place Details" />
+      <Typography variant="h6" textAlign="center" py={2}>
+        {name}
+      </Typography>
       <ImageCarousel />
       <Paper variant="outlined" sx={{ mt: 3, p: 3, borderRadius: 3 }}>
         <Box display="flex" flexDirection="row">

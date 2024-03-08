@@ -7,8 +7,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-import PageHeader from "src/components/PageHeader";
 import { UserToken } from "src/app/api/auth/types";
+import BreadCrumbs from "src/app/navigation/Breadcrumbs";
 
 const Profile: React.FC = () => {
   const { username: urlPathUsername } = useParams();
@@ -22,14 +22,13 @@ const Profile: React.FC = () => {
   const isCurrentUser = urlPathUsername === username;
 
   return (
-    <Container component="main" disableGutters>
-      <PageHeader
-        title={
-          isCurrentUser
-            ? `My Profile (${username})`
-            : `User: ${urlPathUsername}`
-        }
-      />
+    <Container component="main">
+      <BreadCrumbs currentPage="User Profile" />
+      <Typography variant="h6" textAlign="center" py={2}>
+        {isCurrentUser
+          ? `My Profile (${username})`
+          : `User: ${urlPathUsername}`}
+      </Typography>
       <Box display="flex" justifyContent="center" pt={15}>
         <Typography variant="h6">User profile page - coming soon!</Typography>
       </Box>

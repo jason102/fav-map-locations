@@ -16,7 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 
-import PageHeader from "src/components/PageHeader";
+import BreadCrumbs from "src/app/navigation/Breadcrumbs";
 
 const About: React.FC = () => {
   const ListRow = ({ children }: { children: React.ReactNode }) => (
@@ -69,8 +69,11 @@ const About: React.FC = () => {
 
   return (
     <Container component="main">
-      <Paper variant="elevation" elevation={16} sx={{ mt: 3, borderRadius: 2 }}>
-        <PageHeader title="About Favorite Map Locations" />
+      <BreadCrumbs currentPage="About" />
+      <Paper variant="elevation" elevation={16} sx={{ mt: 1, borderRadius: 2 }}>
+        <Typography variant="h6" textAlign="center" py={2}>
+          About Favorite Map Locations
+        </Typography>
         <Box sx={{ px: 3, pb: 3 }}>
           <Divider variant="fullWidth" sx={{ mb: 5 }} />
           <Typography>
