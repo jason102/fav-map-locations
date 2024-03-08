@@ -16,7 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 
-import BackButton from "src/components/BackButton";
+import PageHeader from "src/components/PageHeader";
 
 const About: React.FC = () => {
   const ListRow = ({ children }: { children: React.ReactNode }) => (
@@ -69,37 +69,10 @@ const About: React.FC = () => {
 
   return (
     <Container component="main">
-      <Paper
-        variant="elevation"
-        elevation={16}
-        sx={{ mt: 3, borderRadius: 2, mb: 5 }}
-      >
-        <Box sx={{ display: "flex", flex: 1, pt: 3 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: 60,
-            }}
-          >
-            <BackButton />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flex: 1,
-            }}
-          >
-            <Typography variant="h5" textAlign="center">
-              About Favorite Map Locations
-            </Typography>
-          </Box>
-          <Box sx={{ width: 60 }} />
-        </Box>
-        <Box sx={{ p: 3 }}>
-          <Divider variant="fullWidth" sx={{ mt: 2, mb: 5 }} />
+      <Paper variant="elevation" elevation={16} sx={{ mt: 3, borderRadius: 2 }}>
+        <PageHeader title="About Favorite Map Locations" />
+        <Box sx={{ px: 3, pb: 3 }}>
+          <Divider variant="fullWidth" sx={{ mb: 5 }} />
           <Typography>
             Welcome to my GitHub portfolio project demo app Favorite Map
             Locations!
