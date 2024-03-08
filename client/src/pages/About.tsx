@@ -16,7 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 
-import BreadCrumbs from "src/app/navigation/Breadcrumbs";
+import BreadCrumbs from "src/app/navigation/BreadCrumbs";
 
 const About: React.FC = () => {
   const ListRow = ({ children }: { children: React.ReactNode }) => (

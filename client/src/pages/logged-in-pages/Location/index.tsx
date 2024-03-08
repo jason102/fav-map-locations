@@ -14,7 +14,7 @@ import { useSnackbarFetchResponse } from "src/components/FetchResultSnackbar/sna
 import { SubmittedPlaceRating } from "./types";
 import Chat from "./Chat";
 import { useChatService } from "./Chat/useChatService";
-import BreadCrumbs from "src/app/navigation/Breadcrumbs";
+import BreadCrumbs from "src/app/navigation/BreadCrumbs";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";

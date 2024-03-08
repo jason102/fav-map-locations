@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import { UserToken } from "src/app/api/auth/types";
-import BreadCrumbs from "src/app/navigation/Breadcrumbs";
+import BreadCrumbs from "src/app/navigation/BreadCrumbs";
 
 const Profile: React.FC = () => {
   const { username: urlPathUsername } = useParams();
