@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link as RRDLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "src/app/store";
+import isEmail from "validator/lib/isEmail";
+import isStrongPassword from "validator/lib/isStrongPassword";
 
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -19,11 +21,7 @@ import {
   FetchResultType,
   openSnackbarWithFetchResult,
 } from "src/components/FetchResultSnackbar/fetchResultSnackbarSlice";
-import {
-  MAX_INPUT_TEXT_LENGTH,
-  validateEmail,
-  validatePassword,
-} from "src/utils";
+import { MAX_INPUT_TEXT_LENGTH } from "src/utils";
 import TogglePasswordVisibility from "./TogglePasswordVisibility";
 import LoadingButton from "src/components/LoadingButton";
 import { RegisterFormValues } from "./types";
@@ -135,8 +133,7 @@ const Register: React.FC = () => {
                 variant="standard"
                 control={control}
                 validate={(value) =>
-                  (validateEmail(value) &&
-                    value.length <= MAX_INPUT_TEXT_LENGTH) ||
+                  (isEmail(value) && value.length <= MAX_INPUT_TEXT_LENGTH) ||
                   "Please enter a valid email address"
                 }
               />
@@ -151,7 +148,13 @@ const Register: React.FC = () => {
                 variant="standard"
                 control={control}
                 validate={(value) =>
-                  (validatePassword(value) &&
+                  (isStrongPassword(value, {
+                    minLength: 8,
+                    minUppercase: 1,
+                    minLowercase: 1,
+                    minSymbols: 1,
+                    minNumbers: 1,
+                  }) &&
                     value.length <= MAX_INPUT_TEXT_LENGTH) ||
                   "Please enter a valid password"
                 }

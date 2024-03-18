@@ -28,13 +28,15 @@
     "react-router-dom": "^6.19.0",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
-    "socket.io-client": "^4.7.4"
+    "socket.io-client": "^4.7.4",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.8",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-slick": "^0.23.12",
+    "@types/validator": "^13.11.9",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.3.2",
