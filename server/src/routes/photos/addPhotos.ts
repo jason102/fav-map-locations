@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import { matchedData } from "express-validator";
@@ -75,17 +75,17 @@ router.post(
       respondWith({ res, status: 200, data: fileKeys });
     } catch (error) {
       // If there's an error, roll back the S3 uploads
-      const deleteCommandPromises = files.map((file) =>
-        awsS3Client.send(
-          new DeleteObjectCommand({
-            Bucket: process.env.AWS_S3_BUCKET_NAME || "",
-            Key: file.key,
-          })
-        )
-      );
+      const fileKeys = files.map((file) => ({ Key: file.key }));
 
       try {
-        await Promise.all(deleteCommandPromises);
+        await awsS3Client.send(
+          new DeleteObjectsCommand({
+            Bucket: process.env.AWS_S3_BUCKET_NAME || "",
+            Delete: {
+              Objects: fileKeys,
+            },
+          })
+        );
       } catch (deleteError) {
         console.error("Error deleting files from S3");
         return next(deleteError);
