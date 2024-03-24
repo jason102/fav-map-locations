@@ -1,14 +1,15 @@
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import helmet from "helmet";
 import http from "http";
 
 import { setupChatWebsockets } from "websockets/setupChatWebsockets";
 import getPaginatedChatMessagesRoute from "routes/getPaginatedChatMessages";
 
+import { startGraphQLServer } from "graphqlApi";
+
 import { errorHandler } from "middleware/errorHandler";
+import { configureRequestHeaders } from "middleware/headers";
 
 import registerRoute from "routes/auth/register";
 import loginRoute from "routes/auth/login";
@@ -32,16 +33,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Request header middleware
-app.use(helmet());
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.URL || "http://localhost:5173", // TODO: Replace with process.env.LOCALHOST_URL
-    allowedHeaders:
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-  })
-);
+configureRequestHeaders(app);
 
 app.use(cookieParser());
 
@@ -68,10 +60,13 @@ app.use("/api/chatMessages", getPaginatedChatMessagesRoute);
 
 app.use(errorHandler);
 
-const server = http.createServer(app);
+// TODO: Enable async await in this top level code, for now have to use callbacks
+startGraphQLServer(app, () => {
+  const server = http.createServer(app);
 
-setupChatWebsockets(server);
+  setupChatWebsockets(server);
 
-server.listen(process.env.PORT, () => {
-  console.log(`Hola, Server listening on ${process.env.PORT}`);
+  server.listen(process.env.PORT, () => {
+    console.log(`Hola, Server listening on ${process.env.PORT}`);
+  });
 });

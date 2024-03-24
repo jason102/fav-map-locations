@@ -6,7 +6,6 @@ export interface UserTokenRequest extends Request {
   userToken?: JwtPayload & { userId: string };
 }
 
-// TODO: move these into the middleware folder
 export const verifyToken = (
   req: UserTokenRequest,
   res: Response,

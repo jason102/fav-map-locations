@@ -1,6 +1,3 @@
-
-
-// TODO: Remove the "direction" field as all messages in the backend are "outgoing"
 export interface DatabaseChatMessage {
   chat_id: string;
   place_id: string;

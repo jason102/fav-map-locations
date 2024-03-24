@@ -1,0 +1,9 @@
+type User {
+  username: String
+  email: String
+  memberSince: String
+}
+
+type Query {
+  userDetails(username: String): User
+}

@@ -1,23 +1,30 @@
 {
 	"name": "server",
-	"version": "1.6.0",
+	"version": "1.7.0",
 	"description": "",
 	"main": "server.ts",
 	"scripts": {
 		"dev": " concurrently 'npm run server' 'cd .. && cd client && pnpm run dev' ",
 		"start": "tsx -r tsconfig-paths/register src/server.ts",
 		"server": "tsx watch -r tsconfig-paths/register src/server.ts",
-		"knex": "ts-node --project tsconfig.json -r tsconfig-paths/register node_modules/knex/bin/cli"
+		"knex": "ts-node --project tsconfig.json -r tsconfig-paths/register node_modules/knex/bin/cli",
+		"graphql-types": "graphql-codegen --config src/graphqlApi/typesCodegen.ts"
 	},
 	"author": "Jason Stine",
 	"license": "ISC",
 	"devDependencies": {
+		"@graphql-codegen/cli": "5.0.2",
+		"@graphql-codegen/typescript": "4.0.6",
+		"@graphql-codegen/typescript-resolvers": "4.0.6",
 		"@typescript-eslint/eslint-plugin": "^6.8.0",
 		"@typescript-eslint/parser": "^6.8.0",
 		"concurrently": "^8.2.2",
-		"eslint": "^8.52.0"
+		"eslint": "^8.52.0",
+		"@graphql-codegen/introspection": "4.0.3"
 	},
 	"dependencies": {
+		"@apollo/server": "^4.10.1",
+		"@apollo/subgraph": "^2.7.1",
 		"@aws-sdk/client-s3": "^3.478.0",
 		"@types/bcrypt": "^5.0.2",
 		"@types/cookie-parser": "^1.4.6",
@@ -34,6 +41,8 @@
 		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
 		"express-validator": "^7.0.1",
+		"graphql": "^16.8.1",
+		"graphql-tag": "^2.12.6",
 		"helmet": "^7.1.0",
 		"jsonwebtoken": "^9.0.2",
 		"knex": "^3.1.0",
