@@ -1,7 +1,7 @@
 import http from "http";
 import { Server } from "socket.io";
 import jwt, { Secret } from "jsonwebtoken";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { SUCCESS_MESSAGE } from "utils/responseHandling";
 import {
   ClientToServerEvents,
@@ -9,8 +9,6 @@ import {
   ServerToClientEvents,
 } from "./types";
 import { MAX_FIELD_LENGTH } from "middleware/validation";
-
-const db = getDatabase();
 
 // For the place details page chat widget
 export const setupChatWebsockets = (

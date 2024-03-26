@@ -3,7 +3,7 @@ import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import { matchedData } from "express-validator";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { DatabasePhoto } from "./types";
 import { UserTokenRequest, verifyToken } from "middleware/verifyToken";
 import { awsS3Client } from "aws";
@@ -16,7 +16,6 @@ const MAX_ALLOWED_FILES_PER_UPLOAD = 5;
 const MAX_FILE_SIZE_IN_BYTES = 1024 * 1024 * 5; // 5 MB
 
 const router = express.Router();
-const db = getDatabase();
 
 const multerUploader = multer({
   storage: multerS3({

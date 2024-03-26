@@ -1,8 +1,6 @@
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { Resolvers } from "graphqlApi/types";
 import getUserDetails from "./dbUserDetails";
-
-const db = getDatabase();
 
 const resolvers: Resolvers = {
   Query: {

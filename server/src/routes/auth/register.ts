@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { matchedData } from "express-validator";
 import bcrypt from "bcrypt";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { getSignedJwtTokens } from "utils/jwt";
 import { DatabaseUser } from "./types";
 import { isDbDuplicateRecordError } from "db/utils";
@@ -9,7 +9,6 @@ import { respondWith } from "utils/responseHandling";
 import { bodyHas, validateResult } from "middleware/validation";
 
 const router = express.Router();
-const db = getDatabase();
 
 interface Body {
   username: string;

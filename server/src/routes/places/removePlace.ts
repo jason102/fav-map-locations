@@ -2,14 +2,14 @@ import express, { NextFunction, Request, Response } from "express";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { matchedData } from "express-validator";
 import { verifyToken } from "middleware/verifyToken";
-import { getDatabase } from "db/dbSetup";
-import { DatabasePhoto, DatabasePlace, PlaceId } from "./types";
+import { db } from "db/dbSetup";
+import { DatabasePlace, PlaceId } from "./types";
 import { respondWith, SUCCESS_MESSAGE } from "utils/responseHandling";
 import { awsS3Client } from "aws";
 import { bodyHas, validateResult } from "middleware/validation";
+import { DatabasePhoto } from "routes/photos/types";
 
 const router = express.Router();
-const db = getDatabase();
 
 interface Body {
   placeId: PlaceId;

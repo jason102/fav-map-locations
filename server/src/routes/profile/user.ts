@@ -1,13 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import { matchedData } from "express-validator";
 import { DatabaseUser } from "routes/auth/types";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { verifyToken } from "middleware/verifyToken";
 import { respondWith } from "utils/responseHandling";
 import { queryHas, validateResult } from "middleware/validation";
 
 const router = express.Router();
-const db = getDatabase();
 
 interface QueryParams {
   username: string;

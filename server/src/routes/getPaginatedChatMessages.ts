@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { matchedData } from "express-validator";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { verifyToken } from "middleware/verifyToken";
 import { respondWith } from "utils/responseHandling";
 import { queryHas, validateResult } from "middleware/validation";
@@ -10,7 +10,6 @@ import { DatabaseChatMessage, ChatscopeMessage } from "websockets/types";
 const MAX_LIMIT = 100;
 
 const router = express.Router();
-const db = getDatabase();
 
 interface QueryParams {
   placeId: PlaceId;

@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import { matchedData } from "express-validator";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { DatabasePhoto, Photo } from "./types";
 import { verifyToken } from "middleware/verifyToken";
 import { awsS3Client } from "aws";
@@ -11,7 +11,6 @@ import { queryHas, validateResult } from "middleware/validation";
 import { PlaceId } from "routes/places/types";
 
 const router = express.Router();
-const db = getDatabase();
 
 interface QueryParams {
   placeId: PlaceId;

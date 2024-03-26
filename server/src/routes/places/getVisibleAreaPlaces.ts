@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { matchedData } from "express-validator";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { DatabasePlace, Place } from "./types";
 import { respondWith } from "utils/responseHandling";
 import { queryHas, validateResult } from "middleware/validation";
@@ -8,7 +8,6 @@ import { queryHas, validateResult } from "middleware/validation";
 const PLACES_QUERY_LIMIT = 20;
 
 const router = express.Router();
-const db = getDatabase();
 
 interface QueryParams {
   neLat: number;

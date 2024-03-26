@@ -1,14 +1,13 @@
 import express, { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { matchedData } from "express-validator";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { getSignedJwtTokens } from "utils/jwt";
 import { DatabaseUser } from "./types";
 import { respondWith } from "utils/responseHandling";
 import { bodyHas, validateResult } from "middleware/validation";
 
 const router = express.Router();
-const db = getDatabase();
 
 interface Body {
   usernameOrEmail: string;

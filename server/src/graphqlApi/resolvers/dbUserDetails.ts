@@ -1,8 +1,6 @@
 import { GraphQLError } from "graphql";
 import { DatabaseUser } from "routes/auth/types";
-import { getDatabase } from "db/dbSetup";
-
-const db = getDatabase();
+import { db } from "db/dbSetup";
 
 const getUserDetails = async (username: string) => {
   try {

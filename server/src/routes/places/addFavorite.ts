@@ -1,14 +1,13 @@
 import express, { NextFunction, Request, Response } from "express";
 import { matchedData } from "express-validator";
 import { verifyToken, UserTokenRequest } from "middleware/verifyToken";
-import { getDatabase } from "db/dbSetup";
+import { db } from "db/dbSetup";
 import { DatabasePlace, Place, PlaceId } from "./types";
 import { isDbDuplicateRecordError } from "db/utils";
 import { SUCCESS_MESSAGE, respondWith } from "utils/responseHandling";
 import { bodyHas, validateResult } from "middleware/validation";
 
 const router = express.Router();
-const db = getDatabase();
 
 interface Body {
   id: PlaceId;
