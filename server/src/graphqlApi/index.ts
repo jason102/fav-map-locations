@@ -10,13 +10,13 @@ import express, { Express } from "express";
 import { corsMiddleware } from "middleware/headers";
 
 import { getUserToken } from "graphqlApi/context/auth";
-import { loaders } from "graphqlApi/context/loaders";
+import { getLoaders } from "graphqlApi/context/loaders";
 
 import { UserToken } from "types";
 
 export interface GraphQLContext {
   userToken: UserToken;
-  loaders: typeof loaders;
+  loaders: ReturnType<typeof getLoaders>;
 }
 
 export const startGraphQLServer = (app: Express, callback: () => void) => {
@@ -38,6 +38,8 @@ export const startGraphQLServer = (app: Express, callback: () => void) => {
       expressMiddleware(apolloServer, {
         context: async ({ req }): Promise<GraphQLContext> => {
           const userToken = await getUserToken(req);
+          const loaders = getLoaders();
+
           return { userToken, loaders };
         },
       })
