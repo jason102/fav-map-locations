@@ -241,6 +241,27 @@ const About: React.FC = () => {
             >
               Express.js route validation and sanitization
             </DependencyRow>
+            <DependencyRow href="https://graphql.org/" name="GraphQL">
+              Including use of{" "}
+              <Link target="_blank" href="https://www.apollographql.com/">
+                Apollo Server
+              </Link>
+              {", "}
+              <Link
+                target="_blank"
+                href="https://github.com/graphql/dataloader"
+              >
+                DataLoader
+              </Link>{" "}
+              for batching database queries and caching, and{" "}
+              <Link
+                target="_blank"
+                href="https://the-guild.dev/graphql/codegen"
+              >
+                GraphQL-Codegen
+              </Link>{" "}
+              for TypeScript types generation
+            </DependencyRow>
             <DependencyRow href="https://helmetjs.github.io/" name="helmet.js">
               Helps with setting secure HTTP response headers
             </DependencyRow>
