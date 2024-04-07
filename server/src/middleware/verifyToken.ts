@@ -1,9 +1,10 @@
-import jwt, { Secret, JwtPayload } from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { respondWith } from "utils/responseHandling";
+import { UserToken } from "types";
 
 export interface UserTokenRequest extends Request {
-  userToken?: JwtPayload & { userId: string };
+  userToken?: UserToken;
 }
 
 export const verifyToken = (
@@ -35,7 +36,7 @@ export const verifyToken = (
         });
       }
 
-      req.userToken = userToken as JwtPayload & { userId: string };
+      req.userToken = userToken as UserToken;
 
       next();
     }

@@ -5,16 +5,18 @@ import { expressMiddleware } from "@apollo/server/express4";
 import resolvers from "graphqlApi/resolvers/resolvers";
 import { readFileSync } from "fs";
 import path from "path";
-import { GraphQLError } from "graphql";
 import express, { Express } from "express";
-import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 
 import { corsMiddleware } from "middleware/headers";
 
+import { getUserToken } from "graphqlApi/context/auth";
+import { loaders } from "graphqlApi/context/loaders";
+
+import { UserToken } from "types";
+
 export interface GraphQLContext {
-  userToken?: JwtPayload & {
-    userId: string;
-  };
+  userToken: UserToken;
+  loaders: typeof loaders;
 }
 
 export const startGraphQLServer = (app: Express, callback: () => void) => {
@@ -24,7 +26,7 @@ export const startGraphQLServer = (app: Express, callback: () => void) => {
     })
   );
 
-  const apolloServer = new ApolloServer<GraphQLContext>({
+  const apolloServer = new ApolloServer({
     schema: buildSubgraphSchema({ typeDefs, resolvers }),
   });
 
@@ -34,51 +36,9 @@ export const startGraphQLServer = (app: Express, callback: () => void) => {
       corsMiddleware,
       express.json(),
       expressMiddleware(apolloServer, {
-        // JWT verification
-        // If the JWT is valid, pass it to resolvers via context
-        context: async ({ req }) => {
-          const authHeader = req.headers["authorization"];
-          const token = authHeader && authHeader.split(" ")[1];
-
-          if (!token) {
-            throw new GraphQLError("Authorization header must be provided", {
-              extensions: {
-                code: "UNAUTHENTICATED",
-                http: { status: 401 },
-              },
-            });
-          }
-
-          try {
-            const userToken = await new Promise((resolve, reject) => {
-              jwt.verify(
-                token,
-                process.env.ACCESS_TOKEN_SECRET as Secret,
-                (error, validUserToken) => {
-                  if (error) {
-                    console.error(error);
-
-                    return reject("UNAUTHENTICATED");
-                  }
-
-                  resolve(
-                    validUserToken as JwtPayload & {
-                      userId: string;
-                    }
-                  );
-                }
-              );
-            });
-
-            return { userToken };
-          } catch (error) {
-            throw new GraphQLError("Invalid access token", {
-              extensions: {
-                code: "UNAUTHENTICATED",
-                http: { status: 403 },
-              },
-            });
-          }
+        context: async ({ req }): Promise<GraphQLContext> => {
+          const userToken = await getUserToken(req);
+          return { userToken, loaders };
         },
       })
     );
