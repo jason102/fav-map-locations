@@ -7,6 +7,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -16,9 +17,34 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Place = {
+  __typename?: 'Place';
+  address: Scalars['String']['output'];
+  createdAt: Scalars['String']['output'];
+  creatorUserId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  lat: Scalars['Float']['output'];
+  lng: Scalars['Float']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type PlaceDetails = {
+  __typename?: 'PlaceDetails';
+  averageRating: Scalars['Float']['output'];
+  creatorUsername: Scalars['String']['output'];
+  place: Place;
+  userRating: Scalars['Float']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  placeDetails?: Maybe<PlaceDetails>;
   userDetails?: Maybe<User>;
+};
+
+
+export type QueryPlaceDetailsArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -106,6 +132,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Place: ResolverTypeWrapper<Place>;
+  PlaceDetails: ResolverTypeWrapper<PlaceDetails>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
@@ -114,12 +144,36 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
+  Float: Scalars['Float']['output'];
+  ID: Scalars['ID']['output'];
+  Place: Place;
+  PlaceDetails: PlaceDetails;
   Query: {};
   String: Scalars['String']['output'];
   User: User;
 }>;
 
+export type PlaceResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Place'] = ResolversParentTypes['Place']> = ResolversObject<{
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  creatorUserId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lat?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  lng?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PlaceDetailsResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['PlaceDetails'] = ResolversParentTypes['PlaceDetails']> = ResolversObject<{
+  averageRating?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  creatorUsername?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  place?: Resolver<ResolversTypes['Place'], ParentType, ContextType>;
+  userRating?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  placeDetails?: Resolver<Maybe<ResolversTypes['PlaceDetails']>, ParentType, ContextType, RequireFields<QueryPlaceDetailsArgs, 'id'>>;
   userDetails?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryUserDetailsArgs>>;
 }>;
 
@@ -131,6 +185,8 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
 }>;
 
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
+  Place?: PlaceResolvers<ContextType>;
+  PlaceDetails?: PlaceDetailsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
