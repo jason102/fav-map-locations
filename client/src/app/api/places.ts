@@ -11,7 +11,9 @@ import {
 } from "src/pages/logged-in-pages/Location/types";
 
 export const placesApi = api
-  .enhanceEndpoints({ addTagTypes: ["Places", "PlaceDetails"] })
+  .enhanceEndpoints({
+    addTagTypes: ["Places", "PlaceDetails", "PlaceDetailsGraphQL"],
+  })
   .injectEndpoints({
     endpoints: (builder) => ({
       getVisibleAreaPlaces: builder.query<
@@ -80,6 +82,7 @@ export const placesApi = api
 
           return response;
         },
+        providesTags: ["PlaceDetailsGraphQL"],
       }),
       ratePlace: builder.mutation<SuccessMessageResponse, SubmittedPlaceRating>(
         {
@@ -103,7 +106,7 @@ export const placesApi = api
             queryFulfilled.catch(dispatchResult.undo);
           },
           invalidatesTags: invalidateOn({
-            success: ["PlaceDetails", "Places"],
+            success: ["PlaceDetails", "Places", "PlaceDetailsGraphQL"],
           }),
         }
       ),
