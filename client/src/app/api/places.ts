@@ -36,6 +36,51 @@ export const placesApi = api
         }),
         providesTags: ["PlaceDetails"],
       }),
+      getPlaceDetailsGraphQL: builder.query<PlaceDetails, PlaceId>({
+        query: (placeId) => ({
+          url: `graphql`,
+          method: "POST",
+          body: {
+            query: `
+            query GetPlaceDetails($id: ID!) {
+              placeDetails(id: $id) {
+                place {
+                  id,
+                  name,
+                  address,
+                  lat,
+                  lng,
+                  createdAt,
+                  creatorUserId
+                },
+                userRating,
+                creatorUsername,
+                averageRating,
+              }
+            }
+          `,
+            variables: { id: placeId },
+          },
+        }),
+        transformResponse: (res) => {
+          const response = res as any;
+
+          if ("placeDetails" in response) {
+            const { place, averageRating, userRating, creatorUsername } =
+              response.placeDetails;
+
+            // So this can be compatible with the existing REST API types and React code
+            return {
+              ...place,
+              averageRating,
+              userRating,
+              creatorUsername,
+            };
+          }
+
+          return response;
+        },
+      }),
       ratePlace: builder.mutation<SuccessMessageResponse, SubmittedPlaceRating>(
         {
           query: (ratingAndPlaceId) => ({
@@ -126,4 +171,5 @@ export const {
   useFavoritePlaceMutation,
   useRemovePlaceMutation,
   useRatePlaceMutation,
+  useGetPlaceDetailsGraphQLQuery,
 } = placesApi;

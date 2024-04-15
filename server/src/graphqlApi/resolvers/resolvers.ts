@@ -7,7 +7,6 @@ const resolvers: Resolvers = {
     },
     placeDetails: async (_, { id }, { loaders, userToken }) => {
       const place = await loaders.placesLoader.load(id);
-      const averageRating = await loaders.averageRatingsLoader.load(id);
       const userRating = await loaders.placeRatingsByUsersLoader.load({
         userId: userToken.userId,
         placeId: id,
@@ -15,10 +14,13 @@ const resolvers: Resolvers = {
       const creatorUsername = await loaders.usernamesByUserIdsLoader.load(
         place.creatorUserId
       );
+      const averageRating = await loaders.averageRatingsLoader.load(id);
 
+      // If averageRating is undefined but the other data for the place exists, that means
+      // the place hasn't been rated by anyone yet, and therefore has a value of 0
       return {
         place,
-        averageRating,
+        averageRating: averageRating ?? 0,
         userRating,
         creatorUsername,
       };

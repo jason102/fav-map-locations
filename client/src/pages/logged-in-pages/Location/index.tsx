@@ -6,7 +6,8 @@ import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 
 import { clearSelectedPlace } from "src/pages/logged-in-pages/Location/placeSlice";
 import {
-  useGetPlaceDetailsQuery,
+  useGetPlaceDetailsGraphQLQuery,
+  // useGetPlaceDetailsQuery,
   useRatePlaceMutation,
 } from "src/app/api/places";
 import ImageCarousel from "./ImageCarousel";
@@ -29,8 +30,13 @@ const Location: React.FC = () => {
 
   const { placeId } = useParams();
 
+  // REST API
+  // const { data: placeDetails, isLoading: isLoadingFirstTime } =
+  //   useGetPlaceDetailsQuery(placeId ?? "");
+
+  // GraphQL API
   const { data: placeDetails, isLoading: isLoadingFirstTime } =
-    useGetPlaceDetailsQuery(placeId ?? "");
+    useGetPlaceDetailsGraphQLQuery(placeId ?? "");
 
   const [dispatchRatePlace] = useSnackbarFetchResponse<SubmittedPlaceRating>(
     useRatePlaceMutation()
