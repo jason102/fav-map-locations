@@ -11,7 +11,10 @@ import InfoIcon from "@mui/icons-material/Info";
 import WarningIcon from "@mui/icons-material/Warning";
 import Rating from "@mui/material/Rating";
 
-import { useGetVisibleAreaPlacesQuery } from "src/app/api/places";
+import {
+  useGetVisibleAreaPlacesGraphQLQuery,
+  // useGetVisibleAreaPlacesQuery,
+} from "src/app/api/places";
 import { Place } from "src/pages/logged-in-pages/Location/types";
 import {
   setSelectedPlace,
@@ -34,7 +37,14 @@ const PlacesList: React.FC = () => {
     (state) => state.place.neBoundsCoordinate
   );
 
-  const { data: places, isError } = useGetVisibleAreaPlacesQuery(
+  // const { data: places, isError } = useGetVisibleAreaPlacesQuery(
+  //   { ne: neBoundsCoordinate!, sw: swBoundsCoordinate! },
+  //   {
+  //     skip: !neBoundsCoordinate || !swBoundsCoordinate,
+  //   }
+  // );
+
+  const { data: places, isError } = useGetVisibleAreaPlacesGraphQLQuery(
     { ne: neBoundsCoordinate!, sw: swBoundsCoordinate! },
     {
       skip: !neBoundsCoordinate || !swBoundsCoordinate,

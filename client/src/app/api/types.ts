@@ -20,3 +20,13 @@ export type SuccessfulResponse<T> = {
 export type ApiResponse<T> = SuccessfulResponse<T> | ErrorResponse;
 
 export type SuccessMessageResponse = "success";
+
+export type GraphQLPlace = {
+  address: string;
+  createdAt: string;
+  creatorUserId: string;
+  id: string;
+  lat: number;
+  lng: number;
+  name: string;
+};

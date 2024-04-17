@@ -11,11 +11,12 @@ import { corsMiddleware } from "middleware/headers";
 
 import { getUserToken } from "graphqlApi/context/auth";
 import { getLoaders } from "graphqlApi/context/loaders";
+import { queryRequiresAuthentication } from "graphqlApi/context/queryRequiresAuthentation";
 
 import { UserToken } from "types";
 
 export interface GraphQLContext {
-  userToken: UserToken;
+  userToken: UserToken | null;
   loaders: ReturnType<typeof getLoaders>;
 }
 
@@ -37,7 +38,10 @@ export const startGraphQLServer = (app: Express, callback: () => void) => {
       express.json(),
       expressMiddleware(apolloServer, {
         context: async ({ req }): Promise<GraphQLContext> => {
-          const userToken = await getUserToken(req);
+          const userToken = queryRequiresAuthentication(req)
+            ? await getUserToken(req)
+            : null;
+
           const loaders = getLoaders();
 
           return { userToken, loaders };

@@ -17,6 +17,13 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Bounds = {
+  neLat: Scalars['Float']['input'];
+  neLng: Scalars['Float']['input'];
+  swLat: Scalars['Float']['input'];
+  swLng: Scalars['Float']['input'];
+};
+
 export type Place = {
   __typename?: 'Place';
   address: Scalars['String']['output'];
@@ -40,6 +47,7 @@ export type Query = {
   __typename?: 'Query';
   placeDetails?: Maybe<PlaceDetails>;
   userDetails?: Maybe<User>;
+  visibleAreaPlaces: Array<Maybe<VisibleAreaPlaces>>;
 };
 
 
@@ -52,11 +60,22 @@ export type QueryUserDetailsArgs = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
+
+export type QueryVisibleAreaPlacesArgs = {
+  bounds: Bounds;
+};
+
 export type User = {
   __typename?: 'User';
   email?: Maybe<Scalars['String']['output']>;
   memberSince?: Maybe<Scalars['String']['output']>;
   username?: Maybe<Scalars['String']['output']>;
+};
+
+export type VisibleAreaPlaces = {
+  __typename?: 'VisibleAreaPlaces';
+  averageRating: Scalars['Float']['output'];
+  place: Place;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -132,6 +151,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Bounds: Bounds;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Place: ResolverTypeWrapper<Place>;
@@ -139,11 +159,13 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
+  VisibleAreaPlaces: ResolverTypeWrapper<VisibleAreaPlaces>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
+  Bounds: Bounds;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Place: Place;
@@ -151,6 +173,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String']['output'];
   User: User;
+  VisibleAreaPlaces: VisibleAreaPlaces;
 }>;
 
 export type PlaceResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Place'] = ResolversParentTypes['Place']> = ResolversObject<{
@@ -175,6 +198,7 @@ export type PlaceDetailsResolvers<ContextType = GraphQLContext, ParentType exten
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   placeDetails?: Resolver<Maybe<ResolversTypes['PlaceDetails']>, ParentType, ContextType, RequireFields<QueryPlaceDetailsArgs, 'id'>>;
   userDetails?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryUserDetailsArgs>>;
+  visibleAreaPlaces?: Resolver<Array<Maybe<ResolversTypes['VisibleAreaPlaces']>>, ParentType, ContextType, RequireFields<QueryVisibleAreaPlacesArgs, 'bounds'>>;
 }>;
 
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -184,10 +208,17 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type VisibleAreaPlacesResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['VisibleAreaPlaces'] = ResolversParentTypes['VisibleAreaPlaces']> = ResolversObject<{
+  averageRating?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  place?: Resolver<ResolversTypes['Place'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   Place?: PlaceResolvers<ContextType>;
   PlaceDetails?: PlaceDetailsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  VisibleAreaPlaces?: VisibleAreaPlacesResolvers<ContextType>;
 }>;
 

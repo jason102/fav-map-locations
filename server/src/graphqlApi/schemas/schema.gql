@@ -1,6 +1,7 @@
 type Query {
   userDetails(username: String): User
   placeDetails(id: ID!): PlaceDetails
+  visibleAreaPlaces(bounds: Bounds!): [VisibleAreaPlaces]!
 }
 
 type User {
@@ -23,5 +24,17 @@ type PlaceDetails {
   place: Place!
   userRating: Float!
   creatorUsername: String!
+  averageRating: Float!
+}
+
+input Bounds {
+  neLat: Float!
+  neLng: Float!
+  swLat: Float!
+  swLng: Float!
+}
+
+type VisibleAreaPlaces {
+  place: Place!
   averageRating: Float!
 }

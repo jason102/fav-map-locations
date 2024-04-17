@@ -4,7 +4,10 @@ import { Marker, useMap, Popup, useMapEvent } from "react-leaflet";
 import L, { DivIconOptions } from "leaflet";
 import "./marker.css";
 
-import { useGetVisibleAreaPlacesQuery } from "src/app/api/places";
+import {
+  useGetVisibleAreaPlacesGraphQLQuery,
+  // useGetVisibleAreaPlacesQuery,
+} from "src/app/api/places";
 import { useAppDispatch, useAppSelector } from "src/app/store";
 import {
   setSelectedPlace,
@@ -35,7 +38,14 @@ const NearbyPlacesMarkers: React.FC = () => {
   // Note that in the case of an error, an error message is shown in
   // client/src/pages/Home/PlacesList.tsx as this hook is called at the
   // same time in the same way in both of these components
-  const { data: places } = useGetVisibleAreaPlacesQuery(
+  // const { data: places } = useGetVisibleAreaPlacesQuery(
+  //   { ne: neBoundsCoordinate!, sw: swBoundsCoordinate! },
+  //   {
+  //     skip: !neBoundsCoordinate || !swBoundsCoordinate,
+  //   }
+  // );
+
+  const { data: places } = useGetVisibleAreaPlacesGraphQLQuery(
     { ne: neBoundsCoordinate!, sw: swBoundsCoordinate! },
     {
       skip: !neBoundsCoordinate || !swBoundsCoordinate,

@@ -1,4 +1,6 @@
-import { Resolvers } from "graphqlApi/types";
+import { Resolvers, VisibleAreaPlaces } from "graphqlApi/types";
+import getPlaceIdsWithinBounds from "graphqlApi/non-loaders/getPlaceIdsWithinBounds";
+import { safeLoadMany } from "graphqlApi/loaders";
 
 const resolvers: Resolvers = {
   Query: {
@@ -8,7 +10,7 @@ const resolvers: Resolvers = {
     placeDetails: async (_, { id }, { loaders, userToken }) => {
       const place = await loaders.placesLoader.load(id);
       const userRating = await loaders.placeRatingsByUsersLoader.load({
-        userId: userToken.userId,
+        userId: userToken!.userId,
         placeId: id,
       });
       const creatorUsername = await loaders.usernamesByUserIdsLoader.load(
@@ -24,6 +26,33 @@ const resolvers: Resolvers = {
         userRating,
         creatorUsername,
       };
+    },
+    visibleAreaPlaces: async (_, { bounds }, { loaders }) => {
+      const placeIds = await getPlaceIdsWithinBounds(bounds); // Replace with a function to just get the IDs
+      const places = await safeLoadMany(loaders.placesLoader, placeIds);
+      const averageRatings = await safeLoadMany(
+        loaders.averageRatingsLoader,
+        placeIds
+      );
+
+      const combinedData = places.map<VisibleAreaPlaces>((place, index) => ({
+        place,
+        averageRating: averageRatings[index] ?? 0,
+      }));
+
+      const placesOrderedByAvgRating = [...combinedData].sort((a, b) => {
+        // First order by rating (descending average rating)
+        if (a.averageRating > b.averageRating) {
+          return -1;
+        } else if (a.averageRating < b.averageRating) {
+          return 1;
+        }
+
+        // Then by place name in alphabetical order
+        return a.place.name.localeCompare(b.place.name);
+      });
+
+      return placesOrderedByAvgRating;
     },
   },
 };

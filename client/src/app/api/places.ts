@@ -1,6 +1,10 @@
 import { setSelectedPlace } from "src/pages/logged-in-pages/Location/placeSlice";
 import api, { invalidateOn } from ".";
-import { SerializableLatLng, SuccessMessageResponse } from "./types";
+import {
+  GraphQLPlace,
+  SerializableLatLng,
+  SuccessMessageResponse,
+} from "./types";
 import {
   Place,
   PlaceDetails,
@@ -12,7 +16,12 @@ import {
 
 export const placesApi = api
   .enhanceEndpoints({
-    addTagTypes: ["Places", "PlaceDetails", "PlaceDetailsGraphQL"],
+    addTagTypes: [
+      "Places",
+      "PlaceDetails",
+      "PlaceDetailsGraphQL",
+      "PlacesGraphQL",
+    ],
   })
   .injectEndpoints({
     endpoints: (builder) => ({
@@ -30,6 +39,68 @@ export const placesApi = api
           },
         }),
         providesTags: ["Places"],
+      }),
+      getVisibleAreaPlacesGraphQL: builder.query<
+        Place[],
+        { ne: SerializableLatLng; sw: SerializableLatLng }
+      >({
+        query: ({ ne, sw }) => ({
+          url: "graphql",
+          method: "POST",
+          body: {
+            query: `
+            query GetVisibleAreaPlaces(
+              $neLat: Float!,
+              $neLng: Float!,
+              $swLat: Float!,
+              $swLng: Float!
+            ) {
+              visibleAreaPlaces(bounds: {
+                neLat: $neLat,
+                neLng: $neLng,
+                swLat: $swLat,
+                swLng: $swLng
+              }) {
+                place {
+                  id
+                  name
+                  address
+                  lat
+                  lng
+                  createdAt
+                  creatorUserId
+                }
+                averageRating
+              }
+            }
+          `,
+            variables: {
+              neLat: ne.lat,
+              neLng: ne.lng,
+              swLat: sw.lat,
+              swLng: sw.lng,
+            },
+          },
+        }),
+        transformResponse: (res) => {
+          const response = res as any;
+
+          if ("visibleAreaPlaces" in response) {
+            const places = response.visibleAreaPlaces as {
+              place: GraphQLPlace;
+              averageRating: number;
+            }[];
+
+            // So this can be compatible with the existing REST API types and React code
+            return places.map(({ place, averageRating }) => ({
+              ...place,
+              averageRating,
+            }));
+          }
+
+          return response;
+        },
+        providesTags: ["PlacesGraphQL"],
       }),
       getPlaceDetails: builder.query<PlaceDetails, PlaceId>({
         query: (placeId) => ({
@@ -106,7 +177,12 @@ export const placesApi = api
             queryFulfilled.catch(dispatchResult.undo);
           },
           invalidatesTags: invalidateOn({
-            success: ["PlaceDetails", "Places", "PlaceDetailsGraphQL"],
+            success: [
+              "PlaceDetails",
+              "Places",
+              "PlaceDetailsGraphQL",
+              "PlacesGraphQL",
+            ],
           }),
         }
       ),
@@ -133,7 +209,7 @@ export const placesApi = api
 
           queryFulfilled.catch(dispatchResult.undo);
         },
-        invalidatesTags: invalidateOn({ success: ["Places"] }),
+        invalidatesTags: invalidateOn({ success: ["Places", "PlacesGraphQL"] }),
       }),
       removePlace: builder.mutation<
         SuccessMessageResponse,
@@ -163,7 +239,7 @@ export const placesApi = api
 
           dispatch(setSelectedPlace(null));
         },
-        invalidatesTags: invalidateOn({ success: ["Places"] }),
+        invalidatesTags: invalidateOn({ success: ["Places", "PlacesGraphQL"] }),
       }),
     }),
   });
@@ -175,4 +251,5 @@ export const {
   useRemovePlaceMutation,
   useRatePlaceMutation,
   useGetPlaceDetailsGraphQLQuery,
+  useGetVisibleAreaPlacesGraphQLQuery,
 } = placesApi;
