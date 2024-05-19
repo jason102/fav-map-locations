@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import http from "http";
 
+import { useHealthReport } from "routes/useHealthReport";
+
 import { setupChatWebsockets } from "websockets/setupChatWebsockets";
 import getPaginatedChatMessagesRoute from "routes/getPaginatedChatMessages";
 
@@ -36,6 +38,8 @@ app.use(express.json());
 configureRequestHeaders(app);
 
 app.use(cookieParser());
+
+useHealthReport(app);
 
 app.use("/api/auth", [
   registerRoute,
