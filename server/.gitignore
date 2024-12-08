@@ -4,3 +4,4 @@
 .env.production
 Archive.zip
 rds-global-bundle.pem
+.netlify
