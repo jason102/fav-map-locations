@@ -9,7 +9,7 @@
 		"server": "tsx watch -r tsconfig-paths/register src/server.ts",
 		"knex": "ts-node --project tsconfig.json -r tsconfig-paths/register node_modules/knex/bin/cli",
 		"graphql-types": "graphql-codegen --config src/graphqlApi/typesCodegen.ts",
-		"build": "netlify deploy --prod"
+		"build": "echo Building!!!!"
 	},
 	"author": "Jason Stine",
 	"license": "ISC",
