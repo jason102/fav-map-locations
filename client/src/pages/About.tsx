@@ -141,7 +141,8 @@ const About: React.FC = () => {
             Tech stack:
           </Typography>
           <Typography sx={{ pt: 2 }}>
-            The app is hosted using <b>Amazon Web Services (AWS)</b>, including:
+            The app <b>WAS</b> hosted using <b>Amazon Web Services (AWS)</b>,
+            including:
           </Typography>
           <List sx={{ listStyleType: "disc", mx: 3 }}>
             <ListRow>
@@ -168,6 +169,38 @@ const About: React.FC = () => {
               <b>IAM</b> for security rules among AWS services
             </ListRow>
           </List>
+          <Typography sx={{ pt: 2 }}>
+            However, after the free trial period ended (1st year), for
+            easier/cheaper hosting I dropped AWS's Elastic Beanstalk/EC2 service for this:
+          </Typography>
+          <List sx={{ listStyleType: "disc", mx: 3 }}>
+            <ListRow>
+              <Link target="_blank" href="https://www.netlify.com/">
+                Netlify
+              </Link>{" "}
+              for hosting the frontend project
+            </ListRow>
+            <ListRow>
+              <Link target="_blank" href="https://render.com/">
+                Render
+              </Link>{" for hosting the backend project (Netlify does not easily support websockets so I needed a full server hosting solution, which Render provides)"}
+            </ListRow>
+            <ListRow>
+              <b>AWS RDS</b> for the backend database
+            </ListRow>
+            <ListRow>
+              <b>AWS S3</b> for storing frontend project code and place photo image
+              files
+            </ListRow>
+            <ListRow>
+              <b>AWS Route 53</b> for domain name registration
+            </ListRow>
+          </List>
+          <Typography sx={{ pt: 2 }}>
+            <b>NOTE:</b>{" "}Therefore, the first time you load the app <b>it may take almost a minute to load</b> the places due to{" "}<Link target="_blank" href="https://render.com/docs/free#spinning-down-on-idle">
+                {"Render's free tier spinning down the server after a period of inactivity"}
+              </Link>{". However, after the first load, everything should be fast and responsive."}
+          </Typography>
           <DependencyTable title="Frontend libraries and services:">
             <DependencyRow href="https://vitejs.dev/" name="Vite">
               Frontend project tooling
