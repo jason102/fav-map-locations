@@ -87,6 +87,26 @@ const About: React.FC = () => {
             comments about the places.
           </Typography>
           <Typography sx={{ pt: 2 }}>
+            I’ve always been enthusiastic about digital maps (see my previous project{" "}
+              <Link
+                target="_blank"
+                href="https://lingomap.app/"
+              >
+                LingoMap
+              </Link>
+            ), and I enjoy exploring ways to improve map app experiences for myself and others.
+          </Typography>
+          <Typography sx={{ pt: 2 }}>
+            This time, I was inspired to create a highly efficient place marker
+            rendering system that would only load places within the visual
+            bounds of the app the user is currently viewing. I wanted the app to
+            only update as the user pans the map or zooms in and out, showing
+            places reasonably dispersed across the map without too many markers
+            clustered together. The goal was to create something user friendly
+            with a social media aspect where users could share and chat about
+            their favorite places.
+          </Typography>
+          <Typography sx={{ pt: 2 }}>
             View the project source code here:{" "}
             <Link
               target="_blank"
@@ -171,7 +191,8 @@ const About: React.FC = () => {
           </List>
           <Typography sx={{ pt: 2 }}>
             However, after the free trial period ended (1st year), for
-            easier/cheaper hosting I dropped AWS's Elastic Beanstalk/EC2 service for this:
+            easier/cheaper hosting I dropped AWS's Elastic Beanstalk/EC2 service
+            for this:
           </Typography>
           <List sx={{ listStyleType: "disc", mx: 3 }}>
             <ListRow>
@@ -183,23 +204,36 @@ const About: React.FC = () => {
             <ListRow>
               <Link target="_blank" href="https://render.com/">
                 Render
-              </Link>{" for hosting the backend project (Netlify does not easily support websockets so I needed a full server hosting solution, which Render provides)"}
+              </Link>
+              {
+                " for hosting the backend project (Netlify does not easily support websockets so I needed a full server hosting solution, which Render provides)"
+              }
             </ListRow>
             <ListRow>
               <b>AWS RDS</b> for the backend database
             </ListRow>
             <ListRow>
-              <b>AWS S3</b> for storing frontend project code and place photo image
-              files
+              <b>AWS S3</b> for storing frontend project code and place photo
+              image files
             </ListRow>
             <ListRow>
               <b>AWS Route 53</b> for domain name registration
             </ListRow>
           </List>
           <Typography sx={{ pt: 2 }}>
-            <b>NOTE:</b>{" "}Therefore, the first time you load the app <b>it may take almost a minute to load</b> the places due to{" "}<Link target="_blank" href="https://render.com/docs/free#spinning-down-on-idle">
-                {"Render's free tier spinning down the server after a period of inactivity"}
-              </Link>{". However, after the first load, everything should be fast and responsive."}
+            <b>NOTE:</b> Therefore, the first time you load the app{" "}
+            <b>it may take almost a minute to load</b> the places due to{" "}
+            <Link
+              target="_blank"
+              href="https://render.com/docs/free#spinning-down-on-idle"
+            >
+              {
+                "Render's free tier spinning down the server after a period of inactivity"
+              }
+            </Link>
+            {
+              ". However, after the first load, everything should be fast and responsive."
+            }
           </Typography>
           <DependencyTable title="Frontend libraries and services:">
             <DependencyRow href="https://vitejs.dev/" name="Vite">
