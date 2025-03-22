@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"],
+    },
+    "outDir": "./dist",
+    "strict": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src",
+    "migrations/**/*",
+    "knexfile.ts"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}

@@ -1,3 +1,7 @@
 # dependencies
 /node_modules
 .env
+.env.production
+Archive.zip
+rds-global-bundle.pem
+.netlify

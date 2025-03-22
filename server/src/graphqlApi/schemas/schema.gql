@@ -1,0 +1,40 @@
+type Query {
+  userDetails(username: String): User
+  placeDetails(id: ID!): PlaceDetails
+  visibleAreaPlaces(bounds: Bounds!): [VisibleAreaPlaces]!
+}
+
+type User {
+  username: String
+  email: String
+  memberSince: String
+}
+
+type Place {
+  id: ID!
+  name: String!
+  address: String!
+  lat: Float!
+  lng: Float!
+  createdAt: String!
+  creatorUserId: ID!
+}
+
+type PlaceDetails {
+  place: Place!
+  userRating: Float!
+  creatorUsername: String!
+  averageRating: Float!
+}
+
+input Bounds {
+  neLat: Float!
+  neLng: Float!
+  swLat: Float!
+  swLng: Float!
+}
+
+type VisibleAreaPlaces {
+  place: Place!
+  averageRating: Float!
+}

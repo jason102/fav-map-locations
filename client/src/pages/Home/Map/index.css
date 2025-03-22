@@ -1,0 +1,8 @@
+/* Need to manually set up the CSS, which isn't very clearly described in official docs: */
+/* https://stackoverflow.com/questions/40365440/react-leaflet-map-not-correctly-displayed */
+@import url("leaflet/dist/leaflet.css");
+
+.leaflet-container {
+  width: 100%;
+  height: calc(100vh - 65px);
+}
